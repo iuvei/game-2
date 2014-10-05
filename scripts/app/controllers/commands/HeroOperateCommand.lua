@@ -15,7 +15,6 @@ end
 function HeroOperateCommand:execute()
 
     HeroOperateCommand.super:execute(self)
-    local b = 13333
     local object=self.map_:getObject(self.opObjId_)
     if object ~= nil then
         if not object:GetModel():isDead() then
