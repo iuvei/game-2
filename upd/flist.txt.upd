@@ -1,0 +1,9 @@
+local list = {
+    ver = "1.0.0.0",
+    upver = "1.0.0.0",
+    stage = {
+    },
+    remove={
+    },
+}
+return list

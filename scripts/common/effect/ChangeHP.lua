@@ -1,0 +1,65 @@
+--
+-- Author: Anthony
+-- Date: 2014-07-10 18:28:57
+--
+--[[
+
+    血量改变  数字变化  (向上漂的数字)
+
+]]
+
+
+local M = {}
+
+--[[执行特效]]
+function M:run( sprite_ , num , param )
+    if type(param) ~= "table" then param = {} end
+
+    if tonumber( num ) == 0 then
+        if param.onComplete then param.onComplete() end
+        return
+    end
+
+    local group , group_width
+    if param.isCrit then
+        audio.playSound("sound/crit.mp3")
+        --暴击掉血
+        group , group_width = getImageNum( math.abs( num ) , "common/cirt.png" , { offset = -10 } )
+    else
+        --掉血或者加血
+        group , group_width = getImageNum( math.abs( num ) , num>0 and "common/hp_green.png" or "common/hp.png" )
+    end
+
+    setAnchPos( group , 0 , 0 , 0.5 )
+    sprite_:addChild(group)
+
+    --[[特效开始]]
+    group:setScale(0.3)
+    transition.scaleTo(group, {
+        time = 0.1,
+        -- scale = 2.5,
+        scale = 1,
+    })
+    transition.scaleTo(group, {
+        delay = 0.2,
+        time = 0.2,
+        -- scale = 1,
+        scale = 0.5,
+    })
+
+    transition.moveTo(group, { delay = 0.6 , time = 0.4, x = 0 , y = 100  })
+
+    transition.fadeOut(group, {
+        delay = 0.7,
+        time = 0.3,
+        onComplete = function()
+            group:removeFromParentAndCleanup(true)  -- 清除自己
+            if param.onComplete then param.onComplete() end
+        end
+    })
+
+    -- -- 添加到 特效层
+    -- logic:getLayer("effect"):addChild( group )
+
+end
+return M
