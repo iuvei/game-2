@@ -16,6 +16,7 @@ function HeroOperateCommand:execute()
 
     HeroOperateCommand.super:execute(self)
     local object=self.map_:getObject(self.opObjId_)
+    local b = 1
     if object ~= nil then
         if not object:GetModel():isDead() then
             if object:GetModel():getClassId() == "hero" then
