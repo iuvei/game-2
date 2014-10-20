@@ -228,8 +228,7 @@ function HeroView:createAttackAction()
                         :GetArmArtById(self:GetModel():getArmId(),"attck",self:GetModel():isEnemy())
     local frames    = display.newFrames(frameName, 1, 4)
     local animation = display.newAnimation(frames,  actTime/ 4)--cls.ATTACK_COOLDOWN
-    --加入技能效果
-    self:createAttackEff()
+
     --技能名称
     self:createSkillNameEff(skillTemp.nickname)
 

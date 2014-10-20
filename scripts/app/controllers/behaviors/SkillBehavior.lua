@@ -64,11 +64,12 @@ function SkillBehavior:bindMethods(object)
     self:bindMethod(object,"useSkill", useSkill)
     ------------------------------------------------------------------------------
     -- 伤害处理相关
-    local function doAttack(object)
+    local function doAttack(object,timeInterval)
         local params = object:getTargetAndDepleteParams()
         if params == nil then return false end
+        return object:doAttackEvent(timeInterval/1000)
         --整个攻击完成的时间：加上了被攻击后的时间和0.2的调整
-        return object:doAttackEvent(params.atkAomuntTime/1000 + object.ATTACK_COOLDOWN + 0.2)--Object.ATTACK_COOLDOWN
+        --return object:doAttackEvent(params.atkAomuntTime/1000 + object.ATTACK_COOLDOWN + 0.2)--Object.ATTACK_COOLDOWN
     end
     self:bindMethod(object,"doAttack", doAttack)
     --受伤害分类型

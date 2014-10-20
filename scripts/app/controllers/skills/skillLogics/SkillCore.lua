@@ -67,11 +67,6 @@ function SkillCore:preocessSkillRequest(rMe,skillId)
     --params.flip=flip
 
     return  true
-    -- local bRet = self:activeSkillNew(rMe)
-    -- if bRet==false then
-
-    -- end
-    -- return bRet
 end
 ---------------------------------------------------------
 function SkillCore:activeSkillNew(rMe)
