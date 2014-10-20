@@ -2,9 +2,9 @@
 -- Author: wangshaopei
 -- Date: 2014-09-19 14:33:40
 --
-local MapConstants = require("app.controllers.MapConstants")
-local homeBuilds=require("config.home.homeBuild")
-local homeRes=require("config.home.homeRes")
+local MapConstants  = require("app.ac.MapConstants")
+local homeBuilds    =require("config.home.homeBuild")
+local homeRes       =require("config.home.homeRes")
 local conf_homeMgr = {}
 function conf_homeMgr:getHomeBuilds()
     return homeBuilds.all_type

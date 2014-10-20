@@ -1,7 +1,7 @@
 package.loaded["config"] = nil
 require("config")
 require("lfs")
-require("base")
+
 
 Launcher = {}
 

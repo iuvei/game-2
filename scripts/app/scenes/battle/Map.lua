@@ -3,11 +3,11 @@
 -- Date: 2014-07-25 16:27:20
 --
 ------------------------------------------------------------------------------
-local MapConstants = require("app.controllers.MapConstants")
-local SkillDefine=require("app.controllers.skills.SkillDefine")
-local DynamicMap=import(".DynamicMap")
-local configMgr = require("config.configMgr")
-local Formation = require("app.views.Formation")
+local MapConstants  = require("app.ac.MapConstants")
+local SkillDefine   = require("app.character.controllers.skills.SkillDefine")
+local DynamicMap    = import(".DynamicMap")
+local configMgr     = require("config.configMgr")
+local Formation     = require("app.character.views.Formation")
 ------------------------------------------------------------------------------
 -- 图片资源
 ------------------------------------------------------------------------------
@@ -25,10 +25,10 @@ function Map:ctor(id)
     self.batchBuild_       = nil
     self.dMap_             = nil
 
-    self.ImpactLogicManger_=import("app.controllers.skills.LogicManger").new(SkillDefine.LogicType_Impact)
-    self.SkillLogicManger_=import("app.controllers.skills.LogicManger").new(SkillDefine.LogicType_Skill)
+    self.ImpactLogicManger_=import("app.character.controllers.skills.LogicManger").new(SkillDefine.LogicType_Impact)
+    self.SkillLogicManger_=import("app.character.controllers.skills.LogicManger").new(SkillDefine.LogicType_Skill)
 
-    self.ObjectManager_ = import("app.controllers.ObjectManager").new()
+    self.ObjectManager_ = import("app.character.controllers.ObjectManager").new()
 
     self:setNodeEventEnabled(true)
 
@@ -252,25 +252,27 @@ end
 function Map:spawnSelf(parent)
 
     -- 1. 显示我方(左边)
-    local Fdata_ = DATA_Formation:get_data()
+    local Fdata_ = CLIENT_PLAYER:get_formations()
     local buildData = nil
     for key , v in pairs(Fdata_) do
+        local info = v:get_info()
+        if info.index>0 and info.GUID>0 then --需要有值
+            local pos = Formation:indexToPos(info.index, {
+                Left = true,
+                getValue = function ( position )
+                    return self:getDMap():cellPosToWorldPos(position)
+                end
+            })
 
-        local pos = Formation:indexToPos(v.index, {
-            Left = true,
-            getValue = function ( position )
-                return self:getDMap():cellPosToWorldPos(position)
-            end
-        })
-
-        -- 创建武将
-        local data = configMgr:getConfig("heros"):GetHeroDataById(v.dataID,MapConstants.PLAYER_CAMP)
-        self.ObjectManager_:newObject( parent, "hero", data,{
-            x = pos.x,
-            y = pos.y,
-            flipx = true
-        })
-        buildData = data
+            -- 创建武将，从玩家武将数据得到
+            local data = CLIENT_PLAYER:get_mgr_heros():get_hero_by_GUID(info.GUID)
+            self.ObjectManager_:newObject( parent, "hero", data,{
+                x = pos.x,
+                y = pos.y,
+                flipx = true
+            })
+            buildData = data
+        end
     end
     --建筑
     local pt = self:getDMap():cellPosToWorldPos(ccp(0,5))
@@ -310,8 +312,9 @@ function Map:spawnEnemy(parent)
             end
         })
 
-        -- 创建武将
-        local data = configMgr:getConfig("heros"):GetHeroDataById(monster.HeorId,MapConstants.ENEMY_CAMP)
+        -- 创建武将，数据从表里面生成
+        local data = configMgr:getConfig("heros"):GetHeroDataById(monster.HeorId)
+        data.campId = MapConstants.ENEMY_CAMP
         self.ObjectManager_:newObject( parent, "hero", data,{
             x = pos.x,
             y = pos.y,

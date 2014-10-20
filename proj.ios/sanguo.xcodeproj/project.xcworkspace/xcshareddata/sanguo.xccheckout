@@ -5,34 +5,42 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>CDCE40CD-1FF6-457B-977E-CA4BE0A23B79</string>
+	<string>D72590A0-12D7-4F38-9334-959FC530B247</string>
 	<key>IDESourceControlProjectName</key>
 	<string>sanguo</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
+		<key>4CA1613B-0FD0-4C74-A2EC-ADAB98AFEC75</key>
+		<string>https://www.svnchina.com/svn/wsp_develop/code</string>
 		<key>6027FE01-F022-4E59-927E-A8B140831D65</key>
 		<string>http://192.168.0.200:8080/svn/code/trunk</string>
-		<key>91CB0B9B-5438-4AD3-835B-E96A71C23695</key>
-		<string>https://www.svnchina.com/svn/wsp_develop/code</string>
+		<key>CD346E9D-536B-4ECB-8FC6-2301D1BC1208</key>
+		<string>https://github.com/wspGreen/game.git</string>
+		<key>DE4CB51C-6692-464D-BF66-23C074F0B5CF</key>
+		<string>https://github.com/chukong/quick-cocos2d-x.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>game/proj.ios/sanguo.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
+		<key>4CA1613B-0FD0-4C74-A2EC-ADAB98AFEC75</key>
+		<string>../../../../../../study</string>
 		<key>6027FE01-F022-4E59-927E-A8B140831D65</key>
 		<string>../../../..</string>
-		<key>91CB0B9B-5438-4AD3-835B-E96A71C23695</key>
-		<string>../../../../../../study</string>
+		<key>CD346E9D-536B-4ECB-8FC6-2301D1BC1208</key>
+		<string>../../..</string>
+		<key>DE4CB51C-6692-464D-BF66-23C074F0B5CF</key>
+		<string>../../../../3rd/quick-cocos2d-x</string>
 	</dict>
 	<key>IDESourceControlProjectRepositoryRootDictionary</key>
 	<dict>
+		<key>4CA1613B-0FD0-4C74-A2EC-ADAB98AFEC75</key>
+		<string>https://www.svnchina.com/svn/wsp_develop</string>
 		<key>6027FE01-F022-4E59-927E-A8B140831D65</key>
 		<string>http://192.168.0.200:8080/svn/code</string>
-		<key>91CB0B9B-5438-4AD3-835B-E96A71C23695</key>
-		<string>https://www.svnchina.com/svn/wsp_develop</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://192.168.0.200:8080/svn/code/trunk/game/proj.ios/sanguo.xcodeproj</string>
+	<string>https://github.com/wspGreen/game.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
@@ -55,9 +63,25 @@
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CD346E9D-536B-4ECB-8FC6-2301D1BC1208</string>
+			<key>IDESourceControlWCCName</key>
+			<string>game</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>DE4CB51C-6692-464D-BF66-23C074F0B5CF</string>
+			<key>IDESourceControlWCCName</key>
+			<string>quick-cocos2d-x</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.subversion</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>91CB0B9B-5438-4AD3-835B-E96A71C23695</string>
+			<string>4CA1613B-0FD0-4C74-A2EC-ADAB98AFEC75</string>
 			<key>IDESourceControlWCCName</key>
 			<string>study</string>
 		</dict>

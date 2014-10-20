@@ -72,8 +72,12 @@ function Game:requireCommonModule()
 
     package.loaded["launcher.init"] = nil
     require("launcher.init")
+    -- channel
     package.loaded["channel"] = nil
     require("channel")
+    --服务器配置
+    package.loaded["serverconfig"] = nil
+    require("serverconfig")
 
     -- 创建目录
     Launcher.mkDir(G_FLIE_PATH)

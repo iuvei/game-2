@@ -1,31 +1,83 @@
 
-É
+ç
 packets.protomessage.packets"#
 Packet
 cmd (
 body ("
-C2S_SysHeartBeat"%
-	C2S_Login
+CSC_SysHeartBeat"$
+CS_Login
 uid (
-acc (	"ˆ
-	S2C_Login
+acc (	"¹
+SC_Login
 success (
-playerid (7
-content (2&.message.packets.S2C_Login.contentData
+playerid (6
+content (2%.message.packets.SC_Login.contentData
 errCode (
-errMsg (	~
-contentData
-name (	
-exp (
-level (
-RMB (
-money (
+errMsg (	°
+contentData
+aid (
+sid (
+name (	
+exp (
+level (
+RMB (
+money (
 
-createTime (	
-lastLoginTime (	"
-
-C2S_Logout".
-
-S2C_Logout
+createTime (	
+lastLoginTime	 (	
+lastLogoutTime
+ (	"
+	CS_Logout"-
+	SC_Logout
 success (
-errCode (
+errCode ("8
+SC_MSG
+errCode (
+msg (	
+showtype ("@
+S2C_BroadCast
+type (
+times (:3
+content (	"4
+CS_AskCreateHero
+playerid (
+heroid ("R
+SC_AskCreateHero
+result (.
+heroinfo (2.message.packets.SC_HeroInfo"í
+SC_HeroInfo
+dataId (
+GUID (
+level (
+quality (
+stars (
+exp (
+favor (
+armId (6
+skills	 (2&.message.packets.SC_HeroInfo.skillinfo.
+	skillinfo
+
+templateId (
+level ("
+CS_AskHeros
+playerid ("\
+SC_AskHeros
+result (
+playerid (+
+heros (2.message.packets.SC_HeroInfo"$
+CS_AskFormations
+playerid ("?
+SC_FormationInfo
+index (
+GUID (
+dataId ("I
+SC_AskFormations5
+
+formations (2!.message.packets.SC_FormationInfo"i
+CS_UpdateFormation
+playerid (
+pos (4
+	formation (2!.message.packets.SC_FormationInfo"\
+SC_FormationResult
+errocode (4
+	formation (2!.message.packets.SC_FormationInfo

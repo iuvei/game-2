@@ -49,6 +49,10 @@ CommonDefine.Build_ZuoFang=13-- 作坊
 --资源ID
 CommonDefine.HomeRes_BG=14
 --------------------------------------------------------------
+--阵型ID
+CommonDefine.Fmt_YuLin=1
+--------------------------------------------------------------
+--
 CommonDefine.INVALID_ID=-1                          --无效值
 CommonDefine.RATE_LIMITE=10000                      --百分比例限制
 --------------------------------------------------------------

@@ -52,9 +52,18 @@ function conf_skillsMgr:GetSkillData(SkillId)
     local appendImpactRuleData = self:GetSkillAppendImpactIdDatas(SkillId)
     local skillData = {
     type=skillTemp.type,
-    logicId=appendImpactRuleData[1].logicId
+    logicId=appendImpactRuleData[1].logicId,
+    nickname=skillTemp.nickname,
+    lev=skillIns.lev,
+    iconId=skillTemp.iconId,
+    sikllBrief=skillIns.sikllBrief,
 }
     return skillData
+end
+function conf_skillsMgr:GetSkillIcon(SkillId)
+    local skillTemp = self:GetSkillTemplate(SkillId)
+    local conf_skillIcons = require("config.skills.skillIcon")
+    return conf_skillIcons.all_type[skillTemp.iconId][1]
 end
 ------------------------------------------------------------------------------
 --技能效果相关

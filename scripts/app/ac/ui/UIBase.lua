@@ -5,7 +5,7 @@
 local scaleEf = require("common.effect.ScaleEffect")
 ------------------------------------------------------------------------------
 local M  = class("UIBase", function()
-    return display.newColorLayer(ccc4(0, 0, 0,200))
+    return display.newColorLayer(ccc4(0, 0, 0,0))
 end)
 ------------------------------------------------------------------------------
 function M:ctor(UIManager)
@@ -22,7 +22,7 @@ function M:init( ccsFileName )
 
     -- 阵形界面
     self:setTouchGroup( TouchGroup:create():addTo(self) )
-    widget = GUIReader:shareReader():widgetFromJsonFile(ccsFileName)
+    local widget = GUIReader:shareReader():widgetFromJsonFile(ccsFileName)
     self:GetTouchGroup():addWidget(widget)
 end
 ------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ function M:onEnter()
         -- 触摸事件处理
         if event.name == "began" then     self.BeganPos = {x=event.x,y=event.y}
         elseif event.name == "ended" then
-            self:close(ccp(self.BeganPos.x,self.BeganPos.y))
+            self:getUIManager():closeTopUI(ccp(self.BeganPos.x,self.BeganPos.y))
         end
         return true
     end)
@@ -62,9 +62,13 @@ function M:close(pos)
     if pos then
         -- 判断是否点击到界面
         local Panelbg = self:getWidgetByName("Panel_bg")
+        if not Panelbg then
+            return false
+        end
         if Panelbg:hitTest(pos) then return true end
     end
     self:getUIManager():close(self)
+    --self:getUIManager():closeTopUI()
 end
 ------------------------------------------------------------------------------
 function M:CCSDefine()
