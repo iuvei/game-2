@@ -11,6 +11,8 @@ uiLayerDef.ID_Formation = 10004
 ---------------------------------------------------------
 --80000 for wsp
 uiLayerDef.ID_Hero = 80001
+uiLayerDef.ID_HeroInfo = 80002
+uiLayerDef.ID_HeroSkillUp=80003
 ---------------------------------------------------------
 return uiLayerDef
 ---------------------------------------------------------

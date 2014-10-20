@@ -3,13 +3,13 @@
 -- Date: 2014-06-24 16:30:19
 --
 ------------------------------------------------------------------------------
---MapManager= require("app.controllers.MapManager")
+--MapManager= require("app.character.controllers.MapManager")
 local configMgr = require("config.configMgr")
-CommandManager= require("app.controllers.commands.CommandManager")
-HeroOperateManager= require("app.controllers.commands.HeroOperateManager")
+CommandManager= require("app.character.controllers.commands.CommandManager")
+HeroOperateManager= require("app.character.controllers.commands.HeroOperateManager")
 AStarUtil= require("common.astar.AStarUtil")
-SkillCore = require("app.controllers.skills.skillLogics.SkillCore")
-ImpactCore = require("app.controllers.skills.impactLogics.ImpactCore")
+SkillCore = require("app.character.controllers.skills.skillLogics.SkillCore")
+ImpactCore = require("app.character.controllers.skills.impactLogics.ImpactCore")
 ------------------------------------------------------------------------------
 local bgLayer  = class("bgLayer", function()
     return display.newLayer()

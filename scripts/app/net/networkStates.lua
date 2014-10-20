@@ -3,6 +3,8 @@
 -- Date: 2014-08-28 15:47:17
 -- 客户端的连接状态，在这里具体处理连接逻辑
 ------------------------------------------------------------------------------
+local heartbeat_timeid = nil
+------------------------------------------------------------------------------
 local timer = require("common.utils.Timer")
 ------------------------------------------------------------------------------
 -- TODO token
@@ -43,41 +45,41 @@ local curstate = ST.S_CONNECT_LOGIN
 
 ------------------------------------------------------------------------------
 -- 分发
-function M:dispatch(parent, params )
+function M:dispatch(network, params )
 	local f = statesAct[curstate]
 	if f then
-		f(parent,params)
+		f(network,params)
 	end
 end
 ------------------------------------------------------------------------------
 -- LOGIN
-function statesAct.S_CONNECT_LOGIN(parent,params)
+function statesAct.S_CONNECT_LOGIN(network,params)
 	-- connect
-	-- parent._socket:connect(params.host, params.port)
+	-- network._socket:connect(params.host, params.port)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_CONNECT_LOGIN_RET(parent,params)
-	M:ChangeState(parent,ST.S_EXCHANGE_KEY)
+function statesAct.S_CONNECT_LOGIN_RET(network,params)
+	M:ChangeState(network,ST.S_EXCHANGE_KEY)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_EXCHANGE_KEY(parent,params)
-		parent.challenge = crypt.base64decode(params)
-		parent.clientkey = crypt.randomkey()
-		-- print("clientkey"..parent.clientkey)
-		parent:send(crypt.base64encode(crypt.dhexchange(parent.clientkey)))
+function statesAct.S_EXCHANGE_KEY(network,params)
+		network.challenge = crypt.base64decode(params)
+		network.clientkey = crypt.randomkey()
+		-- print("clientkey"..network.clientkey)
+		network:send(crypt.base64encode(crypt.dhexchange(network.clientkey)))
 
-		M:ChangeState(parent,ST.S_SCERET)
+		M:ChangeState(network,ST.S_SCERET)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_SCERET(parent,params)
+function statesAct.S_SCERET(network,params)
 
-	-- print("···",params,parent.clientkey)
-	parent.secret = crypt.dhsecret(crypt.base64decode(params), parent.clientkey)
-	-- print("sceret is ", crypt.hexencode(parent.secret))
+	-- print("···",params,network.clientkey)
+	network.secret = crypt.dhsecret(crypt.base64decode(params), network.clientkey)
+	-- print("sceret is ", crypt.hexencode(network.secret))
 
 	--
-	local hmac = crypt.hmac64(parent.challenge, parent.secret)
-	parent:send(crypt.base64encode(hmac))
+	local hmac = crypt.hmac64(network.challenge, network.secret)
+	network:send(crypt.base64encode(hmac))
 
 	--
 	local function encode_token(token)
@@ -86,22 +88,22 @@ function statesAct.S_SCERET(parent,params)
 				crypt.base64encode(token.server),
 				crypt.base64encode(token.pass))
 	end
-	local etoken = crypt.desencode(parent.secret, encode_token(token))
+	local etoken = crypt.desencode(network.secret, encode_token(token))
 	-- local b = crypt.base64encode(etoken)
-	parent:send(crypt.base64encode(etoken))
+	network:send(crypt.base64encode(etoken))
 
-	M:ChangeState(parent,ST.S_AUTH)
+	M:ChangeState(network,ST.S_AUTH)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_AUTH(parent,params)
+function statesAct.S_AUTH(network,params)
 	-- server auth ok
 	-- 断开连接
-	-- parent:disconnect()
+	-- network:disconnect()
 
 	local code = tonumber(string.sub(params, 1, 3))
 	-- assert(code == 200)
 	if code ~= 200 then
-		M:onError(parent, code)
+		M:onError(network, code)
 		return
 	end
 
@@ -109,128 +111,134 @@ function statesAct.S_AUTH(parent,params)
 	local result = crypt.base64decode(string.sub(params, 5))
 	local subid, host, port  = result:match("([^@]+)@([^:]+):(.+)")
 
-	parent.subid = subid
-	-- parent.subid = crypt.base64decode(string.sub(params, 5))
-	print("login ok, subid =", parent.subid,host, port)
+	network.subid = subid
+	-- network.subid = crypt.base64decode(string.sub(params, 5))
+	print("login ok, subid =", network.subid,host, port)
 
 	-- 回调
-	local f = parent.CMD.onLoginSucc
+	local f = network.CMD.onLoginSucc
 	if f then
-		f(parent.subid)
+		f(network.subid)
 	end
 
 	token.gs_host = host
 	token.gs_port = port
-	M:ChangeState(parent,ST.S_AUTH_END,{host= token.gs_host, port=token.gs_port})
+	M:ChangeState(network,ST.S_AUTH_END,{host= token.gs_host, port=token.gs_port})
 end
 ------------------------------------------------------------------------------
-function statesAct.S_AUTH_END(parent,params)
+function statesAct.S_AUTH_END(network,params)
 	-- print("S_AUTH_END")
 end
 ------------------------------------------------------------------------------
 -- GAME SERVER
 -- 连接
-function statesAct.S_CONNECT_GS(parent,params)
+function statesAct.S_CONNECT_GS(network,params)
 	-- KNMsg.getInstance():boxShow("连接服务器 "..params.host..":"..params.port, {
 	-- 	confirmFun = function()
 			-- connect to game server
 			print("connect to game server",params.host,params.port)
-			if parent.index == nil then
-				parent.index = 0
+			if network.index == nil then
+				network.index = 0
 			end
-			parent.index = parent.index+1
-			parent:connect("gs_auth",params.host, params.port)
+			network.index = network.index+1
+			network:connect("gs_auth",params.host, params.port)
 	-- 	end
 	-- })
 end
 ------------------------------------------------------------------------------
 -- 连接
-function statesAct.S_CONNECT_GS_RET(parent,params)
-	M:ChangeState(parent,ST.S_GS_SEND_AUTH,params)
+function statesAct.S_CONNECT_GS_RET(network,params)
+	M:ChangeState(network,ST.S_GS_SEND_AUTH,params)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_GS_SEND_AUTH(parent,params)
+function statesAct.S_GS_SEND_AUTH(network,params)
 	-- handshake
 	-- base64(uid)@base64(server)#base64(subid):index:base64(hmac)
 	local handshake = string.format("%s@%s#%s:%d", 	crypt.base64encode(token.user),
 													crypt.base64encode(token.server),
-													crypt.base64encode(parent.subid),
-													parent.index)
-	local hmac = crypt.hmac64(crypt.hashkey(handshake), parent.secret)
+													crypt.base64encode(network.subid),
+													network.index)
+	local hmac = crypt.hmac64(crypt.hashkey(handshake), network.secret)
 
-	parent:send(handshake .. ":" .. crypt.base64encode(hmac))
+	network:send(handshake .. ":" .. crypt.base64encode(hmac))
 
-	M:ChangeState(parent,ST.S_GS_REV_AUTH)
+	M:ChangeState(network,ST.S_GS_REV_AUTH)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_GS_REV_AUTH(parent,params)
+function statesAct.S_GS_REV_AUTH(network,params)
 	--收到握手包
 	local code = tonumber(string.sub(params, 1, 3))
 	-- assert(code == 200)
 	if code ~= 200 then
-		M:onError(parent, code)
+		M:onError(network, code)
 		return
 	end
 
 	-- 改变打包收包方式
-	parent.command = "gs"
-	M:ChangeState(parent,ST.S_GS_AUTH_END,code)
+	network.command = "gs"
+	M:ChangeState(network,ST.S_GS_AUTH_END,code)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_GS_AUTH_END(parent,params)
-	M:ChangeState(parent,ST.S_GS_NORMAL)
+function statesAct.S_GS_AUTH_END(network,params)
+	M:ChangeState(network,ST.S_GS_NORMAL)
 
+	-- TODO 需处理客户端心跳，如服务端断线了，得重置网络状态
 	-- 开始定时发送心跳包
-	timer:start(function( dt, data, timerId)
-		NETWORK:encode_send("C2S_SysHeartBeat")
-	end, 1)
+	M:new_heartbeat(network)
 
 	-- 回调
-	local f = parent.CMD.onEnterSucc
+	local f = network.CMD.onEnterSucc
 	if f then
-		f(parent.subid)
+		f(network.subid)
 	end
 end
 ------------------------------------------------------------------------------
-function statesAct.S_ERROR(parent,params)
+function statesAct.S_ERROR(network,params)
 end
 ------------------------------------------------------------------------------
-function statesAct.S_GS_NORMAL(parent,params)
+function statesAct.S_GS_NORMAL(network,params)
 	-- print("ST.S_GS_NORMAL",ST.S_GS_NORMAL)
 
 	-- dump(params)
 	if params.ok then
 	-- params.session
-		parent:decode_handle(params.content)
+		network:decode_handle(params.content)
 	else
+		timer:kill(heartbeat_timeid)
 		KNMsg.getInstance():boxShow("网络出现异常", {
 				confirmFun = function()
-					-- M:reset()
 					switchscene("login")
 				end
 			})
 	end
 end
 ------------------------------------------------------------------------------
-function M:ChangeState(parent,state,params)
+function M:ChangeState(network,state,params)
 	print("ChangeState",curstate,"->",state)
 	curstate = state
 	if params then
-		self:dispatch(parent, params )
+		self:dispatch(network, params )
 	end
 end
 ------------------------------------------------------------------------------
-function M:reset()
+function M:new_heartbeat(network)
+	heartbeat_timeid = timer:start(function( dt, data, timerId)
+		NETWORK:encode_send("CSC_SysHeartBeat")
+	end, 1)
+end
+------------------------------------------------------------------------------
+function M:reset(network)
 	-- 错误就删除所有定时
-	timer:killAll()
-	M:ChangeState(NETWORK,ST.S_CONNECT_LOGIN)
+	-- timer:killAll()
+	timer:kill(heartbeat_timeid)
+	M:ChangeState(network,ST.S_CONNECT_LOGIN)
 	-- 断开网络
-	NETWORK:disconnect()
-	-- M:ChangeState(parent,ST.S_ERROR)
+	network:disconnect()
+	-- M:ChangeState(network,ST.S_ERROR)
 end
 
 ------------------------------------------------------------------------------
-function M:onStatus(parent,__event)
+function M:onStatus(network,__event)
 	if __event.name == "SOCKET_TCP_CONNECTED" then
 		local state = curstate
 		if curstate == ST.S_CONNECT_LOGIN then
@@ -239,30 +247,30 @@ function M:onStatus(parent,__event)
 			state = ST.S_CONNECT_GS_RET
 		end
 
-		M:ChangeState(parent,state,__event)
+		M:ChangeState(network,state,__event)
 	elseif __event.name == "SOCKET_TCP_CONNECT_FAILURE"
 			or __event.name == "SOCKET_TCP_CLOSED" then
 			-- print("···",curstate)
 		-- 完全断开后才开始连接gameserver。不然手机上会出问题！
 		if __event.name == "SOCKET_TCP_CLOSED" and ( curstate == ST.S_AUTH_END ) then
-			M:ChangeState(parent,ST.S_CONNECT_GS,{host= token.gs_host, port=token.gs_port})
+			M:ChangeState(network,ST.S_CONNECT_GS,{host= token.gs_host, port=token.gs_port})
 			return
 		end
 
-		self:reset()
+		self:reset(network)
 
 		-- 回调
-		local f = parent.CMD.onError
+		local f = network.CMD.onError
 		if f then
 			f(__event.name)
 		end
 	end
 end
 ------------------------------------------------------------------------------
-function M:onError(parent, code)
+function M:onError(network, code)
 
-	local text = parent.command
-	if parent.command == "ls" then
+	local text = network.command
+	if network.command == "ls" then
 
 		--[[
 			400 Bad Request . 握手失败
@@ -280,7 +288,7 @@ function M:onError(parent, code)
 		elseif code == 406 then
 			text = text .. ",Not Acceptable"
 		end
-	elseif parent.command == "gs_auth" then
+	elseif network.command == "gs_auth" then
 		--[[
 			404 User Not Found
 			403 Index Expired
@@ -299,18 +307,18 @@ function M:onError(parent, code)
 		end
 	end
 
-	self:reset()
+	self:reset(network)
 
 	-- 回调
-	local f = parent.CMD.onError
+	local f = network.CMD.onError
 	if f then
 		f(text)
 	end
 
 	-- -- KNMsg:getInstance():flashShow(text)
-	-- KNMsg.getInstance():boxShow("网络出现异常,code = "..parent.command..","..code , {
+	-- KNMsg.getInstance():boxShow("网络出现异常,code = "..network.command..","..code , {
 	-- 		confirmFun = function()
-	-- 			M:ChangeState(parent,ST.S_CONNECT_LOGIN)
+	-- 			M:ChangeState(network,ST.S_CONNECT_LOGIN)
 	-- 			-- switchScene("login")
 	-- 		end
 	-- 	})

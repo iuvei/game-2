@@ -2,9 +2,11 @@
 -- Author: Anthony
 -- Date: 2014-06-24 16:25:50
 --
+collectgarbage("setpause"  ,  100)
+collectgarbage("setstepmul"  ,  5000)
 ------------------------------------------------------------------------------
 --
-local MapConstants = require("app.controllers.MapConstants")
+local MapConstants   = require("app.ac.MapConstants")
 local EffectChangeHP = require("common.effect.ChangeHP")
 ------------------------------------------------------------------------------
 local battleScene = class("battleScene", function()
@@ -19,7 +21,7 @@ function battleScene:ctor(id_)
     self.mapLayer_:init()
     self:addChild(self.mapLayer_)
     -- 开始执行地图
-    self.MapRuntime_ = require("app.controllers.MapRuntime").new(self.mapLayer_)
+    self.MapRuntime_ = require("app.character.controllers.MapRuntime").new(self.mapLayer_)
     self.MapRuntime_:init()
     self.mapLayer_:addChild(self.MapRuntime_)
     ---------------------------------------------

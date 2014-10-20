@@ -3,18 +3,13 @@
 -- Date: 2014-07-09 15:59:56
 -- hero的配置管理器
 ------------------------------------------------------------------------------
-local MapConstants = require("app.controllers.MapConstants")
+local StringData    = require("config.zhString")
 -- 武将配置表
-local conf_heros = require("config.heros.heros")
-
+local conf_heros    = require("config.heros.heros")
 ------------------------------------------------------------------------------
 local conf_herosMgr = {}
 ------------------------------------------------------------------------------
-function conf_herosMgr:GetHeroData(typeId,quality,campid)
-
-    if campid == nil then
-        campid = MapConstants.PLAYER_CAMP
-    end
+function conf_herosMgr:GetHeroData(typeId,quality)
 
     local hero = conf_heros.all_type[typeId][quality]
     if hero == nil then
@@ -23,6 +18,15 @@ function conf_herosMgr:GetHeroData(typeId,quality,campid)
     end
     -- 兵种配置表
     local arm = self:GetArmsData(hero.ArmId)
+
+    -- 取出skills
+    local skills = {}
+    local conf_skills = conf_herosMgr:getHeroSkills(hero.SkillRule)
+    if conf_skills then
+        for k,v in pairs(conf_skills) do
+            skills[k] = { templateId = v.skillTempId ,level = v.skllLevel}
+        end
+    end
 
     -- 属性
     local outData = {
@@ -36,20 +40,24 @@ function conf_herosMgr:GetHeroData(typeId,quality,campid)
         attack      = hero.PhysicsAtk,
         defense     = hero.PhysicsDef,
         maxHp       = hero.MaxHP,
-        campId      = campid,
+        -- campId      = campid,
         quality     = hero.Quality,
         artId       = hero.Artid,
         formationId = hero.FormationId,
         ArmId       = hero.ArmId,
-        SkillRule   = hero.SkillRule
+        SkillRule   = hero.SkillRule,
+        country     = hero.country,
+        stars       = hero.stars,
+        Desc        = hero.Desc,
+        skills      = skills,
     }
     return outData
 end
 ------------------------------------------------------------------------------
-function conf_herosMgr:GetHeroDataById(id,campid)
+function conf_herosMgr:GetHeroDataById(id)
     local typeId = math.floor(id / 1000)
     local quality = math.floor(id % 1000)
-    return self:GetHeroData(typeId,quality,campid)
+    return self:GetHeroData(typeId,quality)
 end
 ------------------------------------------------------------------------------
 function conf_herosMgr:GetHeroById(id)
@@ -127,6 +135,15 @@ end
 function conf_herosMgr:GetArmArtById(ArmId,state,isEnemy)
     local arm = self:GetArmsData(ArmId)
     return self:GetArmFlie(arm.artId,state,isEnemy)
+end
+------------------------------------------------------------------------------
+function conf_herosMgr:getHeroCountryName(id)
+   local data =self:GetHeroDataById(id)
+   return StringData[100000020+data.country]
+end
+------------------------------------------------------------------------------
+function conf_herosMgr:getCountryName(id)
+   return StringData[100000020+id]
 end
 ------------------------------------------------------------------------------
 function conf_herosMgr:getHeroSkills(skillRuleOfHero)

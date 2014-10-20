@@ -98,6 +98,7 @@ function M:packet_handle(cmdid,...)
 	if handle then
 		return handle:handle(...)
 	end
+	handle = nil
 end
 ------------------------------------------------------------------------------
 M:init()

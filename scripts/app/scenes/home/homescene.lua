@@ -2,18 +2,20 @@
 -- Author: Anthony
 -- Date: 2014-06-24 16:25:50
 --
+collectgarbage("setpause"  ,  100)
+collectgarbage("setstepmul"  ,  5000)
 ------------------------------------------------------------------------------
 --
 local CommonDefine = require("common.CommonDefine")
 local configMgr = require("config.configMgr")
-local uiscript = import(".HomeUILayer")
+local uiscript = require("app.ui.home.homeUIManager")
 local BaseScene = require("app.scenes.BaseScene")
 ----------------------------------------------------------------
-local MainScene = class("MainScene", BaseScene)
-MainScene.SCROLL_DEACCEL_RATE = 0.95
-MainScene.SCROLL_DEACCEL_DIST = 1.0
+local homeScene = class("homeScene", BaseScene)
+homeScene.SCROLL_DEACCEL_RATE = 0.95
+homeScene.SCROLL_DEACCEL_DIST = 1.0
 ----------------------------------------------------------------
-function MainScene:ctor()
+function homeScene:ctor()
     self.super.ctor(self)
     self.drag = nil
     self.offsetLimit_   = nil
@@ -72,16 +74,39 @@ function MainScene:ctor()
             event.target:setScale(1.0)
         end)
         :onButtonClicked(function()
-            -- NETWORK:reset()
             switchscene("login")
         end)
-        :pos(display.right - 100, display.top - 30)
+        :pos(display.cx, display.top - 30)
+        :addTo(self)
+
+    --创建英雄
+    cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
+        :setButtonSize(160, 50)
+        :setButtonLabel(cc.ui.UILabel.new({text = "创建英雄"}))
+        :onButtonPressed(function(event)
+            event.target:setScale(1.1)
+        end)
+        :onButtonRelease(function(event)
+            event.target:setScale(1.0)
+        end)
+        :onButtonClicked(function()
+            if g_heortemp == nil then
+                g_heortemp = 1
+            end
+            CLIENT_PLAYER:get_mgr_heros():ask_createhero(tonumber(g_heortemp.."001"))
+            if g_heortemp < 6 then
+                g_heortemp = g_heortemp+1
+            else
+                g_heortemp = 1
+            end
+        end)
+        :pos(display.right - 350, display.top - 30)
         :addTo(self)
     -- test
     ------------------------------------------
 end
 ----------------------------------------------------------------
-function MainScene:onTouch(event, x, y)
+function homeScene:onTouch(event, x, y)
     if event == "began" then
         self.drag = {
             startX  = x,
@@ -128,23 +153,23 @@ function MainScene:onTouch(event, x, y)
 
     return
 end
-function MainScene:tick(dt)
+function homeScene:tick(dt)
     if self.drag then
         if self.drag.isDeaccelerate then
-            self.drag.offsetX = self.drag.offsetX * MainScene.SCROLL_DEACCEL_RATE
+            self.drag.offsetX = self.drag.offsetX * homeScene.SCROLL_DEACCEL_RATE
             self:moveOffset(self.drag.offsetX, self.drag.offsetY)
-            if math.abs(self.drag.offsetX) <= MainScene.SCROLL_DEACCEL_DIST then
+            if math.abs(self.drag.offsetX) <= homeScene.SCROLL_DEACCEL_DIST then
                 self.drag.isDeaccelerate=false
             end
         end
     end
 end
 ----------------------------------------------------------------
-function MainScene:moveOffset(offsetX, offsetY)
+function homeScene:moveOffset(offsetX, offsetY)
     self:setOffset(self.offsetX_ + offsetX, self.offsetY_ + offsetY)
 end
 ----------------------------------------------------------------
-function MainScene:setOffset(x, y, movingSpeed, onComplete)
+function homeScene:setOffset(x, y, movingSpeed, onComplete)
     --if self.zooming_ then return end
 
     if x < self.offsetLimit_.minX then
@@ -192,7 +217,7 @@ function MainScene:setOffset(x, y, movingSpeed, onComplete)
     end
 end
 ----------------------------------------------------------------
-function MainScene:resetOffsetLimit()
+function homeScene:resetOffsetLimit()
     --local mapWidth, mapHeight = self.map_:getSize()
    -- local s = self.bgLayer_:
    local size = self:getSceneSize()
@@ -204,7 +229,8 @@ function MainScene:resetOffsetLimit()
     }
 end
 ----------------------------------------------------------------
-function MainScene:onEnter()
+function homeScene:onEnter()
+    print("enter home scene ok")
     INIT_FUNCTION.AppExistsListener(self)
 
     self.touchLayer_:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
@@ -217,7 +243,7 @@ function MainScene:onEnter()
     if self.UIlayer then self.UIlayer:init() end
 end
 ----------------------------------------------------------------
-function MainScene:onExit()
+function homeScene:onExit()
     if self.UIlayer then
         self.UIlayer:removeFromParentAndCleanup(true)
         self.UIlayer = nil
@@ -227,7 +253,7 @@ function MainScene:onExit()
 end
 ----------------------------------------------------------------
 --场景建筑相关
-function MainScene:onTouchBuilding(worldPos)
+function homeScene:onTouchBuilding(worldPos)
     for i=1,#self.builds_ do
         local bv = self.builds_[i]:getView()
         if bv and bv:contains(worldPos) then
@@ -236,7 +262,7 @@ function MainScene:onTouchBuilding(worldPos)
     end
     return nil
 end
-function MainScene:isContainsBySelBuildId(worldPos)
+function homeScene:isContainsBySelBuildId(worldPos)
     if self.selBuildId_ == CommonDefine.INVALID_ID then
         return false
     end
@@ -245,7 +271,7 @@ function MainScene:isContainsBySelBuildId(worldPos)
         return true
     end
 end
-function MainScene:createBuilds()
+function homeScene:createBuilds()
     local builds=configMgr:getConfig("home"):getHomeBuilds()
     for i=1,#builds do
         local build =require("app.scenes.home.HomeBuild").new(i,self)
@@ -253,9 +279,9 @@ function MainScene:createBuilds()
         self.builds_[i]=build
     end
 end
-function MainScene:getBuildsLayer()
+function homeScene:getBuildsLayer()
     return self.buildsLayer_
 end
 ----------------------------------------------------------------
-return MainScene
+return homeScene
 ----------------------------------------------------------------

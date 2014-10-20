@@ -2,9 +2,9 @@
 -- Author: Your Name
 -- Date: 2014-07-29 18:08:13
 -- 游戏战斗
-local MapConstants = require("app.controllers.MapConstants")
-local HeroOperateCommand = require("app.controllers.commands.HeroOperateCommand")
-local HeroInSceneCommand = require("app.controllers.commands.HeroInSceneCommand")
+local MapConstants       = require("app.ac.MapConstants")
+local HeroOperateCommand = require("app.character.controllers.commands.HeroOperateCommand")
+local HeroInSceneCommand = require("app.character.controllers.commands.HeroInSceneCommand")
 local CBattle = class("CBattle")
 ---------------------------------------
 --

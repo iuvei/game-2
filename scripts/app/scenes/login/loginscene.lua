@@ -2,43 +2,91 @@
 -- Author: Anthony
 -- Date: 2014-09-11 11:54:54
 --
+collectgarbage("setpause"  ,  100)
+collectgarbage("setstepmul"  ,  5000)
+
 ------------------------------------------------------------------------------
-local uiscript = import(".loginUILayer")
+local uiscript = require("app.ui.login.loginUIManager")
 ------------------------------------------------------------------------------
 local loginScene = class("loginScene", function()
     return display.newScene("loginScene")
 end)
 ----------------------------------------------------------------
 function loginScene:ctor()
-
-    params = params or {}
-
-    -- NETWORK:reset()
+    -- reset
+    CLIENT_PLAYER:reset()
 
     -----------
     -- test数据
-    local data = {  {GUID= 100, dataID = 1001,camp=0},
-                    {GUID= 101, dataID = 2001,camp=0},
-                    {GUID= 102, dataID = 3001,camp=0},
-                    {GUID= 103, dataID = 4001,camp=0},
-                    {GUID= 104, dataID = 5001,camp=0},
-                    {GUID= 105, dataID = 6001,camp=0},
-                }
-    DATA_Hero:insert(data)
+    if CHANNEL_ID == "test" then
+        -- 创建
+        local function create_hero( GUID, dataid )
+            local configMgr = require("config.configMgr")
+            local confHeros = configMgr:getConfig("heros")
+            local confHeroData = confHeros:GetHeroDataById(dataid)
+            local cfheroArt = confHeros:GetHerosArt(confHeroData.artId)
+            -- 国家信息
+            local countryInfo = {
+                id      = confHeroData.country,
+                name    = confHeros:getCountryName(confHeroData.country)
+            }
 
-    -- 上阵数据
-    local Formationdata = { {index= 2, data = data[1]},
-                            {index= 4, data = data[2]},
-                            {index= 5, data = data[3]},
-                            {index= 6, data = data[4]},
-                            {index= 8, data = data[5]},
-                        }
-    DATA_Formation:insert(Formationdata)
+            --新数据
+            local outInfo = {
+                dataId      = dataid,
+                GUID        = GUID,
+                exp         = confHeroData.exp,
+                favor       = confHeroData.favor,
+
+                typename    = confHeroData.typename,
+                nickname    = confHeroData.nickname,
+                level       = confHeroData.level,
+                speed       = confHeroData.speed,
+                hit         = confHeroData.hit,
+                MovDis      = confHeroData.MovDis,
+                AtkDis      = confHeroData.AtkDis,
+                attack      = confHeroData.attack,
+                defense     = confHeroData.defense,
+                maxHp       = confHeroData.maxHp,
+                campId      = confHeroData.campId,
+                quality     = confHeroData.quality,    -- 品质
+                stars       = confHeroData.stars,      -- 星级
+                artId       = confHeroData.artId,
+                headIcon    = cfheroArt.headIcon,
+                formationId = confHeroData.formationId,
+                ArmId       = confHeroData.armId,
+                SkillRule   = confHeroData.SkillRule,
+                skills      = confHeroData.skills,
+                countryInfo = countryInfo,
+            }
+            return outInfo
+        end
+        local data = {
+            create_hero(100, 1001),
+            create_hero(101, 2001),
+            create_hero(102, 3001),
+            create_hero(103, 4001),
+            create_hero(104, 5001),
+            create_hero(105, 6001),
+
+        }
+        CLIENT_PLAYER:set_heros(data)
+
+       local Formationdata = {
+            {index= 2, GUID=data[1].GUID, dataId = data[1].dataId },
+            -- {index= 4, GUID=data[2].GUID, dataId = data[2].dataId },
+            -- {index= 5, GUID=data[2].GUID, dataId = data[3].dataId },
+            -- {index= 6, GUID=data[2].GUID, dataId = data[4].dataId },
+            {index= 8, GUID=data[5].GUID, dataId = data[5].dataId },
+        }
+        -- 上阵数据
+        CLIENT_PLAYER:set_formations(Formationdata)
+    end
     -----------
 
 
     ---------------插入layer---------------------
-        -- UI管理层
+    -- UI管理层
     self.UIlayer = uiscript.new(self)
     ---------------------------------------------
 end

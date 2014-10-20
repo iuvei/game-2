@@ -33,13 +33,13 @@ function game:ctor()
     Res= require("common.resourceDefine")
 
     ---------------------------------------
-    --[[数据初始化]]
-    require("app.data.dataMgr"):init()
-    ---------------------------------------
-    -- 网络层
     if CHANNEL_ID ~= "test" then
+        -- 网络层
         NETWORK = require("app.net.network")
     end
+
+    -- 全局的玩家单例
+    CLIENT_PLAYER = require("app.mediator.client_player").new()
 
 end
 

@@ -50,7 +50,7 @@ function M:createTouchLayer(parent)
     --     -- print(event.name)
     --     -- 触摸事件处理
     --     if event.name == "began" then     self.BeganPos = {x=event.x,y=event.y}
-    --     elseif event.name == "ended" then self:close(ccp(self.BeganPos.x,self.BeganPos.y))
+    --     elseif event.name == "ended" then self:closeTopUI(ccp(self.BeganPos.x,self.BeganPos.y))
     --     end
     --     return true
     -- end)
@@ -128,27 +128,34 @@ function M:open(uiLayer)
             -- open state
             self.openstate = true
             -- 暂停触摸
-            --self:setTouchLayerEnabled(self:getTouchLayer(),false)
-            --self:getTouchLayer():setOpacity(200)
+            self:setTouchLayerEnabled(self:getTouchLayer(),false)
+            self:getTouchLayer():setOpacity(200)
         end,
         onComplete = function()
             -- 恢复触摸
-            --self:setTouchLayerEnabled(self:getTouchLayer(),true)
+            self:setTouchLayerEnabled(self:getTouchLayer(),true)
             uiLayer:setTouchLayerEnabled(true,false)
             self.openstate = false
         end,
     })
 end
 ------------------------------------------------------------------------------
+--关闭相关
+function M:closeTopUI(pos)
+    local uiLayer = self:getTopUI()
+    if not uiLayer then return false end
+    if pos then
+        -- 判断是否点击到界面
+        local Panelbg = uiLayer:getWidgetByName("Panel_bg")
+        if not Panelbg then return false end
+        if Panelbg:hitTest(pos) then return true end
+    end
+    self:close(uiLayer)
+end
+--
 function M:close(uiLayer)
 
     if not self:canDo(uiLayer) then return false end
-
-    -- if pos then
-    --     -- 判断是否点击到界面
-    --     local Panelbg = self.CurUILayer:getWidgetByName("Panel_bg")
-    --     if Panelbg:hitTest(pos) then return true end
-    -- end
 
     -- 特效
     scaleEf:run( uiLayer,{
@@ -158,23 +165,49 @@ function M:close(uiLayer)
             -- 关闭标志，因为删除窗口是异步的
             self.closestate = true
             -- 暂停触摸
-            --self:setTouchLayerEnabled(self:getTouchLayer(),false)
+            self:setTouchLayerEnabled(self:getTouchLayer(),false)
         end,
         onComplete = function()
-
             -- 关闭UI
             self:clearByID(uiLayer.DialogID)
-            -- 恢复触摸
-            --self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
-
-            --self:getTouchLayer():setOpacity(0)
+            self:setTouchLayerEnabled(self:getTouchLayer(),true)
+            if self:getUIAmount()==0 then
+                -- 恢复触摸
+                self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
+                self:getTouchLayer():setOpacity(0)
+            end
             self.closestate = false
         end,
     })
 end
 ------------------------------------------------------------------------------
 --
+function M:getTopUI()
+    if #self.uiLayers_==0 then
+        return nil
+    end
+    return self.uiLayers_[#self.uiLayers_]
+end
+------------------------------------------------------------------------------
+--
+function M:getUI(dialogID)
+    for i=1,#self.uiLayers_ do
+        local ly = self.uiLayers_[i]
+        if ly and ly.DialogID==dialogID then
+            return ly
+        end
+    end
+    return nil
+end
+------------------------------------------------------------------------------
+--
+function M:getUIAmount()
+    return #self.uiLayers_
+end
+------------------------------------------------------------------------------
+--
 function M:canDo(uiLayer)
+    if uiLayer == nil then return false end
     if self:isExist(uiLayer.DialogID) == nil then return false end
     if self.closestate then return false end
     if self.openstate then return false end
@@ -183,28 +216,41 @@ end
 ------------------------------------------------------------------------------
 --
 function M:isExist(dialogID)
-    if self.uiLayers_[dialogID] then
+    if self:getUI(dialogID) then
         return true
     end
     return false
 end
+------------------------------------------------------------------------------
+--
 function M:registerUI(uiLayer)
-    self.uiLayers_[uiLayer.DialogID]=uiLayer
+    --self.uiLayers_[uiLayer.DialogID]=uiLayer
+    table.insert(self.uiLayers_,uiLayer)
+end
 
-end
-function M:getUI(dialogID)
-    return self.uiLayers_[dialogID]
-end
-function M:clearByID(dialogID)
-    local ly=self.uiLayers_[dialogID]
+------------------------------------------------------------------------------
+--清理相关
+function M:clearTopUI()
+    local  ly = self:getTopUI()
     if ly then
-        ly:removeFromParent()
-        self.uiLayers_[dialogID]=nil
-        if DEBUG_BATTLE.showUILayerInfo then
-            printf("close uiLayer dialogID = %d ", ly.DialogID)
+        self:clearByID(ly.DialogID)
+    end
+end
+--
+function M:clearByID(dialogID)
+    for i=1,#self.uiLayers_ do
+        local ly = self.uiLayers_[i]
+        if ly and ly.DialogID==dialogID then
+            ly:removeFromParent()
+            self.uiLayers_[i]=nil
+            if DEBUG_BATTLE.showUILayerInfo then
+                printf("close uiLayer dialogID = %d ", ly.DialogID)
+            end
+            break
         end
     end
 end
+--
 function M:clear()
     -- body
 end
