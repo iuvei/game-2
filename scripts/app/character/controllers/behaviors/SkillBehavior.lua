@@ -98,9 +98,6 @@ function SkillBehavior:bindMethods(object)
         if not object:isDestroyed() then
             object:increaseRage(10)
         end
-
-
-
     end
     self:bindMethod(object,"onDamages", onDamages)
     --受伤害无类型
@@ -490,7 +487,6 @@ function SkillBehavior:bindMethods(object)
     end
     self:bindMethod(object,"getHeroSkillsOfSkillRule", getHeroSkillsOfSkillRule)
     local function getArmSkillsOfSkillRule(object)
-        print("···4444",object:getArmId())
         local armData = configMgr:getConfig("heros"):GetArmsData(object:getArmId())
         assert(armData~=nil,"getArmSkillsOfSkillRule():arm nil")
         local skillRuleOfArm = armData.skillRule

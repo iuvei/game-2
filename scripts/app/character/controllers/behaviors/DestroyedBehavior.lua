@@ -4,6 +4,7 @@
 -- 破坏行为：HP的增减
 ------------------------------------------------------------------------------
 local MapConstants    = require("app.ac.MapConstants")
+local DelayCommand = require("app.character.controllers.commands.DelayCommand")
 local BehaviorBase = import(".BehaviorBase")
 local EffectChangeHP = require("common.effect.ChangeHP")
 local configMgr       = require("config.configMgr")
@@ -222,6 +223,7 @@ function DestroyedBehavior:bindMethods(object)
                 object:doBeKillEvent()
             else
                 object:doBeAttackEvent(object.ATTACK_COOLDOWN)--object.ATTACK_COOLDOWN
+                HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdCocurrent)
             end
             if oldhp>0 and object:getHp()<=0 then
                 --die

@@ -28,7 +28,6 @@ function HeroAtkCommand:execute()
 
         self.rMeView_:GetModel():setDir(self.dir_)
         local tx, ty = self.rMeView_:getPosition()
-        --local posX,posY = self.rTgtView_:getPosition()
         self.rMeView_:GetModel():doAttack(self.endTimeInterval_)
 
     --操作执行进行中
@@ -36,14 +35,11 @@ function HeroAtkCommand:execute()
         self.elapseTime_=math.floor(self.elapseTime_+CCDirector:sharedDirector():getDeltaTime()*1000)
         if self.endTimeInterval_ <= self.elapseTime_ then
             --加入攻击效果
-            HeroOperateManager:addCommand(BattleEffectCommand.new(self.rMeView_:GetModel()))
+            --HeroOperateManager:addCommand(BattleEffectCommand.new(self.rMeView_:GetModel()))
+
+            HeroOperateManager:addCommand(BattleEffectCommand.new(self.rMeView_:GetModel()),HeroOperateManager.CmdCocurrent)
             self:setOpState(HeroOpState.End)
         end
-        --print("···",CCDirector:sharedDirector():getDeltaTime())
-        --self.rMeView_:GetModel():updataHits(CCDirector:sharedDirector():getDeltaTime())
-        -- if self.rMeView_:GetModel():getIsStop()==true then
-        --    self:setOpState(HeroOpState.End)
-        -- end
     end
     --操作执行结束
     if self:getOpState() == HeroOpState.End then

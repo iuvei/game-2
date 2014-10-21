@@ -3,7 +3,7 @@
 -- Date: 2014-09-19 14:39:32
 --
 --web地址
-WEBSERVER_URL = "http://192.168.0.15/ud/"
+WEBSERVER_URL = "http://192.168.0.17/ud/"
 --serverlist
 SERVER_FILENAME = "serverlist.txt"
 

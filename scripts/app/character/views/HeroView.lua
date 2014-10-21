@@ -392,7 +392,9 @@ function HeroView:createDeadAction()
         callback = function ( sprite )
             sprite:stopAllActions()
             sprite:setDisplayFrame(self:createDeadFrame())
-
+            local params={
+                time1 = 0.4,
+            }
             EffectFadeInOut:run(sprite)
     end})
 end

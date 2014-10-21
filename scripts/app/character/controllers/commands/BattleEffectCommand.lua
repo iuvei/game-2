@@ -3,25 +3,27 @@
 -- Date: 2014-10-06 22:39:01
 --
 local configMgr       = require("config.configMgr")         -- 配置
-local MapConstants = require("app.controllers.MapConstants")
+local MapConstants = require("app.ac.MapConstants")
 local OpCommand = import(".OpCommand")
 local BattleEffectCommand = class("BattleEffectCommand",OpCommand)
 function BattleEffectCommand:ctor(rMe)
-    BattleEffectCommand.super.ctor(self,CommandType.HeroAtk)
+    BattleEffectCommand.super.ctor(self,CommandType.BattleEffect)
     self.params_ = rMe:getTargetAndDepleteParams()
     self.rMe_=rMe
+    self.rMeView_=rMe:getView()
+    self.elapseTime_=0
     self.arrHitTime={}
+    --默认普通攻击时间
     self.arrHitTime[1]=math.floor(rMe.ATTACK_COOLDOWN*1000)
-    self.endTimeInterval_=0
+    self.endTimeInterval_=self.arrHitTime[1]
+    --效果攻击时间
     local skillEffData = configMgr:getConfig("skills"):GetSkillEffect(self.params_.skillId)
     if skillEffData then
        --设置击中时间
      self.arrHitTime = string.split(skillEffData.hitTime, MapConstants.SPLIT_SING)
-
      self.endTimeInterval_=skillEffData.time
-
     end
-    self.elapseTime_=0
+
 end
 function BattleEffectCommand:execute()
     --操作开始执行
