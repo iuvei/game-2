@@ -7,6 +7,8 @@ CommandType.None="none"
 CommandType.HeroOp="HeroOp"
 CommandType.HeroAtk="HeroAtk"
 CommandType.HeroMove="HeroMove"
+CommandType.BattleEffect="BattleEffect"
+CommandType.Delay="Delay"
 
 local CommandManager = {}
 function CommandManager:init()
@@ -39,14 +41,14 @@ function CommandManager:executeCommands_()
     end
 end
 function CommandManager:clearExpireCommands_()
-    local delIndexLst = {}
-    for i,v in ipairs(self.commandLst_) do
-        if v:getDone() then
-            table.insert(delIndexLst,i)
+    for i=#self.commandLst_,1,-1 do
+        local cmd= self.commandLst_[i]
+        if cmd:getDone() then
+            -- if DEBUG_BATTLE.showCommandList then
+            --     print("delCommand:","cmdType:",cmd:getType(),"opObjId:",cmd.rMeView_:GetModel():getId())
+            -- end
+            table.remove(self.commandLst_,i)
         end
-    end
-    for i,v in ipairs(delIndexLst) do
-        table.remove(self.commandLst_,v)
     end
 end
 function CommandManager:destroyAllCommands()

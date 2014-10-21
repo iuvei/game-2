@@ -237,12 +237,12 @@ function Hero:attack(target)
     end
 end
 function Hero:tick(dt, map)
-    self:updataHits(dt)
+    --self:updataHits(dt)
 end
 ------------------------------------------------------------------------------
 --
 function Hero:updataHits(dt)
-    if self:getState() == "attacking" then
+    --if self:getState() == "attacking" then
 
         local params = self:getTargetAndDepleteParams()
         if params and params.nextHitTime ~=-1 then
@@ -253,7 +253,7 @@ function Hero:updataHits(dt)
             if params.nextHitTime <= hitTimeCounter then
                 --print("···",params.nextHitTime,hitTimeCounter)
                 --self:executeHit(params.target)
-                SkillCore:activeSkillNew(self)
+                -- SkillCore:activeSkillNew(self)
                 --更新下次击中时间
                 if params.skillExeTimesCounter <= #params.hitTimeArr then
                     params.nextHitTime=tonumber(params.hitTimeArr[params.skillExeTimesCounter])
@@ -262,47 +262,17 @@ function Hero:updataHits(dt)
                 else
                     params.nextHitTime=-1
                 end
+                return true
             end
         end
-    end
+    --end
+    return false
 end
 ------------------------------------------------------------------------------
 --回合才更新
 function Hero:updataBout()
     self:updataSkillCDs()
     self:updataImpacts()
-end
-------------------------------------------------------------------------------
---
-function Hero:executeHit(target)
-    -- 简化算法：伤害 = 自己的攻击力 - 目标防御
-    local damage = 0
-
-    if self:hit() then
-        local armor = 0
-        -- if not target:isFrozen() then -- 如果目标被冰冻，则无视防御
-            armor = target:getDefense()
-        -- end
-        damage = self:getAttack() - armor
-        if damage <= 0 then damage = 1 end -- 只要命中，强制扣 HP
-    else
-        --todo miss
-    end
-
-    -- 处理伤害
-    if damage > 0 then
-        -- 扣除目标 HP，并触发事件
-        if not target:isDead() then
-            target:decreaseHp(damage) -- 扣除目标 Hp
-            -- 每次攻击成功，增加 10 点 EXP
-            self:increaseEXP(10)
-
-            --self:decreaseRage(consumeRage)
-            --目标添加怒气值
-            target:increaseRage(10)
-        end
-
-    end
 end
 -- ------------------------------------------------------------------------------
 return Hero

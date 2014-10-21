@@ -8,7 +8,7 @@ local HeroInSceneCommand = class("HeroInSceneCommand",Command)
 function HeroInSceneCommand:ctor(opObj,map,mapEvent)
     HeroInSceneCommand.super.ctor(self)
     self.opObjId_=opObj:GetModel():getId()
-    self.opObj_=opObj
+    self.rMeView_=opObj
     self.map_=map
     self.mapEvent_=mapEvent
 end
@@ -19,9 +19,9 @@ function HeroInSceneCommand:execute()
         local object = objectView:GetModel()
         if not object:isDead() then
             if object:getClassId() == "hero" then
-                local cmd = HeroOperateManager:getCommand()
+                local cmd = HeroOperateManager:getFrontCommand(HeroOperateManager.CmdSequence)
                 --队列为空，才添加命令
-                if cmd==nil  then
+                if HeroOperateManager:isEmpty()  then
                     local skills = object:getSkills()
                     if skills then
                         for k,v in pairs(skills) do

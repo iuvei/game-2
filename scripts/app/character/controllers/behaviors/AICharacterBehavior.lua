@@ -70,14 +70,7 @@ function AICharacterBehavior:bindMethods(object)
                 HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,targetPosWorld,dir))
              end
         end
-
-        if not HeroOperateManager:isEmpty() then
-            -- local moveinfo=self.moveQueue[1]
-            -- self:move(moveinfo.objId, moveinfo.objDir)
-            -- table.remove(self.moveQueue,1)
-            return true
-        end
-        return false
+        return true
     end
     self:bindMethod(object,"AILogicMove", AILogicMove)
     ----------------------------------------

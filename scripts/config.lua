@@ -38,8 +38,8 @@ DEBUG_BATTLE = { showRect = false,  -- 显示tilemap方块
                  showShortestPath=false, -- 显示寻径最终信息
                  showOpenPath=false,-- 显示寻径open列表信息
                  showDMapInfo=false,-- 显示生成的动态地图坐标信息
-                 showCommandList=false,--显示命令列表信息
+                 showCommandList=true,--显示命令列表信息
                  showFSMLog = false,  -- 是否显示状态机相关log
-                 showSkillInfo=true,  -- 显示技能信息
-                 showUILayerInfo=true,--现实界面信息
+                 showSkillInfo=false,  -- 显示技能信息
+                 showUILayerInfo=false,--现实界面信息
 }

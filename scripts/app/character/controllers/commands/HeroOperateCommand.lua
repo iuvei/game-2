@@ -19,9 +19,9 @@ function HeroOperateCommand:execute()
     if object ~= nil then
         if not object:GetModel():isDead() then
             if object:GetModel():getClassId() == "hero" then
-                local cmd = HeroOperateManager:getCommand()
+                local cmd = HeroOperateManager:getFrontCommand(HeroOperateManager.CmdSequence)
                 --队列为空，才添加命令
-                if cmd==nil  then
+                if HeroOperateManager:isEmpty() then
                     --添加攻击命令
                     if object:GetModel():AILogicAkt(self.mapEvent_) then
                         --self.mapEvent_:doStopMove(object)
