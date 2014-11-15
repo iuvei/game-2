@@ -450,9 +450,11 @@ function M:connetToLoginServer( _host, _port )
             if error == "not_conneted" then
                 text = "网络未连接！"
             else
-               text = "网络出现异常，你可能已经断网了！"
+                if error == nil then
+                    text = "网络出现异常，你可能已经断网了！"
+                    text = text.."error code："..error
+                end
             end
-            text = text.."error code："..error
             -- print(text)
 
             KNMsg.getInstance():boxShow(text, {
@@ -466,11 +468,10 @@ function M:connetToLoginServer( _host, _port )
         end,
         onEnterSucc = function(subid)
             -- 发送进入包
-            local msg = {
+            CLIENT_PLAYER:send("CS_Login", {
                 uid = subid,
                 acc = token.user,
-            }
-            CLIENT_PLAYER:send("CS_Login", msg)
+            })
         end,
     }
     NETWORK:connect("ls",_host, _port,CMD)

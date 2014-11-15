@@ -11,7 +11,7 @@ local SkillDefine=require("app.character.controllers.skills.SkillDefine")
 local SkillLogic = import(".SkillLogic")
 local CombatCore= require("app.character.controllers.skills.CombatCore")
 local OwnImpact = import("app.character.controllers.skills.OwnImpact")
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local ImpactLogic003 = import("..impactLogics.LogicImpact003")
 
 local SLImpactsToTarget = class("SLImpactsToTarget",SkillLogic)
@@ -53,9 +53,6 @@ function SLImpactsToTarget:effectOnUnitOnce(rMe,rTar,bCritcalHit)
                     combat:getResultImpact(rMe, rTar, ownImpact)
                 end
                 self:registerImpactEvent(rTar,rMe,ownImpact,false)
-            -- elseif ImpacteIdData.type==SkillDefine.AppendSkillImpType_ToSelf then
-            --         ImpactCore:initImpactFromData(rMe,ImpacteIdData.impactId,ownImpact)
-            --         self:registerImpactEvent(rMe,rMe,ownImpact,false)
             end
         end
     end

@@ -20,7 +20,7 @@ function logoScene:ctor()
 	INIT_FUNCTION.reloadModule("version")
 
 	-- if CHANNEL_ID == "test" then
-		local layer = CCLayer:create()
+		local layer = display.newLayer()
 		local bg = display.newSprite(IMG_LOG,display.cx,display.cy)
 		-- INIT_FUNCTION.setAnchPos( bg , 0 , 0 )
 		layer:addChild( bg )

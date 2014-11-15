@@ -3,7 +3,7 @@
 -- Date: 2014-08-22 16:24:16
 -- 效果：直接修改值，血量，怒气
 local SkillDefine=require("app.character.controllers.skills.SkillDefine")
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local configMgr       = require("config.configMgr")         -- 配置
 local ImpactLogic = import(".ImpactLogic")
 local LogicImpact004 = class("LogicImpact004",ImpactLogic)

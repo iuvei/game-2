@@ -3,7 +3,7 @@
 -- Date: 2014-08-22 16:24:16
 -- 效果：无类型一次性伤害
 local SkillDefine=require("app.character.controllers.skills.SkillDefine")
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local configMgr       = require("config.configMgr")         -- 配置
 local ImpactLogic = import(".ImpactLogic")
 local LogicImpact001 = class("LogicImpact001",ImpactLogic)

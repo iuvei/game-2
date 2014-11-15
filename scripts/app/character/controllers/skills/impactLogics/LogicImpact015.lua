@@ -3,7 +3,7 @@
 -- Date: 2014-09-03 20:17:21
 --功能说明：效果 － 昏迷，定身，无敌状态
 local SkillDefine=require("app.character.controllers.skills.SkillDefine")
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local configMgr    = require("config.configMgr")         -- 配置
 
 local ImpactLogic = import(".ImpactLogic")

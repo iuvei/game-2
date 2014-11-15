@@ -13,8 +13,8 @@ local loginScene = class("loginScene", function()
 end)
 ----------------------------------------------------------------
 function loginScene:ctor()
-    -- reset
-    CLIENT_PLAYER:reset()
+    -- init
+    CLIENT_PLAYER:init()
 
     -----------
     -- test数据
@@ -44,7 +44,7 @@ function loginScene:ctor()
                 speed       = confHeroData.speed,
                 hit         = confHeroData.hit,
                 MovDis      = confHeroData.MovDis,
-                AtkDis      = confHeroData.AtkDis,
+                -- AtkDis      = confHeroData.AtkDis,
                 attack      = confHeroData.attack,
                 defense     = confHeroData.defense,
                 maxHp       = confHeroData.maxHp,
@@ -70,7 +70,7 @@ function loginScene:ctor()
             create_hero(105, 6001),
 
         }
-        CLIENT_PLAYER:set_heros(data)
+        CLIENT_PLAYER:get_mgr("heros"):set_data(data)
 
        local Formationdata = {
             {index= 2, GUID=data[1].GUID, dataId = data[1].dataId },
@@ -80,7 +80,7 @@ function loginScene:ctor()
             {index= 8, GUID=data[5].GUID, dataId = data[5].dataId },
         }
         -- 上阵数据
-        CLIENT_PLAYER:set_formations(Formationdata)
+        CLIENT_PLAYER:get_mgr("formations"):set_data(Formationdata)
     end
     -----------
 

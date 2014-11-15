@@ -8,6 +8,7 @@ collectgarbage("setstepmul"  ,  5000)
 --
 local MapConstants   = require("app.ac.MapConstants")
 local EffectChangeHP = require("common.effect.ChangeHP")
+local HeroBoutUseSkillCommand = require("app.character.controllers.commands.HeroBoutUseSkillCommand")
 ------------------------------------------------------------------------------
 local battleScene = class("battleScene", function()
     return display.newScene("battleScene")
@@ -17,11 +18,11 @@ function battleScene:ctor(id_)
 
     ---------------插入layer---------------------
     -- -- mapLayer 包含地图的整个视图
-    self.mapLayer_  = require("app.scenes.battle.Map").new(id_)
+    self.mapLayer_  = require("app.scenes.battle.map.Map").new(id_)
     self.mapLayer_:init()
     self:addChild(self.mapLayer_)
     -- 开始执行地图
-    self.MapRuntime_ = require("app.character.controllers.MapRuntime").new(self.mapLayer_)
+    self.MapRuntime_ = require("app.scenes.battle.map.MapRuntime").new(self.mapLayer_)
     self.MapRuntime_:init()
     self.mapLayer_:addChild(self.MapRuntime_)
     ---------------------------------------------
@@ -46,6 +47,21 @@ function battleScene:ctor(id_)
             switchscene("home",{transitionType = "crossFade", time = 0.5})
         end)
         :pos(display.right - 100, display.top - 15)
+        :addTo(self)
+    cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
+        :setButtonSize(160, 30)
+        :setButtonLabel(cc.ui.UILabel.new({text = "add skill"}))
+        :onButtonPressed(function(event)
+            event.target:setScale(1.1)
+        end)
+        :onButtonRelease(function(event)
+            event.target:setScale(1.0)
+        end)
+        :onButtonClicked(function()
+            local  cmds =CommandManager:getCmds()
+            table.insert(cmds,2,HeroBoutUseSkillCommand.new(CommandManager:getFrontCommand().opObj_,self.mapLayer_,91001))
+        end)
+        :pos(display.right - 300, display.top - 15)
         :addTo(self)
         ------------------------------------------
         -- cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})

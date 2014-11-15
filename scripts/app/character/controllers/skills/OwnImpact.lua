@@ -2,7 +2,7 @@
 -- Author: wangshaopei
 -- Date: 2014-08-21 15:10:18
 --
-local Cooldown = import("common.Cooldown")
+local Cooldown = import("app.ac.Cooldown")
 local OwnImpact = class("OwnImpact")
 function OwnImpact:ctor()
     -- self.cd_=Cooldown.new(0,0)              --buffCD
@@ -88,6 +88,9 @@ end
 function OwnImpact:getParameterByIndex(paramTypeIndex)
     local v = self.params_[paramTypeIndex] or nil
     return v
+end
+function OwnImpact:getParamAmount()
+    return #self.params_
 end
 -------------------------------------------------------------------
 return OwnImpact

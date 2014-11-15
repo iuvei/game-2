@@ -13,6 +13,8 @@ uiLayerDef.ID_Formation = 10004
 uiLayerDef.ID_Hero = 80001
 uiLayerDef.ID_HeroInfo = 80002
 uiLayerDef.ID_HeroSkillUp=80003
+uiLayerDef.ID_Package=80004
+uiLayerDef.ID_EquipUse=80005
 ---------------------------------------------------------
 return uiLayerDef
 ---------------------------------------------------------

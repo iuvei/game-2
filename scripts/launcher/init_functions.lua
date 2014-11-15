@@ -63,7 +63,19 @@ function INIT_FUNCTION.AppExistsListener(bindApp)
         end, 0.5)
     end
 
-
+    -- if device.platform == "android" then
+    --     self.touchLayer = display.newLayer()
+    --     self.touchLayer:addNodeEventListener(cc.KEYPAD_EVENT, function(event)
+    --         if event.key == "back" then
+    --             --CCDirector:sharedDirector():endToLua()
+    --             local javaClassName = "com/cocos2dx/testgame/Testgame"
+    --             local javaMethodName = "exit"
+    --             luaj.callStaticMethod(javaClassName, javaMethodName)
+    --         end
+    --     end)
+    --     self.touchLayer:setKeypadEnabled(true)
+    --     self:addChild(self.touchLayer)
+    -- end
 end
 ----------------------------------------------------------------
 function INIT_FUNCTION.hex(s)

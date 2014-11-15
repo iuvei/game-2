@@ -2,11 +2,12 @@
 -- Author: wangshaopei
 -- Date: 2014-08-12 19:07:38
 --
+local MapConstants    = require("app.ac.MapConstants")
 local OpCommand = import(".OpCommand")
 local HeroCGCommand = class("HeroCGCommand",OpCommand)
 function HeroCGCommand:ctor(rMe)
 
-    HeroCGCommand.super.ctor(self)
+    HeroCGCommand.super.ctor(self,CommandType.CG)
     self.rMe_=rMe
     self.rMeView_=rMe:getView()
 end
@@ -16,7 +17,7 @@ function HeroCGCommand:execute()
         self:setOpState(HeroOpState.Doing)
         local x,y = 0,0
         local tx,ty = 0,0
-        local sprite = display.newSprite("effect/bigHead.png",x,y):addTo(self.rMe_:getMap())
+        local sprite = display.newSprite("effect/bigHead.png",x,y):addTo(self.rMe_:getMap(),MapConstants.MAP_Z_3_0)
         if self.rMe_:isEnemy() then
             x,y=display.width+sprite:getContentSize().width/2,display.cy
             tx,ty = display.width-sprite:getContentSize().width/2,display.cy

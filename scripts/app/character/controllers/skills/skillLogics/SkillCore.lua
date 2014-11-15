@@ -42,27 +42,9 @@ function SkillCore:preocessSkillRequest(rMe,skillId)
     --     end)
     params.skillId = skillIns.id
 
-    --默认攻击总时间为动作完成时间
-    params.atkAomuntTime=skillTemp.actTime
-    if skillEffData then
-       --设置击中时间
-        params.hitTimeArr = string.split(skillEffData.hitTime, MapConstants.SPLIT_SING)
-        --设置攻击时间
-        if params.atkAomuntTime < skillEffData.time then
-            params.atkAomuntTime=skillEffData.time
-        end
-    end
-    if params.hitTimeArr==nil then
-        params.hitTimeArr={}
-        params.hitTimeArr[1]=skillTemp.actHitTime
-    end
-    if #params.hitTimeArr > 0 then
-        params.nextHitTime=tonumber(params.hitTimeArr[1])
-        params.skillExeTimesCounter=params.skillExeTimesCounter+1
-    end
-
     --设置参数
     params.targets=targets
+    params.target_type=skillTemp.useTarget_type
     params.skillLev=skillIns.lev
    -- params.atkDir=dir
     --params.flip=flip
@@ -80,8 +62,10 @@ function SkillCore:activeSkillNew(rMe)
      end
      rMe:refixSkill(skillInfo)
      local logicId = skillInfo:getLogicId()
+     --取得对应的技能ID
      local skillLogic = Skill_GetLogic(rMe,logicId)
      if skillLogic==nil then return false end
+     --前面已检测
      if skillLogic:isPassive() then
          return false
      end

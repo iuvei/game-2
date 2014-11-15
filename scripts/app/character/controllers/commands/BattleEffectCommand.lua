@@ -14,7 +14,8 @@ function BattleEffectCommand:ctor(rMe)
     self.elapseTime_=0
     self.arrHitTime={}
     --默认普通攻击时间
-    self.arrHitTime[1]=math.floor(rMe.ATTACK_COOLDOWN*1000)
+    -- self.arrHitTime[1]=math.floor(rMe.ATTACK_COOLDOWN*1000)
+    self.arrHitTime[1]=0
     self.endTimeInterval_=self.arrHitTime[1]
     --效果攻击时间
     local skillEffData = configMgr:getConfig("skills"):GetSkillEffect(self.params_.skillId)
@@ -36,15 +37,14 @@ function BattleEffectCommand:execute()
     elseif self:getOpState() == HeroOpState.Doing then
         self.elapseTime_=math.floor(self.elapseTime_+CCDirector:sharedDirector():getDeltaTime()*1000)
         if self.skillExeTimesCounter <= #self.arrHitTime then
-            if tonumber(self.arrHitTime[self.skillExeTimesCounter])  <= self.elapseTime_ then
+            if self.elapseTime_ >= tonumber(self.arrHitTime[self.skillExeTimesCounter])   then
                 --执行攻击效果
                 SkillCore:activeSkillNew(self.rMe_)
                 --暂时只执行一次
                 self.skillExeTimesCounter = self.skillExeTimesCounter+5
             end
         end
-        if self.endTimeInterval_ <= self.elapseTime_ then
-
+        if self.elapseTime_ >= self.endTimeInterval_ then
             self:setOpState(HeroOpState.End)
         end
         --print("···",CCDirector:sharedDirector():getDeltaTime())

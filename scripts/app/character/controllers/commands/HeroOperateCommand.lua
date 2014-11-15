@@ -10,7 +10,8 @@ function HeroOperateCommand:ctor(opObj,map,mapEvent)
     self.opObj_=opObj
     self.map_=map
     self.mapEvent_=mapEvent
-    self.isDoDoneBefore_=false                          --是否完成前处理过
+    self._isDoDoneBefore=false                          --是否完成前处理过
+    self._isDoingBefore=false
 end
 function HeroOperateCommand:execute()
 
@@ -22,6 +23,9 @@ function HeroOperateCommand:execute()
                 local cmd = HeroOperateManager:getFrontCommand(HeroOperateManager.CmdSequence)
                 --队列为空，才添加命令
                 if HeroOperateManager:isEmpty() then
+                    -- 攻击前处理
+                    self:doingBefore(object:GetModel())
+
                     --添加攻击命令
                     if object:GetModel():AILogicAkt(self.mapEvent_) then
                         --self.mapEvent_:doStopMove(object)
@@ -38,6 +42,10 @@ function HeroOperateCommand:execute()
                     if cmd then
                         --每次移动结束后都检测一次攻击
                         if cmd:getOpState()==HeroOpState.End and cmd:getType()==CommandType.HeroMove then
+                            local move_cmds=HeroOperateManager:getCmdsByType(CommandType.HeroMove)
+                            if #move_cmds<=1 then
+                                self.map_:updataTrigger(object:GetModel())
+                            end
                            if object:GetModel():AILogicAkt(self.mapEvent_) then
                                --todo
                            end
@@ -49,10 +57,15 @@ function HeroOperateCommand:execute()
 
                 --没有玩家操作命令
                 if HeroOperateManager:isEmpty() then
-                    --if self:doDoneBefore(object:GetModel()) then
+                    if self._isDoDoneBefore == false then
+                        self:doDoneBefore(object:GetModel())
+                        if HeroOperateManager:isEmpty() then
+                            self:doDone()
+                        end
+                    else
                         --完成此次步骤
-                        self:doDone(object:GetModel())
-                    --end
+                        self:doDone()
+                    end
                 end
 
             end
@@ -68,7 +81,7 @@ function HeroOperateCommand:clearExpireObj()
     local delObjLst={}
     for k,v in pairs(self.map_:getAllObjects()) do
         -- 判断是否已经被摧毁
-        if v:GetModel():isDestroyed() then
+        if v:GetModel():getClassId() == "hero" and v:GetModel():isDestroyed() then
             table.insert(delObjLst,v)
         end
     end
@@ -78,24 +91,25 @@ function HeroOperateCommand:clearExpireObj()
 end
 --------------------------------------------------------
 function HeroOperateCommand:doDone(rMe)
-    if rMe then
-        rMe:updataBout()
-    end
-    self.isDoDoneBefore_=false
-    self:setDone(true)
-    HeroOperateManager:destroyAllCommands()
+        self:setDone(true)
+        HeroOperateManager:destroyAllCommands()
+        self._isDoDoneBefore = false
 end
 --------------------------------------------------------
 --功能函数
 function HeroOperateCommand:doDoneBefore(rMe)
-    if self.isDoDoneBefore_ == false then
-        self.isDoDoneBefore_=true
-        if rMe then
-            rMe:updataBout()
-        end
-        return false
+    if rMe then
+        rMe:updataBout()
     end
-    return true
+    self._isDoDoneBefore = true
+end
+function HeroOperateCommand:doingBefore(rMe)
+    if rMe then
+        rMe:updataImpacts()
+        self.map_:updataTrigger(rMe)
+    end
+
+    self._isDoingBefore = true
 end
 --------------------------------------------------------
 return HeroOperateCommand

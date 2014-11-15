@@ -2,9 +2,12 @@
 -- Author: wangshaopei
 -- Date: 2014-08-21 15:16:24
 --
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local ImpactLogic = class("ImpactLogic")
 function ImpactLogic:ctor()
+end
+function ImpactLogic:initFromData(ownImpact,impactData)
+    return true
 end
 --修改效果值
 function ImpactLogic:refixSkill(ownImp,skillInfo)
@@ -12,6 +15,9 @@ function ImpactLogic:refixSkill(ownImp,skillInfo)
 end
 function ImpactLogic:updata(rMe,ownImp)
     local bContinue = true
+    if self:specialCDCheck(rMe,ownImp) == false then
+        bContinue = false
+    end
     if bContinue == false then
         return
     end
@@ -35,13 +41,15 @@ end
 function ImpactLogic:isOverTimed()
     return false
 end
+function ImpactLogic:specialCDCheck(rMe,ownImpact)
+    return true
+end
 function ImpactLogic:markModifiedAttrDirty(rMe,ownImpact)
     return true
 end
-function ImpactLogic:getIntAttrRefix(ownImpact,rMe,roleAttrType)
-    return false,0
+function ImpactLogic:getIntAttrRefix(ownImpact,rMe,role_attr_refix,out_data)
 end
-function ImpactLogic:getBoolAttrRefix(ownImpact,rMe,roleAttrType)
+function ImpactLogic:getBoolAttrRefix(ownImpact,rMe,role_attr_refix)
     return false,CommonDefine.INVALID_ID
 end
 --驻留CD
@@ -70,11 +78,17 @@ function ImpactLogic:calcCD(rMe,ownImpact)
     return true
 end
 --处理无类型伤害
-function ImpactLogic:onDamage()
+function ImpactLogic:onDamage(rMe,attacker,ownImpact,outData,skillId) -- outData={damage}
     -- body
 end
 --处理分类伤害
-function ImpactLogic:onDamages()
+function ImpactLogic:onDamages(rMe,attacker,ownImpact,outData,skillId) -- outData={damages}
+    -- body
+end
+function ImpactLogic:onDamageTarget(rMe,target,ownImpact,outData,skillId) -- outData={damage}
+    -- body
+end
+function ImpactLogic:onFiltrateImpact(rMe,ownImpact,impactNeedCheck)
     -- body
 end
 -------------------------------------------------------------

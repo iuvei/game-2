@@ -3,12 +3,12 @@
 -- Date: 2014-08-06 15:05:40
 --
 local configMgr       = require("config.configMgr")         -- 配置
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local SkillDefine=require("app.character.controllers.skills.SkillDefine")
 local HeroAtkCommand=require("app.character.controllers.commands.HeroAtkCommand")
 local HeroCGCommand = require("app.character.controllers.commands.HeroCGCommand")
 local SkillInfo = require("app.character.controllers.skills.SkillInfo")
-local CooldownList = require("common.CooldownList")
+local CooldownList = require("app.ac.CooldownList")
 local TargetAndDepleteParams = require("app.character.controllers.skills.TargetAndDepleteParams")
 local BehaviorBase = import(".BehaviorBase")
 ------------------------------------------------------------------------------
@@ -45,12 +45,12 @@ end
 ------------------------------------------------------------------------------
 function SkillBehavior:bindMethods(object)
 
-    local function useSkill(object,skillId)
+    local function UseSkill(object,skillId)
         if not object.skillCore_:preocessSkillRequest(object,skillId) then
             object:getTargetAndDepleteParams():init()
             return false
         end
-        HeroOperateManager:destroyAllCommands()
+        HeroOperateManager:destroyCommandByType(CommandType.HeroMove)
         --加入命令
         --加入战前CG
         local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(skillId)
@@ -61,7 +61,7 @@ function SkillBehavior:bindMethods(object)
         HeroOperateManager:addCommand(HeroAtkCommand.new(object))
         return true
     end
-    self:bindMethod(object,"useSkill", useSkill)
+    self:bindMethod(object,"UseSkill", UseSkill)
     ------------------------------------------------------------------------------
     -- 伤害处理相关
     local function doAttack(object,timeInterval)
@@ -72,27 +72,43 @@ function SkillBehavior:bindMethods(object)
         --return object:doAttackEvent(params.atkAomuntTime/1000 + object.ATTACK_COOLDOWN + 0.2)--Object.ATTACK_COOLDOWN
     end
     self:bindMethod(object,"doAttack", doAttack)
+    --受伤害无类型
+    local function onDamage(object,damageVal,attackerId,skillId)
+        local outData={damage=damageVal}
+        local attackerObj =object:getMap():getObjectReal(attackerId)
+        -- default min value is 1
+        if outData.damage<=0 then outData.damage=1 end
+        -- 被攻击方受伤害时执行的效果
+        object:_Impact_OnDamage(attackerObj,outData,skillId)
+        -- 攻击方攻击后执行的效果
+        if attackerObj~=nil then
+            attackerObj:_Impact_OnDamageTarget(object,outData,skillId)
+        end
+
+        object:increaseHp(-outData.damage)
+    end
+    self:bindMethod(object,"onDamage", onDamage)
     --受伤害分类型
-    local function onDamages(object,damageArr,attackerId,skillId)
+    local function onDamages(object,damages,attackerId,skillId)
+        local outData={damages=damages,damage=0}
          local attackerView =object:getMap():getObject(attackerId)
          local attackerObj = nil
          if attackerView then attackerObj = attackerView:GetModel() end
 
-        object:Impact_OnDamages(damageArr,attackerObj,skillId)
+        object:_Impact_OnDamages(attackerObj,outData,skillId)
 
-        local damageVal = damageArr[SkillDefine.ImpactParamL003_DamagePhy]+
-        damageArr[SkillDefine.ImpactParamL003_DamagePhyRate]+
-        damageArr[SkillDefine.ImpactParamL003_DamageZhanFa]+
-        damageArr[SkillDefine.ImpactParamL003_DamageZhanFaRate]+
-        damageArr[SkillDefine.ImpactParamL003_DamageJiCe]+
-        damageArr[SkillDefine.ImpactParamL003_DamageJiCeRate]
+        outData.damage = outData.damages[SkillDefine.ImpactParamL003_DamagePhy]+
+        outData.damages[SkillDefine.ImpactParamL003_DamageZhanFa]+
+        outData.damages[SkillDefine.ImpactParamL003_DamageJiCe]
 
-        object:Impact_OnDamage(damageVal,attackerObj,skillId)
+        object:_Impact_OnDamage(attackerObj,outData,skillId)
 
         if attackerObj~=nil then
-            attackerObj:onDamageTarget(damageVal,object,skillId)
+            attackerObj:_Impact_OnDamageTarget(object,outData,skillId)
         end
-        object:increaseHp(-damageVal)
+        -- default min value is 1
+        if outData.damage==0 then outData.damage=1 end
+        object:increaseHp(-outData.damage)
 
         local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
         if not object:isDestroyed() then
@@ -100,48 +116,62 @@ function SkillBehavior:bindMethods(object)
         end
     end
     self:bindMethod(object,"onDamages", onDamages)
-    --受伤害无类型
-    local function onDamage(object,damageVal,attackerId,skillId)
-        local attackerObj =object:getMap():getObjectReal(attackerId)
-        if damageVal<=0 then damageVal=1 end
-        object:Impact_OnDamage(damageVal,attackerObj,skillId)
-        if attackerObj~=nil then
-            attackerObj:onDamageTarget(damageVal,object,skillId)
-        end
-        object:increaseHp(-damageVal)
-    end
-    self:bindMethod(object,"onDamage", onDamage)
     --受伤害目标
-    local function onDamageTarget(object,damageVal,rTar,skillId)
+    local function _Impact_OnDamageTarget(object,target,outData,skillId)
+        local logic
+        for k,ownImpact in pairs(object.impacts_) do
+            logic=Impact_GetLogic(object, ownImpact)
+            if logic==nil then
+            else
+                logic:onDamageTarget(object,target,ownImpact,outData,skillId)
+            end
+        end
 
     end
-    self:bindMethod(object,"onDamageTarget", onDamageTarget)
+    self:bindMethod(object,"_Impact_OnDamageTarget", _Impact_OnDamageTarget)
     --拥有的无类型伤害处理
-
-    local function Impact_OnDamage(object,nDamage,attacker,skillId)
+    local function _Impact_OnDamage(object,attacker,outData,skillId)
+        local logic
         for k,ownImpact in pairs(object.impacts_) do
-            local logic=Impact_GetLogic(object, ownImpact)
+            logic=Impact_GetLogic(object, ownImpact)
             if logic==nil then
             else
-                logic:onDamage()
+                logic:onDamage(object,attacker,ownImpact,outData,skillId)
             end
         end
     end
-    self:bindMethod(object,"Impact_OnDamage", Impact_OnDamage)
+    self:bindMethod(object,"_Impact_OnDamage", _Impact_OnDamage)
     --拥有的分类型伤害处理
-    local function Impact_OnDamages(object,nDamage,attacker,skillId)
+    local function _Impact_OnDamages(object,attacker,outData,skillId)
+        local logic
         for k,ownImpact in pairs(object.impacts_) do
-            local logic=Impact_GetLogic(object, ownImpact)
+            logic=Impact_GetLogic(object, ownImpact)
             if logic==nil then
             else
-                logic:onDamages()
+                logic:onDamages(object,attacker,ownImpact,outData,skillId)
             end
         end
     end
-    self:bindMethod(object,"Impact_OnDamages", Impact_OnDamages)
+    self:bindMethod(object,"_Impact_OnDamages", _Impact_OnDamages)
     ------------------------------------------------------------------------------
     --效果相关
-    local function Impact_OnImpactActived(object,ownImpact)
+    -- register impact
+    local function Impact_RegisterImpact(object,ownImpact)
+        object:_Impact_AddNewImpact(ownImpact)
+        object:_Impact_OnImpactActived(ownImpact)
+    end
+    self:bindMethod(object,"Impact_RegisterImpact", Impact_RegisterImpact)
+    -- add new impact
+    local function _Impact_AddNewImpact(object,ownImpact)
+        object.impacts_[ownImpact:getImpactTypeId()]=ownImpact
+        if DEBUG_BATTLE.showSkillInfo then
+            printf("object = %s impactId = %d is add new",object:getId(),ownImpact:getImpactTypeId())
+        end
+        return true
+    end
+    self:bindMethod(object,"_Impact_AddNewImpact", _Impact_AddNewImpact)
+    -- execute impact effect
+    local function _Impact_OnImpactActived(object,ownImpact)
         if DEBUG_BATTLE.showSkillInfo then
             printf("object = %s impactId = %d is actived,", object:getId(),ownImpact:getImpactTypeId())
         end
@@ -153,23 +183,12 @@ function SkillBehavior:bindMethods(object)
         end
         if ownImpact:getResEffectId()>0 then
             local isRepeatPlay = logic:isOverTimed()
+            -- local effectPoint = local conf_impact=configMgr:getConfig("impacts"):GetImpact(trap_impact_type_id)
             object:getView():createImpactEffect(ownImpact:getResEffectId(),isRepeatPlay)
         end
     end
-    self:bindMethod(object,"Impact_OnImpactActived", Impact_OnImpactActived)
-    local function Impact_RegisterImpact(object,ownImpact)
-        object:Impact_AddNewImpact(ownImpact)
-        object:Impact_OnImpactActived(ownImpact)
-    end
-    self:bindMethod(object,"Impact_RegisterImpact", Impact_RegisterImpact)
-    local function Impact_AddNewImpact(object,ownImpact)
-        object.impacts_[ownImpact:getImpactTypeId()]=ownImpact
-        if DEBUG_BATTLE.showSkillInfo then
-            printf("object = %s impactId = %d is add new",object:getId(),ownImpact:getImpactTypeId())
-        end
-        return true
-    end
-    self:bindMethod(object,"Impact_AddNewImpact", Impact_AddNewImpact)
+    self:bindMethod(object,"_Impact_OnImpactActived", _Impact_OnImpactActived)
+    -- call the impact ends
     local function Impact_OnImpactFadeOut(object,ownImpact)
        ownImpact:markFadeOut()
 
@@ -187,21 +206,15 @@ function SkillBehavior:bindMethods(object)
        end
     end
     self:bindMethod(object,"Impact_DelImpact", Impact_DelImpact)
-    local function Impact_GetIntAttRefix(object,roleAttrType)
-        local v = 0
-        local b = false
+    local function Impact_GetIntAttRefix(object,role_attr_refix,out_data)
         for k,ownImpact in pairs(object.impacts_) do
             local impLogic = Impact_GetLogic(object, ownImpact)
             if impLogic==nil then
 
             elseif ownImpact:isFadeOut()==false and impLogic:isOverTimed()==true then
-                b,v=impLogic:getIntAttrRefix(ownImpact,object,roleAttrType)
-                if b==true then
-                    return b,v
-                end
+                impLogic:getIntAttrRefix(ownImpact,object,role_attr_refix,out_data)
             end
         end
-        return b,v
     end
     self:bindMethod(object,"Impact_GetIntAttRefix", Impact_GetIntAttRefix)
     local function Impact_GetBoolAttRefix(object,roleAttrType)
@@ -235,7 +248,7 @@ function SkillBehavior:bindMethods(object)
             --print("···",skill.id)
             if logic~=nil then
                 --logic:refix_ItemEffect(skill,slotId,itemType,attrType,outAttr)
-                logic:refix_SkillEffect(skill,attrType,outAttr)
+                logic:refix_SkillEffect(object,skill,attrType,outAttr)
             end
         end
     end
@@ -261,6 +274,10 @@ function SkillBehavior:bindMethods(object)
         end
     end
     self:bindMethod(object,"updataImpacts", updataImpacts)
+    local function getImpactByTypeId(type_id)
+        return object.impacts_[type_id]
+    end
+    self:bindMethod(object,"getImpactByTypeId", getImpactByTypeId)
     ------------------------------------------------------------------------------
     -- 命中目标
     local function isHit(object,enemy,_callback)
@@ -306,7 +323,7 @@ function SkillBehavior:bindMethods(object)
         --     object:addSkill(object:createSkill(41001))
         -- end
         object:skillsSort()
-        object:markMaxHpDirtyFlag()
+        --object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MaxHP)
     end
     self:bindMethod(object,"initSkill", initSkill)
     --------------------------------------------------------------------------
@@ -331,6 +348,7 @@ function SkillBehavior:bindMethods(object)
         end
     end
     self:bindMethod(object,"checkCondition", checkCondition)
+    -- 入场技能
     local function isInSceneSkill(object,skillId)
         local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
         if skillIns then
@@ -401,17 +419,17 @@ function SkillBehavior:bindMethods(object)
         assert(object:getSkill(skill.id) == nil, "addSkill() typeId is exist")
         table.insert(object._skills,skill)
         --主动技能
-        if skill.useType==SkillDefine.UseType_Auto then
+        -- if skill.useType==SkillDefine.UseType_Auto then
             if not object.skillsByUseType_[skill.useType] then
                 object.skillsByUseType_[skill.useType]={}
             end
             object.skillsByUseType_[skill.useType][skill.typeId]=skill
-        else
-            if not object.skillsByUseType_[SkillDefine.UseType_Passivity] then
-                object.skillsByUseType_[SkillDefine.UseType_Passivity]={}
-            end
-           object.skillsByUseType_[SkillDefine.UseType_Passivity][skill.typeId]=skill
-        end
+        -- else
+        --     if not object.skillsByUseType_[SkillDefine.UseType_Passivity] then
+        --         object.skillsByUseType_[SkillDefine.UseType_Passivity]={}
+        --     end
+        --    object.skillsByUseType_[SkillDefine.UseType_Passivity][skill.typeId]=skill
+        -- end
 
     end
     self:bindMethod(object,"addSkill",addSkill)
@@ -526,6 +544,10 @@ function SkillBehavior:bindMethods(object)
     self:bindMethod(object,"getImpactLogicByLogicId", getImpactLogicByLogicId)
     local function getSkillLogicByLogicId(object,logicId)
         return object:getMap().SkillLogicManger_:getLogicByLogicId(logicId)
+    end
+    self:bindMethod(object,"getSkillLogicByLogicId", getSkillLogicByLogicId)
+    local function getSpecailLogicByLogicId(object,logicId)
+        return object:getMap().SpecialLogicManger_:getLogicByLogicId(logicId)
     end
     self:bindMethod(object,"getSkillLogicByLogicId", getSkillLogicByLogicId)
     --------------------------------------------------------------------------

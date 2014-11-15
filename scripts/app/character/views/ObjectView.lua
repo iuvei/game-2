@@ -23,8 +23,10 @@ end
 ------------------------------------------------------------------------------
 function ObjectView:init(model,params)
     -- 生成sprite
-    self.sprite_ = display.newSprite(params.img)
-    self:GetBatch():addChild(self.sprite_,MapConstants.MAX_OBJECT_ZORDER)
+    if params.img then
+        self.sprite_ = display.newSprite(params.img)
+        self:GetBatch():addChild(self.sprite_,params.zorder or MapConstants.MAX_OBJECT_ZORDER)
+    end
 
     -- 设置是否翻转
     if params.flipx ~= nil then self:flipX(params.flipx) end
@@ -80,7 +82,9 @@ end
 -- 更新
 function ObjectView:updateView()
     local sprite = self.sprite_
-    sprite:setPosition(ccp(self:getPosition()))
+    if sprite then
+        sprite:setPosition(ccp(self:getPosition()))
+    end
     self:updataImpacts()
 end
 ------------------------------------------------------------------------------
@@ -111,7 +115,7 @@ function ObjectView:removeImpactEffect(resEffectId)
 end
 ------------------------------------------------------------------------------
 --被攻击的效果特效
-function ObjectView:createImpactEffect(resEffectId,isRepeatPlay)
+function ObjectView:createImpactEffect(resEffectId,isRepeatPlay,effectPoint)
     local resEffectData = configMgr:getConfig("skills"):GetSkillEffectByEffectId(resEffectId)
     assert(resEffectData~=nil,string.format("createBuffEff() - resEffectData is nil,resEffectId = %d",resEffectId))
     if self.impactSprite_[resEffectId] then
@@ -121,9 +125,14 @@ function ObjectView:createImpactEffect(resEffectId,isRepeatPlay)
     local arrOffset = string.split(resEffectData.tarOffsetPos, MapConstants.SPLIT_SING)
     local scale_ = resEffectData.scale/100
     local x,y = self:getPosition()
-    local sprite = display.newSprite():addTo(self:GetModel():getMap())
+    local sprite = display.newSprite()
     sprite:setPosition(ccp(x+arrOffset[1],y+arrOffset[2]))
     sprite:setScale(scale_)
+    if effectPoint==nil or effectPoint == 1 then -- 人物身上
+        self:GetModel():getMap():addChild(sprite,MapConstants.MAP_Z_2_0)
+    elseif effectPoint == 2 then -- 在地上
+        self:GetModel():getMap():addChild(sprite,MapConstants.MAP_Z_0_0)
+    end
     --创建动画
     local frameName = resEffectData.name
     local time = resEffectData.time/1000

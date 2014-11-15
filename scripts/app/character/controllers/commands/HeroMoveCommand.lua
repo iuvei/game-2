@@ -9,6 +9,7 @@ function HeroMoveCommand:ctor(opObj,mapEvent,targetPosWorld,dir)
     HeroMoveCommand.super.ctor(self,CommandType.HeroMove)
     --self.opState_=HeroOpState.Start
     self.mapEvent_=mapEvent
+    self._rMe = opObj:GetModel()
     self.rMeView_=opObj
     self.dir_=dir
     self.targetPosWorld_ =targetPosWorld
@@ -28,7 +29,8 @@ function HeroMoveCommand:execute()
          self.rMeView_:GetModel():startMoving(self.rMeView_,self.targetPosWorld_.x,self.targetPosWorld_.y)
     --操作执行进行中
     elseif self:getOpState() == HeroOpState.Doing then
-        if self.rMeView_:GetModel():getIsStop()==true then
+        -- if self.rMeView_:GetModel():getIsStop()==true then
+        if self._rMe:isState("idle") == true then
            self:setOpState(HeroOpState.End)
         end
     end

@@ -31,6 +31,9 @@ end
 function M:getTouchLayer()
     return self.touchLayer_
 end
+function M:getUiLayers()
+    return self.uiLayers_
+end
 ----------------------------------------------------------------
 function M:setTouchLayerEnabled(layer,touchEnabled,touchSwallowEnabled)
     if touchSwallowEnabled == nil then touchSwallowEnabled = true end
@@ -105,7 +108,7 @@ function M:create(params)
     end
     assert(not self:isExist(ly.DialogID),string.format("DialogID = %d,is exist", ly.DialogID))
     self:getTouchLayer():addChild(ly)
-    ly:init(params.ccsFileName,params.params or {})
+    ly:init(params or {})
 
     self:registerUI(ly)
     if DEBUG_BATTLE.showUILayerInfo then
@@ -119,25 +122,31 @@ function M:open(uiLayer)
 
     if not self:canDo(uiLayer) then return false end
 
-    -- 特效
-    scaleEf:run( uiLayer,{
-        initSacle = 0.3,
-        from = { time = 0.1, scale = 1.1 },
-        to   = { tiem = 0.1, scale = 1 },
-        onInit = function()
-            -- open state
-            self.openstate = true
-            -- 暂停触摸
-            self:setTouchLayerEnabled(self:getTouchLayer(),false)
-            self:getTouchLayer():setOpacity(200)
-        end,
-        onComplete = function()
-            -- 恢复触摸
-            self:setTouchLayerEnabled(self:getTouchLayer(),true)
-            uiLayer:setTouchLayerEnabled(true,false)
-            self.openstate = false
-        end,
-    })
+    if uiLayer.open_close_effect == true then
+        -- 特效
+        scaleEf:run( uiLayer,{
+            initSacle = 0.3,
+            from = { time = 0.1, scale = 1.1 },
+            to   = { tiem = 0.1, scale = 1 },
+            onInit = function()
+                -- open state
+                self.openstate = true
+                -- 暂停触摸
+                self:setTouchLayerEnabled(self:getTouchLayer(),false)
+                self:getTouchLayer():setOpacity(200)
+            end,
+            onComplete = function()
+                -- 恢复触摸
+                self:setTouchLayerEnabled(self:getTouchLayer(),true)
+                uiLayer:setTouchLayerEnabled(true,false)
+                self.openstate = false
+            end,
+        })
+    else
+        self:setTouchLayerEnabled(self:getTouchLayer(),true)
+        uiLayer:setTouchLayerEnabled(true,false)
+        self.openstate = false
+    end
 end
 ------------------------------------------------------------------------------
 --关闭相关
@@ -157,28 +166,40 @@ function M:close(uiLayer)
 
     if not self:canDo(uiLayer) then return false end
 
-    -- 特效
-    scaleEf:run( uiLayer,{
-        from = { time = 0.1, scale = 1.1 },
-        to   = { tiem = 0.1, scale = 0.5 },
-        onInit = function()
-            -- 关闭标志，因为删除窗口是异步的
-            self.closestate = true
-            -- 暂停触摸
-            self:setTouchLayerEnabled(self:getTouchLayer(),false)
-        end,
-        onComplete = function()
-            -- 关闭UI
-            self:clearByID(uiLayer.DialogID)
-            self:setTouchLayerEnabled(self:getTouchLayer(),true)
-            if self:getUIAmount()==0 then
-                -- 恢复触摸
-                self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
-                self:getTouchLayer():setOpacity(0)
-            end
-            self.closestate = false
-        end,
-    })
+    if uiLayer.open_close_effect == true then
+        -- 特效
+        scaleEf:run( uiLayer,{
+            from = { time = 0.1, scale = 1.1 },
+            to   = { tiem = 0.1, scale = 0.5 },
+            onInit = function()
+                -- 关闭标志，因为删除窗口是异步的
+                self.closestate = true
+                -- 暂停触摸
+                self:setTouchLayerEnabled(self:getTouchLayer(),false)
+            end,
+            onComplete = function()
+                -- 关闭UI
+                self:clearByID(uiLayer.DialogID)
+                self:setTouchLayerEnabled(self:getTouchLayer(),true)
+                if self:getUIAmount()==0 then
+                    -- 恢复触摸
+                    self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
+                    self:getTouchLayer():setOpacity(0)
+                end
+                self.closestate = false
+            end,
+        })
+    else
+      -- 关闭UI
+        self:clearByID(uiLayer.DialogID)
+        -- self:setTouchLayerEnabled(self:getTouchLayer(),true)
+        if self:getUIAmount()==0 then
+            -- 恢复触摸
+            self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
+            self:getTouchLayer():setOpacity(0)
+        end
+        self.closestate = false
+    end
 end
 ------------------------------------------------------------------------------
 --

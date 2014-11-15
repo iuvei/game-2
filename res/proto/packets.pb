@@ -1,5 +1,5 @@
 
-ç
+É
 packets.protomessage.packets"#
 Packet
 cmd (
@@ -41,10 +41,10 @@ createTime (	
 content (	"4
 CS_AskCreateHero
 playerid (
-heroid ("R
-SC_AskCreateHero
+heroid ("N
+SC_FlushHero
 result (.
-heroinfo (2.message.packets.SC_HeroInfo"í
+heroinfo (2.message.packets.SC_HeroInfo"›
 SC_HeroInfo
 dataId (
 GUID (
@@ -54,11 +54,13 @@ createTime (	
 exp (
 favor (
 armId (6
-skills	 (2&.message.packets.SC_HeroInfo.skillinfo.
+skills	 (2&.message.packets.SC_HeroInfo.skillinfo,
+equips
+ (2.message.packets.SC_ItemInfo.
 	skillinfo
 
-templateId (
-level ("
+templateId (
+level ("
 CS_AskHeros
 playerid ("\
 SC_AskHeros
@@ -80,4 +82,45 @@ formations (2!.message.packets.SC_FormationInfo"i
 	formation (2!.message.packets.SC_FormationInfo"\
 SC_FormationResult
 errocode (4
-	formation (2!.message.packets.SC_FormationInfo
+	formation (2!.message.packets.SC_FormationInfo"!
+CS_AskItemBag
+playerid ("¬
+SC_AskItemBag
+result (
+playerid (5
+items (2&.message.packets.SC_AskItemBag.ItemBagÁ
+ItemBag,
+equips (2.message.packets.SC_ItemInfo.
+comitems (2.message.packets.SC_ItemInfo*
+gems (2.message.packets.SC_ItemInfo,
+debris (2.message.packets.SC_ItemInfo"4
+CS_AskCreateItem
+playerid (
+dataid ("J
+SC_FlushItem
+result (*
+info (2.message.packets.SC_ItemInfo"8
+SC_ItemInfo
+dataId (
+GUID (
+num ("9
+CS_UseEquip
+
+op (
+GUID (
+HeroGUID ("I
+SC_UseEquip
+
+op (
+result (
+HeroGUID (
+GUID (",
+
+CS_UseItem
+GUID (
+HeroGUID ("t
+
+SC_UseItem
+result (*
+item (2.message.packets.SC_ItemInfo*
+hero (2.message.packets.SC_HeroInfo

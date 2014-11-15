@@ -45,6 +45,9 @@ end
 @param timerId 定时器ID
 ]]
 function Timer:kill(timerId)
+    if timerId == nil then
+        return
+    end
     self._scheduler:unscheduleScriptEntry(timerId)
     self._timers[timerId] = nil;
 end

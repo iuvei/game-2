@@ -11,6 +11,7 @@ function DelayCommand:ctor(rMe,endTimeInterval)
     self.rMeView_=rMe:getView()
     self._endTimeInterval= endTimeInterval
     self._elapseTime=0
+    self._rMe = rMe
 end
 function DelayCommand:execute()
     --操作开始执行
@@ -21,7 +22,10 @@ function DelayCommand:execute()
     elseif self:getOpState() == HeroOpState.Doing then
         self._elapseTime=math.floor(self._elapseTime+CCDirector:sharedDirector():getDeltaTime()*1000)
 
-        if self._endTimeInterval <= self._elapseTime then
+        if  self._elapseTime >= self._endTimeInterval then
+            if self._rMe:isState("beattacking") then
+                self._rMe:doStopEvent()
+            end
             --加入攻击效果
             self:setOpState(HeroOpState.End)
         end

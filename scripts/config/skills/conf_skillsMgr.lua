@@ -56,7 +56,7 @@ function conf_skillsMgr:GetSkillData(SkillId)
     nickname=skillTemp.nickname,
     lev=skillIns.lev,
     iconId=skillTemp.iconId,
-    sikllBrief=skillIns.sikllBrief,
+    sikllBrief=skillIns.sikllBrief
 }
     return skillData
 end

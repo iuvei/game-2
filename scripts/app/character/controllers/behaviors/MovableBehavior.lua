@@ -27,6 +27,7 @@ function MovableBehavior:bind(object)
     self:bindMethods(object)
 
     self:reset(object)
+    object:setSpeed(checknumber(object.arm_.Speed))
 end
 ------------------------------------------------------------------------------
 function MovableBehavior:unbind(object)
@@ -35,7 +36,7 @@ function MovableBehavior:unbind(object)
 end
 ------------------------------------------------------------------------------
 function MovableBehavior:reset(object)
-    object:setSpeed(checknumber(object.speed_))
+    -- object:setSpeed(checknumber(object.arm_.Speed))
     object.currentSpeed_ = 0
     object.movingState_  = MovableBehavior.MOVING_STATE_STOPPED
 end
@@ -45,7 +46,7 @@ function MovableBehavior:bindMethods(object)
     ----------------------------------------
     --
     local function getSpeed(object)
-        return object.speed_
+        return object.arm_.Speed
     end
     self:bindMethod(object, "getSpeed", getSpeed)
     ----------------------------------------
@@ -153,8 +154,7 @@ function MovableBehavior:bindMethods(object)
 
         -- 到达目标，停止
         if x == self.targetPos.x and y == self.targetPos.y then
-
-            object:doStopEvent(0,self.targetPos.callback)
+            object:doStopEvent()
             -- print("end",object:getId(),object:getNickname())
             -- 设置为停止状态
             object:stopMovingNow()

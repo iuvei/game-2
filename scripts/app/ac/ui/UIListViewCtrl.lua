@@ -8,7 +8,12 @@ function UIListView:ctor(ScrollView,col,row)
     self.amountCol_=col or 0
     self.amountRow_ = row or 0
     self.items_={}
-    self.sizeItem_=CCSize(0,0)
+    local item=self:getItemByIndex(0)
+    if item then
+        self.sizeItem_=item:getSize()
+    else
+        self.sizeItem_=CCSize(0,0)
+    end
     self.scrollAreaSize_=ScrollView:getInnerContainerSize()
 end
 function UIListView:getScrollView()
@@ -25,49 +30,64 @@ function UIListView:insert(item)
     self:updataScrollArea()
 end
 function UIListView:setScrollAreaSize(size)
+    local size_ = size
     if self:getScrollView():getSize().width > size.width or self:getScrollView():getSize().height > size.height then
-        return
+        size_=self:getScrollView():getSize()
     end
-    self:getScrollView():setInnerContainerSize(size)
+    self:getScrollView():setInnerContainerSize(size_)
 end
 function UIListView:getCount()
     return self:getScrollView():getChildrenCount()
 end
 function UIListView:getItemByIndex(index)
-    return tolua.cast(self:getScrollView():getChildren():objectAtIndex(index), "Layout")
+    if self:getScrollView():getChildrenCount() > 0 then
+        return tolua.cast(self:getScrollView():getChildren():objectAtIndex(index), "Layout")
+    end
+    return nil
+
 end
 function UIListView:updataScrollArea(callback_)
     local amount = self:getScrollView():getChildrenCount()
     if amount<=0 then
         return
     end
+    local count = 0
+    local arrTemp = {}
+    -- 默认顺序
+    local arr=self:getScrollView():getChildren()
+    for i=0,amount-1 do
+        local layout=tolua.cast(arr:objectAtIndex(i), "Layout")
+        table.insert(arrTemp,layout)
+        if layout:isEnabled() then
+            count = count +1
+        end
+    end
+
+    if callback_ then
+        callback_(arrTemp)
+    end
+    -- set position
     local sizeItem = self.sizeItem_
     self.amountCol_= math.floor(self:getScrollView():getSize().width/sizeItem.width)
-    --除法
+
+    -- 除法
     local row_div = math.floor(amount/self.amountCol_)
-    --取模
+    -- 取模
     local row_mod = amount%self.amountCol_
     self.amountRow_ = row_div
     if row_mod > 0 then
         self.amountRow_ = self.amountRow_ + 1
     end
-
-    self.scrollAreaSize_=CCSize(sizeItem.width*(self.amountCol_),sizeItem.height*(self.amountRow_))
+    -- 实际的显示区域
+    row_div = math.floor(count/self.amountCol_)
+    row_mod = count%self.amountCol_
+    local amountRow__ = row_div
+    if row_mod > 0 then
+        amountRow__ = amountRow__ + 1
+    end
+    self.scrollAreaSize_=CCSize(sizeItem.width*(self.amountCol_),sizeItem.height*(amountRow__))
     self:setScrollAreaSize(self.scrollAreaSize_)
     self.scrollAreaSize_=self:getScrollView():getInnerContainerSize()
-    local arrTemp = {}
-    --默认顺序
-        local arr=self:getScrollView():getChildren()
-        for i=0,amount-1 do
-            local layout=tolua.cast(arr:objectAtIndex(i), "Layout")
-            table.insert(arrTemp,layout)
-            -- local col= i%self.amountCol_
-            -- local row = math.floor(i/self.amountCol_)
-            -- layout:setPosition(ccp( col*itemSize.width,self.scrollAreaSize_.height-((row+1)*itemSize.height)))
-        end
-    if callback_ then
-        callback_(arrTemp)
-    end
 
     for i=0,#arrTemp-1 do
         local layout = arrTemp[i+1]

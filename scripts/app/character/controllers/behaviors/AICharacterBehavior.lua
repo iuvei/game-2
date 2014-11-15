@@ -100,7 +100,7 @@ function AICharacterBehavior:bindMethods(object)
         end
 
         --执行技能
-        if not object:useSkill(ownSkill.id) then
+        if not object:UseSkill(ownSkill.id) then
             return false
         end
         --local dis = math.floor(math2d.dist(selfPos.x, selfPos.y, targetPos.x, targetPos.y))

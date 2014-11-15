@@ -8,13 +8,15 @@ SkillDefine.EffType_FakeFly=2           --假飞
 SkillDefine.EffType_Line=3              --直线
 SkillDefine.EffType_Parabolic=4         --抛物线
 
-SkillDefine.UseType_Auto=1              --主动
-SkillDefine.UseType_Passivity=2         --被动
-SkillDefine.UseType_Specific=3          --特殊
-SkillDefine.UseType_Hero=4              --主将
+SkillDefine.UseType_Common=1            --普通攻击
+SkillDefine.UseType_Auto=2              --主动
+SkillDefine.UseType_Passivity=3         --被动
+SkillDefine.UseType_Specific=4          --特殊
+SkillDefine.UseType_Hero=5              --主将
 
 SkillDefine.LogicType_Impact=1
 SkillDefine.LogicType_Skill=2
+SkillDefine.LogicType_Special=3
 
 --效果逻辑类ID定义
 SkillDefine.LogicImpact001=1
@@ -23,20 +25,20 @@ SkillDefine.LogicImpact003=3
 SkillDefine.LogicImpact004=4
 SkillDefine.LogicImpact010=10
 SkillDefine.LogicImpact011=11
+SkillDefine.LogicImpact012=12
+SkillDefine.LogicImpact013=13
 SkillDefine.LogicImpact014=14
 SkillDefine.LogicImpact015=15
+SkillDefine.LogicImpact018=18
 -------------------------------------------------------------
 --效果逻辑参数类型
 --LogicID001
 SkillDefine.ImpactParamL001_Damage=1
 SkillDefine.ImpactParamL001_DamageRate=2
 --LogicID003
-SkillDefine.ImpactParamL003_DamagePhy=1
-SkillDefine.ImpactParamL003_DamagePhyRate=2
-SkillDefine.ImpactParamL003_DamageZhanFa=3                     --战法伤害
-SkillDefine.ImpactParamL003_DamageZhanFaRate=4
-SkillDefine.ImpactParamL003_DamageJiCe=5                       --计策伤害
-SkillDefine.ImpactParamL003_DamageJiCeRate=6
+SkillDefine.ImpactParamL003_DamagePhy=1                        --物理伤害
+SkillDefine.ImpactParamL003_DamageZhanFa=2                     --战法伤害
+SkillDefine.ImpactParamL003_DamageJiCe=3                       --计策伤害
 --LogicID004
 SkillDefine.ImpactParamL004_Hp=1
 SkillDefine.ImpactParamL004_HpRate=2
@@ -49,6 +51,16 @@ SkillDefine.ImpactParamL011_MaxHp=1
 SkillDefine.ImpactParamL011_MaxHpRate=2
 SkillDefine.ImpactParamL011_MaxRage=3
 SkillDefine.ImpactParamL011_MaxRageRate=4
+--LogicID012
+SkillDefine.ImpactParamL012_DamageMagicAtk=1
+SkillDefine.ImpactParamL012_DamageMagicAtkRate=2
+SkillDefine.ImpactParamL012_DamageMagicDef=3
+SkillDefine.ImpactParamL012_DamageMagicDefRate=4
+--LogicID013
+SkillDefine.ImpactParamL013_DamageTacticsAtk=1
+SkillDefine.ImpactParamL013_DamageTacticsAtkRate=2
+SkillDefine.ImpactParamL013_DamageTacticsDef=3
+SkillDefine.ImpactParamL013_DamageTacticsDefRate=4
 --LogicID014
 SkillDefine.ImpactParamL014_DamagePhyAtk=1
 SkillDefine.ImpactParamL014_DamagePhyAtkRate=2
@@ -58,6 +70,8 @@ SkillDefine.ImpactParamL014_DamagePhyDefenceRate=4
 SkillDefine.ImpactParamL015_MoveFlag=1
 SkillDefine.ImpactParamL015_AktFlag=2
 SkillDefine.ImpactParamL015_UnbreakableFlag=3
+-- LogicID025
+SkillDefine.ImpactParamL025_AbsorbRate=1
 --被动技能的LogicID none
 SkillDefine.ImpactParamPassvieSkill_MaxHp=1
 SkillDefine.ImpactParamPassvieSkill_MaxHpRate=2
@@ -67,6 +81,7 @@ SkillDefine.ImpactParamPassvieSkill_MaxRageRate=4
 --技能逻辑类ID定义
 SkillDefine.LogicSkill_ImpToTar=1
 SkillDefine.LogicSkill_PassiveSkill=2
+SkillDefine.LogicSkill_Trap=3  -- 陷阱逻辑ID
 --技能逻辑参数类型
 --LogicSkill_ImpToTar
 SkillDefine.SkillParamL_ImpToTar_Type=1

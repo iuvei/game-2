@@ -8,15 +8,19 @@ local UIButtonCtrl = require("app.ac.ui.UIButtonCtrl")
 local UIUtil = require("app.ac.ui.UIUtil")
 local configMgr = require("config.configMgr")
 local StringData = require("config.zhString")
+local item_operator = require("app.mediator.item_operator")
 ------------------------------------------------------------------------------
 local UIHeroInfo  = class("UIHeroInfo", require("app.ac.ui.UIBase"))
 ------------------------------------------------------------------------------
 local uiLayerDef =require("app.ac.uiLayerDefine")
 UIHeroInfo.DialogID=uiLayerDef.ID_HeroInfo
 ------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
 function UIHeroInfo:ctor(UIManager)
     UIHeroInfo.super.ctor(self,UIManager)
-    self._curShowDlg=nil
+    self._cur_show_dlg=nil
+    self._equip_solts={}
 end
 ------------------------------------------------------------------------------
 -- 退出
@@ -26,12 +30,17 @@ end
 function UIHeroInfo:onEnter()
     UIHeroInfo.super.onEnter(self)
 end
-function UIHeroInfo:init( ccsFileName, params )
-    self.heroinfo = CLIENT_PLAYER:get_mgr_heros():get_hero_by_GUID(params.GUID)
-    UIHeroInfo.super.init(self,ccsFileName)
-    self:ListenClose()
+function UIHeroInfo:init( params )
+    self.heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(params.params.GUID)
+    UIHeroInfo.super.init(self,params)
+
+    --self:ListenClose()
     self:ListenHero()
+
+    self:ListenEquip()
     self:UpdataHero()
+    -- default show
+    self:ShowDlg("Equip")
 end
 ----------------------------------------------------------------------------------------
 --hero
@@ -56,7 +65,7 @@ function UIHeroInfo:ListenHero()
         --
         self:InitHeroSkill()
         --
-        self:ShowDlg("Skill")
+
         end)
     local btn=self.rootHero:getChildByName("BtnEquip")
     btn:addTouchEventListener(function(sender, eventType)
@@ -83,6 +92,7 @@ function UIHeroInfo:ListenHero()
                                 end
                             end)
 end
+
 function UIHeroInfo:ShowDlg(type,isFade)
     if self.isFading then
         return
@@ -103,7 +113,7 @@ function UIHeroInfo:ShowDlg(type,isFade)
     local origin = ccp(self.rootHero:getBoundingBox():getMinX(),self.rootHero:getBoundingBox():getMaxY())
     -- self.rootHeroSkill:setPosition(origin)
     -- self.rootHeroArr:setPosition(origin)
-    local curDlg = self._curShowDlg
+    local curDlg = self._cur_show_dlg
     if curDlg then
         if isFade then
             transition.execute(curDlg, CCMoveTo:create(0.5, origin), {
@@ -119,43 +129,43 @@ function UIHeroInfo:ShowDlg(type,isFade)
         btnEquip:SetDisable(true)
         self.rootHeroEquip:setEnabled(true)
         self.rootHeroEquip:setVisible(true)
-        self._curShowDlg=self.rootHeroEquip
+        self._cur_show_dlg=self.rootHeroEquip
         self:UpdataHeroEquip()
     elseif type == "Skill" then
         btnSkill:SetDisable(true)
         self.rootHeroSkill:setEnabled(true)
         self.rootHeroSkill:setVisible(true)
-        self._curShowDlg=self.rootHeroSkill
+        self._cur_show_dlg=self.rootHeroSkill
         self:UpdataHeroSkill()
     elseif type=="SoldierKind" then
         btnSolder:SetDisable(true)
         self.rootHeroSoldierInfo:setEnabled(true)
         self.rootHeroSoldierInfo:setVisible(true)
         self:UpdataHeroSoldier()
-        self._curShowDlg=self.rootHeroSoldierInfo
+        self._cur_show_dlg=self.rootHeroSoldierInfo
     elseif type=="Att" then
         btnAtt:SetDisable(true)
         self.rootHeroArr:setEnabled(true)
         self.rootHeroArr:setVisible(true)
         self:UpdataHeroArr({con=self.heroinfo.Desc})
-        self._curShowDlg=self.rootHeroArr
+        self._cur_show_dlg=self.rootHeroArr
     end
-    if not self._curShowDlg then
+    if not self._cur_show_dlg then
         return
     end
-    local tar = ccp(self.rootHero:getPositionX()+self.rootHero:getSize().width/2+self._curShowDlg:getSize().width/2,
-        self._curShowDlg:getPositionY())
+    local tar = ccp(self.rootHero:getPositionX()+self.rootHero:getSize().width/2+self._cur_show_dlg:getSize().width/2,
+        self._cur_show_dlg:getPositionY())
 
     if isFade then
         self.isFading=true
-        transition.execute(self._curShowDlg, CCMoveTo:create(0.5, tar), {
+        transition.execute(self._cur_show_dlg, CCMoveTo:create(0.5, tar), {
             easing = "exponentialOut",
             onComplete = function()
                 self.isFading=false
             end,
         })
     else
-        self._curShowDlg:setPosition(tar)
+        self._cur_show_dlg:setPosition(tar)
     end
 
 end
@@ -256,8 +266,79 @@ function UIHeroInfo:UpdataHeroSoldier()
 end
 ----------------------------------------------------------------------------------------
 --英雄装备相关
+function UIHeroInfo:InitEquip()
+
+end
+function UIHeroInfo:ListenEquip()
+    --for i=0,self.rootHeroEquip:getChildrenCount()-1 do
+    for i=1,6 do
+        local slot = self.rootHeroEquip:getChildByName("EquipBg_"..i)
+        slot:getChildByName("sign"):setEnabled(false)
+        slot.state = 0 -- 0 ＝ 无可穿装备，1 ＝ 可穿装备，2 ＝ 已装备
+        slot.equip_pos = i
+        self._equip_solts[i]=slot
+
+        slot:addTouchEventListener(function(sender, eventType)
+                                    if eventType == self.ccs.TouchEventType.ended then
+                                            self:openUI({
+                                                        uiScript=require("app.ui.home.UIEquipUse"),
+                                                        ccsFileName="UI/equip_use.json",
+                                                        params={state=slot.state,equip_slot=slot,hero_guid=self.heroinfo.GUID}
+                                                                                    })
+
+                                    end
+                                end)
+    end
+end
 function UIHeroInfo:UpdataHeroEquip()
-    -- body
+    for i=1,#self._equip_solts do
+        self._equip_solts[i]:getChildByName("sign"):setEnabled(false)
+    end
+    -- 已装备的道具
+    self.heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(self.heroinfo.GUID)
+    local equips = self.heroinfo.equips
+    for i=1,#equips do
+        local equip_data = equips[i]
+        local equip_info = item_operator:get_equip_info( equip_data )
+        local slot=self._equip_solts[equip_info.equip_point]
+        if slot.state == 0 or slot.state == 1 then
+            slot.equip_info=equip_info
+            slot.state = 2
+            self:createUINode("ImageView",{
+                        name    = "EquipImg"..i,
+                        texture = equip_info.icon,
+                       -- pos     = ccp(0,0),
+                    }):addTo(slot)
+        end
+    end
+    for i=1,#self._equip_solts do
+        local slot=self._equip_solts[i]
+        if slot.state == 0 or slot.state == 1 then
+            local e_info=self:GetCanUseEquipByPos(slot.equip_pos)
+            if e_info then
+                slot.equip_info=e_info
+                slot.state = 1
+                slot:getChildByName("sign"):setEnabled(true)
+            end
+        end
+    end
+end
+function UIHeroInfo:GetCanUseEquipByPos(equip_pos)
+    local data_ = CLIENT_PLAYER:get_mgr("equip"):get_data()
+    for k,v in pairs(data_) do
+        local info=v:get_info()
+        if info.equip_point == equip_pos then
+           return info
+        end
+    end
+    return nil
+end
+function UIHeroInfo:ProcessNetResult(params)
+    if params.msg_type == "SC_UseItem" then
+        if params.args.result ~= 0 then
+            self:UpdataHeroEquip()
+        end
+    end
 end
 ------------------------------------------------------------------------------
 return UIHeroInfo

@@ -6,7 +6,7 @@ collectgarbage("setpause"  ,  100)
 collectgarbage("setstepmul"  ,  5000)
 ------------------------------------------------------------------------------
 --
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local configMgr = require("config.configMgr")
 local uiscript = require("app.ui.home.homeUIManager")
 local BaseScene = require("app.scenes.BaseScene")
@@ -63,10 +63,10 @@ function homeScene:ctor()
 
     ------------------------------------------
     -- test
-    --返回登陆界面
+    --重启
     cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
         :setButtonSize(160, 50)
-        :setButtonLabel(cc.ui.UILabel.new({text = "返回登陆界面"}))
+        :setButtonLabel(cc.ui.UILabel.new({text = "重启"}))
         :onButtonPressed(function(event)
             event.target:setScale(1.1)
         end)
@@ -74,7 +74,8 @@ function homeScene:ctor()
             event.target:setScale(1.0)
         end)
         :onButtonClicked(function()
-            switchscene("login")
+            -- switchscene("login")
+            Game:restart()
         end)
         :pos(display.cx, display.top - 30)
         :addTo(self)
@@ -93,15 +94,99 @@ function homeScene:ctor()
             if g_heortemp == nil then
                 g_heortemp = 1
             end
-            CLIENT_PLAYER:get_mgr_heros():ask_createhero(tonumber(g_heortemp.."001"))
+           CLIENT_PLAYER:get_mgr("heros"):ask_createhero(tonumber(g_heortemp.."001"))
             if g_heortemp < 6 then
                 g_heortemp = g_heortemp+1
             else
                 g_heortemp = 1
             end
         end)
-        :pos(display.right - 350, display.top - 30)
+        :pos(display.right - 300, display.top - 30)
         :addTo(self)
+
+    --创建物品
+    cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
+        :setButtonSize(160, 50)
+        :setButtonLabel(cc.ui.UILabel.new({text = "创建物品"}))
+        :onButtonPressed(function(event)
+            event.target:setScale(1.1)
+        end)
+        :onButtonRelease(function(event)
+            event.target:setScale(1.0)
+        end)
+        :onButtonClicked(function()
+            -- local t = {10103000,
+            --             10104000,
+            --             10105000}
+            local t = {
+                40101000,
+                -- 40101001,
+                -- 40201000,
+                -- 40202000,
+                -- 10102000,
+                -- 10101000,
+                -- 20101000,
+                -- 20102000,
+                -- 20103000,
+                -- 30100000,
+                -- 30100001,
+                -- 30100002,
+            }
+            for i=1,#t do
+                CLIENT_PLAYER:send("CS_AskCreateItem",{
+                    playerid = CLIENT_PLAYER:get_playerid(),
+                    dataid = t[i]
+                })
+            end
+        end)
+        :pos(display.right - 150, display.top - 30)
+        :addTo(self)
+
+    --使用物品
+    cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
+        :setButtonSize(160, 50)
+        :setButtonLabel(cc.ui.UILabel.new({text = "使用物品"}))
+        :onButtonPressed(function(event)
+            event.target:setScale(1.1)
+        end)
+        :onButtonRelease(function(event)
+            event.target:setScale(1.0)
+        end)
+        :onButtonClicked(function()
+            CLIENT_PLAYER:send("CS_UseItem",{
+                GUID    = 40101000,
+                -- HeroGUID = 1,
+            })
+        end)
+        :pos(display.cx - 320, display.top - 30)
+        :addTo(self)
+
+        -- local jelly_menu_item = require("common.UI.jelly_menu_item")
+        -- local button = jelly_menu_item.new({
+        --     image = "actor/Button01.png",
+        --     -- imageSelected = "CloseSelected.png",
+        --     listener = function ()
+        --         print("click")
+        --     end,
+        --     x = display.cx,
+        --     y = display.cy
+        -- })
+        -- local button1 = jelly_menu_item.new({
+        --     image = "actor/Button01.png",
+        --     -- imageSelected = "CloseSelected.png",
+        --     listener = function ()
+        --         -- print("click1")
+        --         local x,y = button:getPosition()
+        --         transition.moveTo(button, {x=x+100, time = 0.2})
+        --         button:setVisible(true)
+        --     end,
+        -- })
+
+        -- button:setVisible(false)
+        -- button1:setPosition(button:getPosition())
+
+        -- local menu = ui.newMenu({button,button1})
+        -- self:addChild(menu)
     -- test
     ------------------------------------------
 end
@@ -230,7 +315,7 @@ function homeScene:resetOffsetLimit()
 end
 ----------------------------------------------------------------
 function homeScene:onEnter()
-    print("enter home scene ok")
+    printInfo("enter home scene ok")
     INIT_FUNCTION.AppExistsListener(self)
 
     self.touchLayer_:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
@@ -241,6 +326,12 @@ function homeScene:onEnter()
     self:scheduleUpdate()
 
     if self.UIlayer then self.UIlayer:init() end
+
+    -- flush item effect
+    local heros = CLIENT_PLAYER:get_mgr("heros"):get_data()
+    for k,v in pairs(heros) do
+        v:flush_item_effect()
+    end
 end
 ----------------------------------------------------------------
 function homeScene:onExit()

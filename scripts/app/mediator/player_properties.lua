@@ -18,6 +18,8 @@ function M:set_data( data )
 	self.__data = self:gen_new(data)
 	-- dump(self.__data)
 	-- print(self:get_createtime())
+	-- print(self:get_lastlogouttime())
+	-- print(self:get_lastlogintime())
 end
 ----------------------------------------
 function M:get( key )

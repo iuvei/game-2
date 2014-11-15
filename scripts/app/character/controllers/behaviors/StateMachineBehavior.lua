@@ -38,12 +38,11 @@ function StateMachineBehavior:bind(object)
     local defaultEvents = {
         {name = "start",        from = "none",              to = "idle" },      -- 初始化后，角色处于 idle 状态
         {name = "attack",       from = "idle",              to = "attacking"},  -- 攻击
-        {name = "atkfinish",    from = "attacking",         to = "idle"},       -- 完成
-        --{name = "ready",        from = "attacking",         to = "idle"},       -- 攻击冷却结束
+        -- {name = "atkfinish",    from = "attacking",         to = "idle"},       -- 完成
         {name = "beattack",     from = "*",     to = "beattacking"},  -- 被攻击
-        {name = "beattackOver", from = "beattacking",       to = "idle"},       -- 被攻击冷却
+        -- {name = "beattackOver", from = "beattacking",       to = "idle"},       -- 被攻击冷却
         {name = "move",         from = "idle",              to = "moving"},     -- 移动
-        {name = "finish",       from = "*",                 to = "finished"},       -- 完成
+        -- {name = "finish",       from = "*",                 to = "finished"},       -- 完成
         {name = "stop",         from = "*",                 to = "idle"},       -- 停止
         {name = "bekill",       from = "*",                 to = "dead"},       -- 被杀死
         {name = "relive",       from = "dead",              to = "idle"},       -- 复活
@@ -68,18 +67,18 @@ function StateMachineBehavior:bind(object)
         onstart             = handler(self, self.onStart_),
 
         onattack            = handler(self, self.onAttack_),
-        onleaveattacking    = handler(self, self.onLeaveAttacking_),
+        -- onleaveattacking    = handler(self, self.onLeaveAttacking_),
 
-        onatkfinish         = handler(self, self.onAtkFinish_),
+        -- onatkfinish         = handler(self, self.onAtkFinish_),
         --onready             = handler(self, self.onReady_),
         onmove              = handler(self, self.onMove_),
-        onfinish            = handler(self, self.onFinished_),
+        -- onfinish            = handler(self, self.onFinished_),
         onstop              = handler(self, self.onStop_),
         onbekill            = handler(self, self.onBeKill_),
         onrelive            = handler(self, self.onRelive_),
         onbeattack          = handler(self, self.onBeAttack_),
-        onleavebeattacking  = handler(self, self.onLeaveBeAttacking_),
-        onbeattackOver      = handler(self, self.onBeAttackOver_),
+        -- onleavebeattacking  = handler(self, self.onLeaveBeAttacking_),
+        -- onbeattackOver      = handler(self, self.onBeAttackOver_),
         onbeforeevent       = handler(self, self.onBeforeEvent_)
     }
     -- 如果继承类提供了其他回调，则合并
@@ -146,21 +145,6 @@ function StateMachineBehavior:bindMethods(object)
         return object.fsm__:getState() == state
     end
     self:bindMethod(object,"isState", isState)
-    --[[
-        local defaultEvents = {
-        {name = "start",        from = "none",              to = "idle" },      -- 初始化后，角色处于 idle 状态
-        {name = "attack",       from = "idle",              to = "attacking"},  -- 攻击
-        {name = "atkfinish",    from = "attacking",         to = "idle"},       -- 完成
-        {name = "ready",        from = "attacking",         to = "idle"},       -- 攻击冷却结束
-        {name = "beattack",     from = {"idle","moving"},   to = "beattacking"},  -- 被攻击
-        {name = "beattackOver", from = "beattacking",       to = "idle"},       -- 被攻击冷却
-        {name = "move",         from = "idle",              to = "moving"},     -- 移动
-
-        {name = "stop",         from = "*",                 to = "idle"},       -- 停止
-        {name = "bekill",       from = "*",                 to = "dead"},       -- 被杀死
-        {name = "relive",       from = "dead",              to = "idle"},       -- 复活
-    }
-    ]]
     ----------------------------------------
     --
     local function canDoEvent(object,eventname)
@@ -176,7 +160,7 @@ function StateMachineBehavior:bindMethods(object)
             -- idle      ->     attacking
             object.fsm__:doEvent("attack")
             -- attacking      ->     idle
-            object.fsm__:doEvent("atkfinish", attackTime)
+            -- object.fsm__:doEvent("atkfinish", attackTime)
             return true
         else
             return false
@@ -203,8 +187,9 @@ function StateMachineBehavior:bindMethods(object)
     local function doBeAttackEvent(object,cooldown)
         --if object.fsm__:canDoEvent("beattack") then
             self:log("----------")
-            object.fsm__:doEventForce("beattack",_callback)
-            object.fsm__:doEvent("beattackOver", cooldown)
+            -- object.fsm__:doEventForce("beattack",_callback)
+            -- object.fsm__:doEvent("beattackOver", cooldown)
+            object.fsm__:doEvent("beattack")
             --return true
         --else
         --    return false
@@ -229,14 +214,9 @@ function StateMachineBehavior:bindMethods(object)
     self:bindMethod(object,"doMoveEvent", doMoveEvent)
     ----------------------------------------
     -- 停止事件
-    local function doStopEvent(object,time,_callback)
-        if object:canDoEvent("stop") then
-            self:log("----------")
-            object.fsm__:doEvent("stop",time)
-            if _callback then
-                _callback()
-            end
-        end
+    local function doStopEvent(object)
+            self:log("doStopEvent")
+            object.fsm__:doEvent("stop")
     end
     self:bindMethod(object,"doStopEvent", doStopEvent)
 end

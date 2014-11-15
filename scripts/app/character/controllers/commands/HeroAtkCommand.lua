@@ -9,6 +9,7 @@ local HeroAtkCommand = class("HeroAtkCommand",OpCommand)
 
 function HeroAtkCommand:ctor(rMe,startTime,endTime)
     HeroAtkCommand.super.ctor(self,CommandType.HeroAtk)
+    self._rMe=rMe
     self.params_ = rMe:getTargetAndDepleteParams()
     self.rMeView_=rMe:getView()
     --self.rTgtView_=params.targets[1]
@@ -33,29 +34,19 @@ function HeroAtkCommand:execute()
     --操作执行进行中
     elseif self:getOpState() == HeroOpState.Doing then
         self.elapseTime_=math.floor(self.elapseTime_+CCDirector:sharedDirector():getDeltaTime()*1000)
-        if self.endTimeInterval_ <= self.elapseTime_ then
+        if  self.elapseTime_ >= self.endTimeInterval_ then
             --加入攻击效果
             --HeroOperateManager:addCommand(BattleEffectCommand.new(self.rMeView_:GetModel()))
-
+            self._rMe:doStopEvent()
             HeroOperateManager:addCommand(BattleEffectCommand.new(self.rMeView_:GetModel()),HeroOperateManager.CmdCocurrent)
             self:setOpState(HeroOpState.End)
         end
     end
     --操作执行结束
     if self:getOpState() == HeroOpState.End then
-
         self:setDone(true)
     end
 
-end
-function HeroAtkCommand:executing()
-    -- body
-end
-function HeroAtkCommand:executeEnd()
-
-end
-function HeroAtkCommand:checkEndCondition()
-    return true
 end
 function HeroAtkCommand:getStartTime()
     return self.startTime_

@@ -8,5 +8,5 @@ echo 当前CMD默认目录：%cd%
 set PATCH=%cd%\proj.win32\Debug\
 set BIN=%cd%\proj.win32\Debug\sanguo.exe
 echo 当前: %BIN%
-start %BIN% -landscape -size 1136x640
+start %BIN% -landscape -size 960x640
 rem pause

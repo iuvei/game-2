@@ -1,6 +1,4 @@
 
--- require("config")
-require("framework.init")
 local game = class("game", cc.mvc.AppBase)
 
 function game:ctor()
@@ -20,11 +18,8 @@ function game:ctor()
     require("common.CommonFunction")
 
     -- 常用组件
-    require("common.UI.KNButton")
-    -- require("common.UI.KNBtn")
+    require("common.UI.KNBtn")
     require("common.UI.KNMsg")
-    require("common.UI.KNProgress")
-    -- require("common.UI.KNScrollView")
 
     require("common.UI.KNFileManager")
 
@@ -33,13 +28,20 @@ function game:ctor()
     Res= require("common.resourceDefine")
 
     ---------------------------------------
+    -- token
+    token = {
+        -- server = "gs101",
+        -- user = "hello",
+        -- pass = "password",
+        -- gs_host = "127.0.0.1",
+        -- gs_port = "8888",
+    }
     if CHANNEL_ID ~= "test" then
         -- 网络层
-        NETWORK = require("app.net.network")
+        NETWORK = require("app.ac.net.network")
     end
-
     -- 全局的玩家单例
-    CLIENT_PLAYER = require("app.mediator.client_player").new()
+    CLIENT_PLAYER = require("app.mediator.client_player").create(NETWORK)
 
 end
 

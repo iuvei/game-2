@@ -8,7 +8,7 @@ local DelayCommand = require("app.character.controllers.commands.DelayCommand")
 local BehaviorBase = import(".BehaviorBase")
 local EffectChangeHP = require("common.effect.ChangeHP")
 local configMgr       = require("config.configMgr")
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 ------------------------------------------------------------------------------
 local DestroyedBehavior = class("DestroyedBehavior", BehaviorBase)
 ------------------------------------------------------------------------------
@@ -17,14 +17,17 @@ function DestroyedBehavior:ctor()
 end
 ------------------------------------------------------------------------------
 function DestroyedBehavior:bind(object)
-
     self:bindMethods(object)
 
-    self:reset(object)
+    object.hp__       = nil
+    object.destroyed_ = false
+    object.intAttrDirtyFlags_={}
+    object.intAttrRefixDirtyFlags_={}
+    --self:reset(object)
 end
 ------------------------------------------------------------------------------
 function DestroyedBehavior:unbind(object)
-    object.maxHp_      = nil
+    -- object:setMaxHp(nil)
     object.destroyed_  = nil
     object.hp_         = nil
     object.isStop_     = false
@@ -33,17 +36,28 @@ function DestroyedBehavior:unbind(object)
 end
 ------------------------------------------------------------------------------
 function DestroyedBehavior:reset(object)
-
-    if object.maxHp_ < 1 then object.maxHp_ = 1 end
-    object.hp_        = object.maxHp_
-    object.rage_      = configMgr:getConfig("skills"):GetInitDataByType(CommonDefine.InitRageValType)--object.maxRage_
-    object.destroyed_ = object.hp_ <= 0
     object.hp__       = nil
+    object.destroyed_ = false
     object.intAttrDirtyFlags_={}
     object.intAttrRefixDirtyFlags_={}
+    --if object:getMaxHp() < 1 then object:setMaxHp(1) end
+    -- object.hp_        = object:getMaxHp()
+    -- object.rage_      = configMgr:getConfig("skills"):GetInitDataByType(CommonDefine.InitRageValType)--object.maxRage_
+    -- object.destroyed_ = object.hp_ <= 0
+    -- object.hp__       = nil
+    -- object.intAttrDirtyFlags_={}
+    -- object.intAttrRefixDirtyFlags_={}
 end
 ------------------------------------------------------------------------------
 function DestroyedBehavior:bindMethods(object)
+    -- 初始化摧毁行为
+    function initDestroyedBeh(object)
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MaxHP)
+        if object:getMaxHp() < 1 then object:setMaxHp(1) end
+        object.hp_        = object:getMaxHp()
+        object.rage_      = configMgr:getConfig("skills"):GetInitDataByType(CommonDefine.InitRageValType)--object.maxRage_
+    end
+    self:bindMethod(object,"initDestroyedBeh", initDestroyedBeh)
     function getHit(object)
         return CommonDefine.RATE_LIMITE
     end
@@ -58,16 +72,7 @@ function DestroyedBehavior:bindMethods(object)
         return false
     end
     self:bindMethod(object,"isUnbreakable", isUnbreakable)
-    local function getIsStop(object)
-        return object.isStop_
-    end
-    self:bindMethod(object,"getIsStop", getIsStop)
-    ----------------------------------------
-    --
-    local function setIsStop(object,isStop)
-         object.isStop_=isStop
-    end
-    self:bindMethod(object,"setIsStop", setIsStop)
+
     ----------------------------------------
     --
     local function isDestroyed(object)
@@ -76,86 +81,41 @@ function DestroyedBehavior:bindMethods(object)
     self:bindMethod(object,"isDestroyed", isDestroyed)
     ----------------------------------------
     --属性更新标识
-    local function markMaxHpDirtyFlag(object)
-        object.intAttrDirtyFlags_[CommonDefine.RoleAttr_Max_Hp]=true
+    local function MarkAttrDirtyFlag(object,role_attr_type)
+        object.intAttrDirtyFlags_[role_attr_type]=true
     end
-    self:bindMethod(object,"markMaxHpDirtyFlag", markMaxHpDirtyFlag)
-    local function getMaxHpDirtyFlag(object)
-        local flag = object.intAttrDirtyFlags_[CommonDefine.RoleAttr_Max_Hp]
-        if not flag then
-            return false
+    self:bindMethod(object,"MarkAttrDirtyFlag", MarkAttrDirtyFlag)
+    local function GetAttrDirtyFlag(object,role_attr_type)
+        local flag = object.intAttrDirtyFlags_[role_attr_type]
+        if flag ~= nil then
+            return flag
         end
-        return flag
+        return false
     end
-    self:bindMethod(object,"getMaxHpDirtyFlag", getMaxHpDirtyFlag)
-    local function clearMaxHpDirtyFlag(object)
-        object.intAttrDirtyFlags_[CommonDefine.RoleAttr_Max_Hp]=nil
+    self:bindMethod(object,"GetAttrDirtyFlag", GetAttrDirtyFlag)
+    local function ClearAttrDirtyFlag(object,role_attr_type)
+        object.intAttrDirtyFlags_[role_attr_type]=nil
     end
-    self:bindMethod(object,"clearMaxHpDirtyFlag", clearMaxHpDirtyFlag)
+    self:bindMethod(object,"ClearAttrDirtyFlag", ClearAttrDirtyFlag)
+    local function MarkAllAttrDirtyFlag(object)
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MaxHP)
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_PhysicsAtk)
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_PhysicsDef)
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MaxRage)        -- 最大怒气
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MaxMP)        -- 最大mp
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_Hit )          -- 命中率
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_Evd )          -- 闪避率
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_Crt)           -- 暴击率
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_Crtdef)       -- 抗暴击率
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_Block)       -- 格挡率
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MagicAtk)     -- 魔法攻击力
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MagicDef)      -- 魔法防御力
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_TacticsAtk)  -- 战法攻击力
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_TacticsDef)
+
+    end
+    self:bindMethod(object,"MarkAllAttrDirtyFlag", MarkAllAttrDirtyFlag)
     ----------------------------------------
-    -- ----------------------------------------
-    -- --
-    -- local function getMaxHp(object)
-    --     local value = object:getBaseMaxHp() + object:getMaxHpRefix()
-    --     return value
-    -- end
-    -- self:bindMethod(object,"getMaxHp", getMaxHp)
-    -- ----------------------------------------
-    -- --
-    -- local function setMaxHp(object, maxHp)
-    --     maxHp = checkint(maxHp)
-    --     assert(maxHp > 0, string.format("DestroyedBehavior.setMaxHp() - invalid maxHp %s", tostring(maxHp)))
-    --     object.maxHp_ = maxHp
-    -- end
-    -- self:bindMethod(object,"setMaxHp", setMaxHp)
-    -- ----------------------------------------
-    -- --
-    -- local function getHp(object)
-    --     return object.hp_
-    -- end
-    -- self:bindMethod(object,"getHp", getHp)
-    -- ----------------------------------------
-    -- --
-    -- local function setHp(object, hp)
-    --     hp = checknumber(hp)
-    --     assert(hp >= 0 and hp <= object.maxHp_,
-    --            string.format("DestroyedBehavior.setHp() - invalid hp %s", tostring(hp)))
-    --     object.hp_ = hp
-    --     object:dispatchEvent({name = object.HP_CHANGED_EVENT})
-    --     object.hp__ = nil
-    -- end
-    -- self:bindMethod(object,"setHp", setHp)
-    -- ----------------------------------------
-    -- --
-    -- local function getMaxRage(object)
-    --     local value = object:getBaseMaxRage() + object:getMaxRageRefix()
-    --     return value
-    -- end
-    -- self:bindMethod(object,"getMaxRage", getMaxRage)
-    -- ----------------------------------------
-    -- --
-    -- local function setMaxRage(object, maxRage)
-    --     maxRage = checkint(maxRage)
-    --     assert(maxRage > 0, string.format("DestroyedBehavior.setMaxRage() - invalid maxRage %s", tostring(maxRage)))
-    --     object.maxRage_ = maxRage
-    -- end
-    -- self:bindMethod(object,"setMaxRage", setMaxRage)
-    -- ----------------------------------------
-    -- --
-    -- local function getRage(object)
-    --     return object.rage_
-    -- end
-    -- self:bindMethod(object,"getRage", getRage)
-    -- ----------------------------------------
-    -- --
-    -- local function setRage(object, rage)
-    --     rage = checknumber(rage)
-    --     assert(rage >= 0 and rage <= object.maxRage_,
-    --            string.format("DestroyedBehavior.setrage() - invalid rage %s", tostring(rage)))
-    --     object.rage_ = rage
-    -- end
-    -- self:bindMethod(object,"setRage", setRage)
-    -- ----------------------------------------
     -- --修改的属性相关
     -- local function getMaxRageRefix(object)
     --     local b,value = object:Impact_GetIntAttRefix(CommonDefine.RoleAttrRefix_Max_Rage)
@@ -223,7 +183,12 @@ function DestroyedBehavior:bindMethods(object)
                 object:doBeKillEvent()
             else
                 object:doBeAttackEvent(object.ATTACK_COOLDOWN)--object.ATTACK_COOLDOWN
-                HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdCocurrent)
+                if CommandManager:getFrontCommand().opObjId_ == object:getId() then
+                    HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdSequence)
+                else
+                    HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdCocurrent)
+                end
+
             end
             if oldhp>0 and object:getHp()<=0 then
                 --die
@@ -260,7 +225,7 @@ function DestroyedBehavior:bindMethods(object)
                             color = display.COLOR_GREEN,
                         })
                         :pos(ccp(0,0))
-                        :addTo(object:getMap())
+                        :addTo(object:getMap(),MapConstants.MAP_Z_1_0)
 
     end
     self:bindMethod(object,"createView", createView)

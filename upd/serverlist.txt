@@ -1,0 +1,32 @@
+--[[
+	aid：	区编号
+	aname： 区名字
+	servers {
+			name：	服务器名字
+			sname: 	gameserver的编号或名字,需跟gameserver配置的一样
+			ip：	loginserver的ip
+			port: 	loginserver的port
+			state: 	当前服的状态, 1：新区 2：火爆 3：维护 4：拥挤
+			}
+]]
+local serverlist = {
+	-- 1区
+	{	aid=1,aname="一区 风零度",
+		servers = {
+			{sid=1,name="一服 乱世再起",sname="gs101",ip="192.168.0.17",port="8001",state=1},
+			--{sid=2,name="二服 乱世再起1",sname="gs102",ip="192.168.0.14",port="8001",state=2},
+			--{sid=3,name="三服 乱世再起2",sname="gs103",ip="192.168.0.14",port="8001",state=3},
+		}
+	},
+	--[[
+	-- 2区
+	{	aid=2,aname="二区 黄1",
+		servers = {
+			{sid=4,name="四服 黄11",sname="gs201",ip="192.168.0.14",port="8001",state=1},
+			{sid=5,name="五服 黄12",sname="gs202",ip="192.168.0.14",port="8001",state=1},
+			{sid=6,name="六服 黄22",sname="gs203",ip="192.168.0.14",port="8001",state=1},
+		}
+	}
+	]]
+}
+return serverlist

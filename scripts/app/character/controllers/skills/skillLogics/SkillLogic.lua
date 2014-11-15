@@ -4,7 +4,7 @@
 --
 local SkillDefine = import("..SkillDefine")
 local configMgr       = require("config.configMgr")         -- 配置
-local CommonDefine = require("common.CommonDefine")
+local CommonDefine = require("app.ac.CommonDefine")
 local MapConstants    = require("app.ac.MapConstants")
 local CombatCore= import("..CombatCore")
 local SkillLogic = class("SkillLogic")
@@ -13,7 +13,6 @@ function SkillLogic:isPassive()
     return false
 end
 function SkillLogic:startLaunching(rMe)
-
     return self:activateOnceHandler(rMe)
 end
 function SkillLogic:activateOnceHandler(rMe)
@@ -21,7 +20,7 @@ function SkillLogic:activateOnceHandler(rMe)
     local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(params.skillId)
     local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(params.skillId)
     local skillInfo = rMe:getSkillInfo()
-    --技能消耗处理
+    --技能消耗处理,前面已做了检测此处肯定成功
     local bRet = self:depleteProcess(rMe)
     if bRet then
         local activateTimes = skillInfo:getActivateTimes()
@@ -36,17 +35,11 @@ function SkillLogic:activateOnceHandler(rMe)
     end
     return bRet
 end
---消耗处理
-function SkillLogic:depleteProcess(rMe)
-    local params = rMe:getTargetAndDepleteParams()
-    local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(params.skillId)
-    rMe:increaseRage(-skillIns.consumeRage)
-    return true
-end
+-- 执行一次
 function SkillLogic:activateOnce(rMe)
     local targets ={}
     if not self:getTargets(rMe,targets) then
-        return false
+
     end
     for k,rTarv in pairs(targets) do
         local b = self:critcalHitThisTarget()
@@ -58,12 +51,21 @@ function SkillLogic:activateOnce(rMe)
     end
     return true
 end
+--消耗处理
+function SkillLogic:depleteProcess(rMe)
+    local params = rMe:getTargetAndDepleteParams()
+    local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(params.skillId)
+    rMe:increaseRage(-skillIns.consumeRage)
+    return true
+end
+
 --主技能目标的效果处理
 function SkillLogic:effectOnUnitOnce(rMe,rTar,bCritcalHit)
 end
 --其他效果处理
 function SkillLogic:effectOtherTarOnUnitOnce(rMe)
 end
+-- 添加并执行效果
 function SkillLogic:registerImpactEvent(rReceiver,rSender,ownImpact,bCritical)
     local skillInfo = rSender:getSkillInfo()
     local params = rSender:getTargetAndDepleteParams()
@@ -87,10 +89,6 @@ function SkillLogic:calcTargets(rMe,skillId,targetViews)
     local selfPos= rMe:getView():getCellPos()
     local targetPos= fristObjv:getCellPos()
     local dir= rMe:calcDir(selfPos,targetPos)
-    local flip = true
-    if dir== MapConstants.DIR_L then
-        flip=false
-    end
     params.atkDir=dir
     --params.flip=flip
     if skillIns.atkRangeType==SkillDefine.AtkRange_Around then
@@ -198,12 +196,13 @@ function SkillLogic:getRangeTars(rMe,cellPos,targets,isEnemy)
 end
 function SkillLogic:getTargets(rMe,targets)
     local params = rMe:getTargetAndDepleteParams()
+    if not params.targets or #params.targets==0 then
+        return
+    end
     --targets=clone(params.targets)
     for i=1,#params.targets do
         table.insert(targets,params.targets[i])
     end
-    --targets=params.targets
-    --table.insert(targets,params.targets)
     return #targets>0
 end
 -------------------------------------------------------------
@@ -232,7 +231,7 @@ function SkillLogic:isHit(rMe,target,accuracy)
     return myCombat:isHit(accuracy,rand)
 
 end
-function SkillLogic:refix_SkillEffect(skill,attrType,outAttr)
+function SkillLogic:refix_SkillEffect(rMe,skill,attrType,outAttr)
     -- body
 end
 -----------------------------------------------------------------

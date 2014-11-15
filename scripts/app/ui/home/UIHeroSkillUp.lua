@@ -24,13 +24,13 @@ end
 function UIHeroSkillUp:onEnter()
     UIHeroSkillUp.super.onEnter(self)
 end
-function UIHeroSkillUp:init( ccsFileName, params )
-    UIHeroSkillUp.super.init(self,ccsFileName)
-    --self.heroinfo = CLIENT_PLAYER:get_mgr_heros():get_hero_by_GUID(params.GUID)
+function UIHeroSkillUp:init( params )
+    UIHeroSkillUp.super.init(self,params)
+    --self.heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(params.GUID)
     --self:ListenClose()
-    self._skillInfo=configMgr:getConfig("skills"):GetSkillData(params.skillId)
+    self._skillInfo=configMgr:getConfig("skills"):GetSkillData(params.params.skillId)
     self:Listen()
-    local file = configMgr:getConfig("skills"):GetSkillIcon(params.skillId).file
+    local file = configMgr:getConfig("skills"):GetSkillIcon(params.params.skillId).file
     self:Updata({sikllBrief=self._skillInfo.sikllBrief,
         lev=self._skillInfo.lev,
         name=self._skillInfo.nickname,

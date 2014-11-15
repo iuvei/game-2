@@ -3,15 +3,24 @@
 -- Date: 2014-08-22 15:47:47
 --
 local SkillDefine=import(".SkillDefine")
+-- skill logic
 local SLImpactsToTarget = import(".skillLogics.SLImpactsToTarget")
 local SLPassiveSkill = import(".skillLogics.SLPassiveSkill")
+local SLTrap = import(".skillLogics.SLTrap")
+-- impact logic
 local LogicImpact001 = import(".impactLogics.LogicImpact001")
 local LogicImpact003 = import(".impactLogics.LogicImpact003")
 local LogicImpact004 = import(".impactLogics.LogicImpact004")
 local LogicImpact010 = import(".impactLogics.LogicImpact010")
 local LogicImpact011 = import(".impactLogics.LogicImpact011")
+local LogicImpact012 = import(".impactLogics.LogicImpact012")
+local LogicImpact013 = import(".impactLogics.LogicImpact013")
 local LogicImpact014 = import(".impactLogics.LogicImpact014")
 local LogicImpact015 = import(".impactLogics.LogicImpact015")
+local LogicImpact018 = import(".impactLogics.LogicImpact018")
+-- special logic
+local TrapLogic = import(".specialLogics.TrapLogic")
+
 local LogicManger = class("LogicManager")
 
 function LogicManger:ctor(logicType)
@@ -22,11 +31,17 @@ function LogicManger:ctor(logicType)
         self:register(LogicImpact004.new())
         self:register(LogicImpact010.new())
         self:register(LogicImpact011.new())
+        self:register(LogicImpact012.new())
+        self:register(LogicImpact013.new())
         self:register(LogicImpact014.new())
         self:register(LogicImpact015.new())
+        self:register(LogicImpact018.new())
     elseif logicType == SkillDefine.LogicType_Skill then
         self:register(SLImpactsToTarget.new())
         self:register(SLPassiveSkill.new())
+        self:register(SLTrap.new())
+    elseif logicType == SkillDefine.LogicType_Special then
+        self:register(TrapLogic.new())
     end
 end
 function LogicManger:getLogicByLogicId(logicId)

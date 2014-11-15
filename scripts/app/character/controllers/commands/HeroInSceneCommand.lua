@@ -29,15 +29,8 @@ function HeroInSceneCommand:execute()
                                 and object:checkCondition(v.id)
                                 and object:isInSceneSkill(v.id)
                             then
-                                object:useSkill(v.id)
+                                object:UseSkill(v.id)
                             end
-                        end
-                    end
-                else
-                    if cmd then
-                        --每次移动结束后都检测一次攻击
-                        if cmd:getOpState()==HeroOpState.End and cmd:getType()==CommandType.HeroMove then
-
                         end
                     end
                 end

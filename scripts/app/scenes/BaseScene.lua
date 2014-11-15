@@ -6,6 +6,7 @@ local BaseScene = class("BaseScene", function()
     return display.newScene("BaseScene")
 end)
 function BaseScene:ctor()
+    self.name = self.__cname
     self.pos_=ccp(0, 0)
 end
 function BaseScene:setSceneSize(size)

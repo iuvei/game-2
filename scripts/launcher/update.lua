@@ -13,7 +13,10 @@ local IMG_PROGRESS_BAR1 = "scene/updata/bar_1.png"
 ------------------------------------------------------------------------------
 -- 常量
 ------------------------------------------------------------------------------
-local NEEDUPDATE = false     --要不要开启更新
+local NEEDUPDATE = true     --要不要开启更新
+if CHANNEL_ID == "test" then
+    NEEDUPDATE = false
+end
 local server = WEBSERVER_URL
 local param = "?dev="..device.platform
 local list_filename = "flist.txt"
@@ -28,12 +31,11 @@ end)
 function UpdateScene:ctor()
 
     print("# -------------------updateBegin-------------------")
-    -- print("---------------------updateBegin-------------------")
     self.path = G_FLIE_PATH
 
     self.restart = false
 
-    self.layer = CCLayer:create():addTo(self)
+    self.layer = display.newLayer():addTo(self)
     -- self:addChild(self.layer)
 
     local bg = display.newSprite(IMG_BG,display.cx,display.cy):addTo(self.layer)

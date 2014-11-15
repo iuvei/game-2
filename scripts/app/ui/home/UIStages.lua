@@ -20,8 +20,8 @@ function M:onExit( )
 end
 ------------------------------------------------------------------------------
 -- 编辑阵形UI
-function M:init( ccsFileName )
-    M.super.init(self,ccsFileName)
+function M:init( params )
+    M.super.init(self,params)
 
     self:CreateSgateSelectBtn()
 

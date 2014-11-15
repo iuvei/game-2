@@ -33,12 +33,12 @@ function HeroView:ctor(model,params)
         :addEventListener(cls.BEKILL_EVENT, handler(self, self.onBeKill_))
         :addEventListener(cls.HP_CHANGED_EVENT, handler(self, self.updateHP_))
         :addEventListener(cls.STOP_EVENT, handler(self,self.onStop_))
-        :addEventListener(cls.READY_EVENT, handler(self,self.onReady_))
-        :addEventListener(cls.ENTER_ATTACKING, handler(self, self.onEnterAttacking_))
+        -- :addEventListener(cls.READY_EVENT, handler(self,self.onReady_))
+        -- :addEventListener(cls.ENTER_ATTACKING, handler(self, self.onEnterAttacking_))
         :addEventListener(cls.ATTACK_EVENT, handler(self, self.onAttack_))
-        :addEventListener(cls.FINISH_EVENT, handler(self, self.onAtkFinish_))
+        -- :addEventListener(cls.FINISH_EVENT, handler(self, self.onAtkFinish_))
         :addEventListener(cls.BEFORE_EVENT, handler(self, self.onBefore_))
-        :addEventListener(cls.BEATTACK_OVER_EVENT, handler(self, self.onBeAttackOver_))
+        -- :addEventListener(cls.BEATTACK_OVER_EVENT, handler(self, self.onBeAttackOver_))
 
     -- 图片资源
     params.img = "#"..configMgr:getConfig("heros"):GetArmArtById(model:getArmId(),"idle",model:isEnemy())
@@ -111,7 +111,7 @@ function HeroView:updateView()
         y           = self:getPositionY(),
         isFlipX     = self:isFlipX()
     })
-    self:GetModel():updataHits()
+    -- self:GetModel():updataHits()
     --self:updataImpacts()
 end
 -- function HeroView:updataImpacts()
@@ -149,7 +149,7 @@ end
 ------------------------------------------------------------------------------
 -- 每个事件开始前调用
 function HeroView:onBefore_(event)
-    self:GetModel():setIsStop(false)
+
 end
 ------------------------------------------------------------------------------
 function HeroView:onStateChange_(event)
@@ -161,18 +161,18 @@ function HeroView:onBeKill_(event)
     self:createDeadAction()
 end
 function HeroView:onBeAttackOver_(event)
-    self:GetModel():setIsStop(true)
+    -- self:GetModel():setIsStop(true)
 end
 ------------------------------------------------------------------------------
 function HeroView:onStop_(event)
-    self:GetModel():stop()
+    -- self:GetModel():stop()
 end
 ------------------------------------------------------------------------------
 function HeroView:onReady_(event)
 end
-function HeroView:onAtkFinish_( event )
-    self:GetModel():stop()
-end
+-- function HeroView:onAtkFinish_( event )
+--     self:GetModel():stop()
+-- end
 ------------------------------------------------------------------------------
 -- function HeroView:onEnterAttacking_()
 -- end
@@ -199,7 +199,6 @@ function HeroView:updateSprite_(state)
     --elseif  state == "attacking"     then self:createAttackAction()
     elseif  state == "moving"        then self:createWalkAction()
     elseif  state == "beattacking"   then
-        self:GetModel():setIsStop(false)
         self:createBeAttackAction()
     end
 end
@@ -248,7 +247,7 @@ function HeroView:createMiss()
                             color = display.COLOR_RED,
                         })
                         :pos(ccp(x,y))
-                        :addTo(self:GetModel():getMap())
+                        :addTo(self:GetModel():getMap(),MapConstants.MAP_Z_1_0)
     transition.execute(label, CCMoveTo:create(1, CCPoint(x,y+50)), {
     easing = "backout",
     onComplete = function()
@@ -264,7 +263,7 @@ function HeroView:createSkillNameEff(name)
                             color = display.COLOR_BLACK,
                         })
                         :pos(ccp(x,y))
-                        :addTo(self:GetModel():getMap())
+                        :addTo(self:GetModel():getMap(),MapConstants.MAP_Z_1_0)
     transition.execute(label, CCMoveTo:create(1, CCPoint(x,y+50)), {
     easing = "backout",
     onComplete = function()
@@ -302,7 +301,7 @@ function HeroView:createAttackEff()
             local time = skillEffData.time/1000
 
             local animation = display.newAnimation(frames, time/skillEffData.amountFrames)
-            local sprite = display.newSprite():addTo(self:GetModel():getMap())
+            local sprite = display.newSprite():addTo(self:GetModel():getMap(),MapConstants.MAP_Z_2_0)
             tx,ty = rTarView:getPosition()
 
             sprite:setPosition(ccp(tx+arrOffset[1],ty+arrOffset[2]))
@@ -315,7 +314,7 @@ function HeroView:createAttackEff()
             tx,ty = rTarView:getPosition()
             x,y= self:getPosition()
             local map = self:GetModel():getMap()
-            baseBullet.new(self:GetModel(), ccp(x,y),ccp(tx+arrOffset[1],ty+arrOffset[2]),frameName,scale_):addTo(map)
+            baseBullet.new(self:GetModel(), ccp(x,y),ccp(tx+arrOffset[1],ty+arrOffset[2]),frameName,scale_):addTo(map,MapConstants.MAP_Z_2_0)
         end
     end
 

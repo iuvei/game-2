@@ -9,16 +9,22 @@ CommandType.HeroAtk="HeroAtk"
 CommandType.HeroMove="HeroMove"
 CommandType.BattleEffect="BattleEffect"
 CommandType.Delay="Delay"
+CommandType.CG="CG"
 
 local CommandManager = {}
 function CommandManager:init()
     self.commandLst_={}
 end
 function CommandManager:addCommand(command)
-
     table.insert(self.commandLst_,command)
 end
 function CommandManager:destroyCommand()
+end
+function CommandManager:getFrontCommand()
+    return self.commandLst_[1]
+end
+function CommandManager:getCmds()
+    return self.commandLst_
 end
 function CommandManager:isEmpty()
     return table.nums(self.commandLst_) <= 0

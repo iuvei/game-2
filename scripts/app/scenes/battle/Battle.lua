@@ -19,7 +19,7 @@ function CBattle:ctor(mapEvent)
                             color = display.COLOR_GREEN,
                         })
                         :pos(ccp(100,50))
-                        :addTo(self.map_)
+                        :addTo(self.map_,MapConstants.MAP_Z_3_0)
 end
 ---------------------------------------
 --
@@ -33,7 +33,7 @@ end
 function CBattle:ready_()
 
     self.sprite = display.newSprite("scene/battle/scene_battle_start.png",display.cx,display.cy)
-        :addTo(self.map_)
+        :addTo(self.map_,MapConstants.MAP_Z_3_0)
     self.sprite:setOpacity(0)
 
     local sequence = transition.sequence({
@@ -69,7 +69,7 @@ end
 --
 function CBattle:win_()
     self.sprite = display.newSprite("scene/battle/scene_battle_win.png",display.cx,display.cy)
-        :addTo(self.map_)
+        :addTo(self.map_,MapConstants.MAP_Z_3_0)
 
     self.sprite:setOpacity(0)
 
@@ -85,7 +85,7 @@ end
 --
 function CBattle:lose_()
     self.sprite = display.newSprite("scene/battle/scene_battle_lose.png",display.cx,display.cy)
-        :addTo(self.map_)
+        :addTo(self.map_,MapConstants.MAP_Z_3_0)
 
     self.sprite:setOpacity(0)
 
@@ -114,6 +114,7 @@ function CBattle:run_()
     end
     if CommandManager:isEmpty() then
         self:updataQueue_()
+        self.map_:updataSpecialObj()
     else
         CommandManager:updata()
     end
@@ -167,7 +168,7 @@ function CBattle:updataQueue_(bInScene)
     self.implementQueue={}
     for id, object in pairs(self.map_:getAllCampObjects(MapConstants.PLAYER_CAMP)) do
         --self.implementQueue[counter]={}
-        if object and not object:GetModel():isDead() then
+        if object and object:GetModel():getClassId() == "hero" and not object:GetModel():isDead() then
 
            table.insert(self.implementQueue,{objId=object:GetModel():getId(),
             objIndex=object:GetModel():getIndex(),
@@ -196,7 +197,7 @@ function CBattle:updataQueue_(bInScene)
     -- end
     local enemyQueue={}
     for id, object in pairs(self.map_:getAllCampObjects(MapConstants.ENEMY_CAMP)) do
-        if object and not object:GetModel():isDead() then
+        if object and object:GetModel():getClassId() == "hero" and not object:GetModel():isDead() then
             table.insert(enemyQueue,{objId=object:GetModel():getId(),
             objIndex=object:GetModel():getIndex(),
             obj=object

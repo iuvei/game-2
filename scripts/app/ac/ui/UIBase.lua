@@ -17,13 +17,19 @@ function M:ctor(UIManager)
 end
 ------------------------------------------------------------------------------
 --
-function M:init( ccsFileName )
-    if ccsFileName == nil or ccsFileName == "" then return false end
+function M:init( params )
+    if params.ccsFileName == nil or params.ccsFileName == "" then return false end
+
+    self.open_close_effect = params.open_close_effect -- 是否有开启关闭特效
+    if self.open_close_effect == nil then
+        self.open_close_effect = false
+    end
 
     -- 阵形界面
     self:setTouchGroup( TouchGroup:create():addTo(self) )
-    local widget = GUIReader:shareReader():widgetFromJsonFile(ccsFileName)
+    local widget = GUIReader:shareReader():widgetFromJsonFile(params.ccsFileName)
     self:GetTouchGroup():addWidget(widget)
+    self:ListenClose()
 end
 ------------------------------------------------------------------------------
 -- 退出
@@ -34,14 +40,18 @@ function M:onEnter()
     self:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
         -- print(event.name)
         -- 触摸事件处理
-        if event.name == "began" then     self.BeganPos = {x=event.x,y=event.y}
+        if event.name == "began" then  self.BeganPos = {x=event.x,y=event.y}
         elseif event.name == "ended" then
             self:getUIManager():closeTopUI(ccp(self.BeganPos.x,self.BeganPos.y))
         end
         return true
     end)
+
 end
 ------------------------------------------------------------------------------
+function M:openUI(params)
+    self:getUIManager():openUI(params)
+end
 function M:getUIManager()
     return self.UIManager_
 end
@@ -58,6 +68,19 @@ function M:loadCCSJsonFile(parent, jsonFile)
     end
 end
 ------------------------------------------------------------------------------
+function M:ListenClose()
+    self:getWidgetByName("Panel_bg",function ( layout )
+                    local wg = layout:getChildByName("close")
+                        if wg then
+                            wg:addTouchEventListener(function(sender, eventType)
+                                    local ccs = self.ccs
+                                    if eventType == ccs.TouchEventType.ended then
+                                        self:getUIManager():close(self)
+                                    end
+                                end)
+                        end
+                    end)
+end
 function M:close(pos)
     if pos then
         -- 判断是否点击到界面
@@ -69,6 +92,9 @@ function M:close(pos)
     end
     self:getUIManager():close(self)
     --self:getUIManager():closeTopUI()
+end
+------------------------------------------------------------------------------
+function M:ProcessNetResult(params)
 end
 ------------------------------------------------------------------------------
 function M:CCSDefine()
