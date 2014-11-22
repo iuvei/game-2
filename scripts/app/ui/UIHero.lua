@@ -169,7 +169,7 @@ function M:addItem(heroDt)
                                         }
                                         self:addReadyHero(data)
 
-                                        CLIENT_PLAYER:get_mgr("formations"):udpate(self:indexToPos(self.wg_sel_formation.formationType,i),heroDt)
+                                        CLIENT_PLAYER:get_mgr("formations"):update(self:indexToPos(self.wg_sel_formation.formationType,i),heroDt)
                                         -- 更新服务端数据
                                         self:update2server(data.slotIndex, data.heroDt)
                                         break
@@ -185,7 +185,7 @@ function M:addItem(heroDt)
                 end
                 --点击弹起处理
                 if self.drag.isClickDown and not self.drag.isMove then
-                    self:getUIManager():openUI({uiScript=require("app.ui.home.UIHeroInfo"),ccsFileName="UI/hero_info.json",
+                    self:getUIManager():openUI({uiScript=require("app.ui.UIHeroInfo"),ccsFileName="UI/hero_info.json",
                                                 params={GUID=heroDt.GUID}})
                 end
             end

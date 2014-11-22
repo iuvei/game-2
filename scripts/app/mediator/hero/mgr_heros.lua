@@ -7,9 +7,9 @@ local table = table
 ----------------------------------------------------------------
 local client_hero = import(".client_hero")
 ----------------------------------------------------------------
-local M = class("mgr_heros")
+local mgr_heros = class("mgr_heros")
 ----------------------------------------------------------------
-function M:ctor(player)
+function mgr_heros:ctor(player)
     self.__data = {}
     self.player = player
 end
@@ -17,36 +17,36 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function M:get_data()
+function mgr_heros:get_data()
 	return self.__data
 end
 ----------------------------------------
-function M:set_data( data )
+function mgr_heros:set_data( data )
     table.walk(data, function(v, k)
-        self.__data[v.GUID] = client_hero.new(v)
+        self:update(v)
     end)
 
     -- print("---------set_heros")
     -- dump(self.__data)
 end
 ----------------------------------------
-function M:get_count()
+function mgr_heros:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
 -- 根据guid得到hero
-function M:get_hero_by_GUID(GUID)
+function mgr_heros:get_hero_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
     end
     return nil
 end
-function M:get_hero(GUID)
+function mgr_heros:get_hero(GUID)
     return self.__data[GUID]
 end
 ----------------------------------------
-function M:update(newdata)
+function mgr_heros:update(newdata)
     -- local heros = self:get_data()
     -- if heros[newdata.GUID] then
     --     print("mgr_heros update replace ",newdata.GUID)
@@ -54,17 +54,21 @@ function M:update(newdata)
 
     -- 添加一条新数据
     self.__data[newdata.GUID] = client_hero.new(newdata)
+
+    -- 刷新相关
+    self:get_hero(newdata.GUID):flush_item_effect()
     -- print("---------update")
     -- dump(self.__data)
+
 end
 ----------------------------------------
-function M:remove( GUID )
+function mgr_heros:remove( GUID )
     self.__data[GUID] = nil
 end
 ----------------------------------------------------------------
 -- 逻辑处理函数
 ----------------------------------------
-function M:ask_createhero( heroid )
+function mgr_heros:ask_createhero( heroid )
     self.player:send("CS_AskCreateHero", {
         playerid    = self.player:get_playerid(),
         heroid      = heroid,
@@ -72,5 +76,5 @@ function M:ask_createhero( heroid )
 end
 
 ----------------------------------------------------------------
-return M
+return mgr_heros
 ----------------------------------------------------------------

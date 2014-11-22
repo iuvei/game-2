@@ -8,9 +8,9 @@ local table = table
 ----------------------------------------------------------------
 local client_equip = import(".client_equip")
 ----------------------------------------------------------------
-local M = class("mgr_equip")
+local mgr_equip = class("mgr_equip")
 ----------------------------------------------------------------
-function M:ctor(player)
+function mgr_equip:ctor(player)
 	self.__data = {}
     self.player = player
 end
@@ -18,29 +18,29 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function M:get_data()
+function mgr_equip:get_data()
     return self.__data
 end
 ----------------------------------------
-function M:set_data( data )
+function mgr_equip:set_data( data )
     table.walk(data, function(v, k)
-        self.__data[v.GUID] = client_equip.new(v)
+        self:update(v)
     end)
 
     -- print("---------set_equips")
     -- dump(self.__data)
 end
 ----------------------------------------
-function M:get_count()
+function mgr_equip:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
-function M:remove( GUID )
+function mgr_equip:remove( GUID )
     self.__data[GUID] = nil
 end
 ----------------------------------------
 -- 根据guid得到equip
-function M:get_by_GUID(GUID)
+function mgr_equip:get_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
@@ -48,7 +48,7 @@ function M:get_by_GUID(GUID)
     return nil
 end
 ----------------------------------------
-function M:update(newdata)
+function mgr_equip:update(newdata)
     -- local heros = self:get_data()
     -- if heros[newdata.GUID] then
     --     print("mgr_equips update replace ",newdata.GUID)
@@ -60,5 +60,4 @@ function M:update(newdata)
     -- dump(self.__data)
 end
 ----------------------------------------------------------------
-return M
-----------------------------------------------------------------
+return mgr_equip

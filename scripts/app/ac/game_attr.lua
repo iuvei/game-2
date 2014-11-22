@@ -3,9 +3,9 @@
 -- Date: 2014-10-20 18:10:02
 -- geme_attr
 
-local M = {}
+local geme_attr = {}
 
-function M.gen_attr( data )
+function geme_attr.gen_attr( data )
 	local attr = {
 		-- 一级属性
 		Con 		= data.Con or 0,	-- 体质
@@ -43,7 +43,7 @@ function M.gen_attr( data )
 	return attr
 end
 -- hero attr
-function M.gen_hero_attr( data )
+function geme_attr.gen_hero_attr( data )
 	local attr = {
 		-- 一级属性
 		Con 		= data.Con or 0,	-- 体质
@@ -78,4 +78,4 @@ function M.gen_hero_attr( data )
 	return attr
 end
 
-return M
+return geme_attr

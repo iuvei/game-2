@@ -9,37 +9,37 @@ local MapConstants  = require("app.ac.MapConstants")
 local configMgr = require("config.configMgr")
 local item_operator = require("app.mediator.item_operator")
 ----------------------------------------------------------------
-local M = class("client_hero")
+local client_hero = class("client_hero")
 ----------------------------------------------------------------
-function M:ctor(data)
+function client_hero:ctor(data)
     self.__data = nil
 	self:set_data(data)
     self._item_effects={}
 end
 ----------------------------------------
-function M:get_data()
+function client_hero:get_data()
     return self.__data
 end
 ----------------------------------------
-function M:set_data( data )
+function client_hero:set_data( data )
     self.__data = self:gen_new(data)
     -- dump(self.__data)
 end
 ----------------------------------------
-function M:get( key )
+function client_hero:get( key )
     if key == nil then
         return self.__data
     end
     return self.__data[key]
 end
 ----------------------------------------
-function M:setkey( key, data )
+function client_hero:setkey( key, data )
     self.__data[key] = data
 end
 ----------------------------------------
 -- 转为新数据，来自己服务端
 -- 因为pb会附带其他没用信息，所有需要这步
-function M:gen_new(olddata)
+function client_hero:gen_new(olddata)
     -- 转出skill
     local skills = {}
     if olddata.skills then
@@ -85,7 +85,7 @@ end
         得到组合过的数据
         如果有配置文件，请放在这里处理!
 ]]
-function M:get_info()
+function client_hero:get_info()
 
     local confHeros = configMgr:getConfig("heros")
     local confHeroData = confHeros:GetHeroDataById(self:get( "dataId" ))
@@ -108,7 +108,7 @@ function M:get_info()
         exp         = self:get( "exp" ) or 0,
         favor       = self:get( "favor" ) or 0,
 
-        typename    = confHeroData.typename,
+        -- typename    = confHeroData.typename,
         nickname    = confHeroData.nickname,
         level       = self:get( "level" ),
         -- speed       = confHeroData.speed,
@@ -122,6 +122,7 @@ function M:get_info()
         formationId = confHeroData.formationId,
         ArmId       = armId_,
         SkillRule   = confHeroData.SkillRule,
+        -- skills      = confHeroData.skills,
         skills      = self:get( "skills" ),
         countryInfo = countryInfo,
 
@@ -134,7 +135,7 @@ function M:get_info()
 end
 ----------------------------------------
 -- 装备相关
-function M:flush_item_effect()
+function client_hero:flush_item_effect()
     local equips = self:get_info().equips
     self._item_effects={}
 
@@ -155,7 +156,7 @@ function M:flush_item_effect()
     --     print(k,v.value)
     -- end
 end
-function M:calc_effect(item_attr)
+function client_hero:calc_effect(item_attr)
     local item_effect_new ={is_active=true,value=0}
     local item_effect = self:get_item_effect(item_attr.attr_type)
     if item_effect==nil then
@@ -171,7 +172,7 @@ function M:calc_effect(item_attr)
     end
 
 end
-function M:get_item_value(attr_type)
+function client_hero:get_item_value(attr_type)
     local item_effect  = self:get_item_effect(attr_type)
     if item_effect then
         return item_effect.value
@@ -179,8 +180,8 @@ function M:get_item_value(attr_type)
     return 0
 end
 -- 装备的各个影响因素
-function M:get_item_effect(attr_type)
+function client_hero:get_item_effect(attr_type)
     return self._item_effects[attr_type]
 end
 ----------------------------------------------------------------
-return M
+return client_hero

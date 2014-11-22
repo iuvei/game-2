@@ -10,11 +10,11 @@ local MapConstants   = require("app.ac.MapConstants")
 local EffectChangeHP = require("common.effect.ChangeHP")
 local HeroBoutUseSkillCommand = require("app.character.controllers.commands.HeroBoutUseSkillCommand")
 ------------------------------------------------------------------------------
-local battleScene = class("battleScene", function()
-    return display.newScene("battleScene")
+local battle_scene = class("battle_scene", function()
+    return display.newScene("battle_scene")
 end)
 ------------------------------------------------------------------------------
-function battleScene:ctor(id_)
+function battle_scene:ctor(id_)
 
     ---------------插入layer---------------------
     -- -- mapLayer 包含地图的整个视图
@@ -59,9 +59,33 @@ function battleScene:ctor(id_)
         end)
         :onButtonClicked(function()
             local  cmds =CommandManager:getCmds()
-            table.insert(cmds,2,HeroBoutUseSkillCommand.new(CommandManager:getFrontCommand().opObj_,self.mapLayer_,91001))
+            local skill_id = 95001--92001--93001--92001--31001--91001
+            table.insert(cmds,2,HeroBoutUseSkillCommand.new(CommandManager:getFrontCommand().opObj_,self.mapLayer_,skill_id))
         end)
         :pos(display.right - 300, display.top - 15)
+        :addTo(self)
+    self.btn = cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
+        :setButtonSize(160, 30)
+        :setButtonLabel(cc.ui.UILabel.new({text = "pause"}))
+        :onButtonPressed(function(event)
+            event.target:setScale(1.1)
+        end)
+        :onButtonRelease(function(event)
+            event.target:setScale(1.0)
+        end)
+        :onButtonClicked(function()
+            if not is_pause then
+                display.pause()
+                is_pause = true
+                self.btn:setButtonLabelString("resume")
+            else
+                self.btn:setButtonLabelString("pause")
+                display.resume()
+                is_pause = false
+            end
+
+        end)
+        :pos(display.right - 500, display.top - 15)
         :addTo(self)
         ------------------------------------------
         -- cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
@@ -89,7 +113,7 @@ function battleScene:ctor(id_)
 
 end
 ------------------------------------------------------------------------------
-function battleScene:onExit()
+function battle_scene:onExit()
 
     if self.MapRuntime_ then
         self.MapRuntime_:removeFromParentAndCleanup(true)
@@ -105,13 +129,13 @@ function battleScene:onExit()
     CCTextureCache:sharedTextureCache():removeAllTextures()
 end
 ------------------------------------------------------------------------------
-function battleScene:onEnter()
+function battle_scene:onEnter()
     INIT_FUNCTION.AppExistsListener(self)
 
 end
 ------------------------------------------------------------------------------
 -- 心跳
-function battleScene:tick(dt)
+function battle_scene:tick(dt)
 
     if self.MapRuntime_ then
         self.MapRuntime_:tick(dt)
@@ -119,6 +143,6 @@ function battleScene:tick(dt)
 
 end
 ------------------------------------------------------------------------------
-return battleScene
+return battle_scene
 ------------------------------------------------------------------------------
 

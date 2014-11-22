@@ -30,9 +30,7 @@ function SLImpactsToTarget:effectOnUnitOnce(rMe,rTar,bCritcalHit)
     for i=1,#paramsLst do
         local succ = true
         local params = paramsLst[i]
-        -- assert(ImpacteIdData.impactId~=CommonDefine.INVALID_ID,
-        --         string.format("effectOnUnitOnce() - ImpacteIdData.impactId == -1,skillId = %d",skillInfo:getSkillId()))
-        if params[SkillDefine.SkillParamL_ImpToTar_ActivateRate] ~= CommonDefine.INVALID_ID then
+         if params[SkillDefine.SkillParamL_ImpToTar_ActivateRate] ~= CommonDefine.INVALID_ID then
             local rand = math.random(1,CommonDefine.RATE_LIMITE)
             if rand>=params[SkillDefine.SkillParamL_ImpToTar_ActivateRate] then
                 if DEBUG_BATTLE.showSkillInfo then
@@ -42,18 +40,50 @@ function SLImpactsToTarget:effectOnUnitOnce(rMe,rTar,bCritcalHit)
                 end
                 succ=false
             end
-        end
+         end
         if succ then
-            local ownImpact = OwnImpact.new()
+            local target_obj_views = {}
+            local target_obj = nil
+            -- local target_obj = rTar
+
+            -- 按主技能目标逻辑
             if params[SkillDefine.SkillParamL_ImpToTar_Type]==SkillDefine.AppendSkillImpType_ToTar then
+                local ownImpact = OwnImpact.new()
+            -- 初始化效果数据
                 ImpactCore:initImpactFromData(rMe,params[SkillDefine.SkillParamL_ImpToTar_ImpID],ownImpact)
+            -- 计算伤害值
                 if ImpactLogic003.ID == Impact_GetLogicId(ownImpact) then
                     local combat=CombatCore.new()
                     --计算基本属性值＋身上impact附加的属性值，如物理攻击
                     combat:getResultImpact(rMe, rTar, ownImpact)
                 end
-                self:registerImpactEvent(rTar,rMe,ownImpact,false)
+                target_obj = rTar
+                self:registerImpactEvent(target_obj,rMe,ownImpact,false)
+
+            -- 自己定义的目标逻辑
+            elseif params[SkillDefine.SkillParamL_ImpToTar_Type]==SkillDefine.AppendSkillImpType_ToCustomTar then
+                -- 取得目标逻辑
+                local tarLogic = params[SkillDefine.SkillParamL_ImpToTar_TarLogic]
+                self:getTarsByTarLogic(rMe,tarLogic,1,target_obj_views)
+                --
+                for i=1,#target_obj_views do
+                    target_obj = target_obj_views[i]:GetModel()
+                    local ownImpact = OwnImpact.new()
+                    ImpactCore:initImpactFromData(rMe,params[SkillDefine.SkillParamL_ImpToTar_ImpID],ownImpact)
+                    local imapct_logic_id = Impact_GetLogicId(ownImpact)
+                    if ImpactLogic003.ID == imapct_logic_id then
+                        local combat=CombatCore.new()
+                        --计算基本属性值＋身上impact附加的属性值，如物理攻击
+                        combat:getResultImpact(rMe, target_obj, ownImpact)
+                    end
+                    self:registerImpactEvent(target_obj,rMe,ownImpact,false)
+                end
             end
+            --
+            -- for i=1,#target_obj_views do
+            --     target_obj = target_obj_views[i]:GetModel()
+            --     self:registerImpactEvent(target_obj,rMe,ownImpact,false)
+            -- end
         end
     end
 end

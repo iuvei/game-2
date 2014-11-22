@@ -2,63 +2,23 @@
 -- don't change it manaully.
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/heros.xls
 
-local armsSkillRule = {}
-
-armsSkillRule.rule_gongchengches = {}
-local rule_gongchengches = armsSkillRule.rule_gongchengches
-rule_gongchengches[1] = {
-	TypeId = 4,
-	TypeName = "rule_gongchengche",
-	skillTempId = 5000,
-	skllLevel = 1,
-	skillName = "工程车攻击",
+local armsSkillRule = {
+	[1] = {
+		{ skillTempId=1000,skllLevel=1,skillName="步兵攻击" },
+	},
+	[2] = {
+		{ skillTempId=4000,skllLevel=1,skillName="骑兵攻击" },
+	},
+	[3] = {
+		{ skillTempId=3000,skllLevel=1,skillName="弓兵攻击" },
+	},
+	[4] = {
+		{ skillTempId=5000,skllLevel=1,skillName="工程车攻击" },
+	},
 }
 
-armsSkillRule.rule_gongbings = {}
-local rule_gongbings = armsSkillRule.rule_gongbings
-rule_gongbings[1] = {
-	TypeId = 3,
-	TypeName = "rule_gongbing",
-	skillTempId = 3000,
-	skllLevel = 1,
-	skillName = "弓兵攻击",
-}
-
-armsSkillRule.rule_qibings = {}
-local rule_qibings = armsSkillRule.rule_qibings
-rule_qibings[1] = {
-	TypeId = 2,
-	TypeName = "rule_qibing",
-	skillTempId = 4000,
-	skllLevel = 1,
-	skillName = "骑兵攻击",
-}
-
-armsSkillRule.rule_bubings = {}
-local rule_bubings = armsSkillRule.rule_bubings
-rule_bubings[1] = {
-	TypeId = 1,
-	TypeName = "rule_bubing",
-	skillTempId = 1000,
-	skllLevel = 1,
-	skillName = "步兵攻击",
-}
-
-armsSkillRule.type_map = {}
-local type_map = armsSkillRule.type_map
-type_map[4] = "rule_gongchengches" type_map["rule_gongchengches"] = 4
-type_map[3] = "rule_gongbings" type_map["rule_gongbings"] = 3
-type_map[2] = "rule_qibings" type_map["rule_qibings"] = 2
-type_map[1] = "rule_bubings" type_map["rule_bubings"] = 1
-
-armsSkillRule.all_type= {}
-local all_type = armsSkillRule.all_type
-all_type[4] = rule_gongchengches
-all_type[3] = rule_gongbings
-all_type[2] = rule_qibings
-all_type[1] = rule_bubings
-
-for i,v in pairs(armsSkillRule.all_type) do
+local pairs = pairs
+for i,v in pairs(armsSkillRule) do
 	local item = v
 	for j=1, #item do
 		item[j].__index = item[j]

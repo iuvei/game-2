@@ -2,6 +2,7 @@
 -- Author: wangshaopei
 -- Date: 2014-10-09 10:19:31
 --
+local pairs = pairs
 ------------------------------------------------------------------------------
 local UIListView = require("app.ac.ui.UIListViewCtrl")
 local UIButtonCtrl = require("app.ac.ui.UIButtonCtrl")
@@ -9,6 +10,7 @@ local UIUtil = require("app.ac.ui.UIUtil")
 local configMgr = require("config.configMgr")
 local StringData = require("config.zhString")
 local item_operator = require("app.mediator.item_operator")
+local hero_helper = require("app.mediator.hero.hero_helper")
 ------------------------------------------------------------------------------
 local UIHeroInfo  = class("UIHeroInfo", require("app.ac.ui.UIBase"))
 ------------------------------------------------------------------------------
@@ -220,7 +222,7 @@ function UIHeroInfo:InitHeroSkill()
         img:addTouchEventListener(function(sender, eventType)
                                     local ccs = self.ccs
                                     if eventType == ccs.TouchEventType.ended then
-                                        self:getUIManager():openUI({uiScript=require("app.ui.home.UIHeroSkillUp"),
+                                        self:getUIManager():openUI({uiScript=require("app.ui.UIHeroSkillUp"),
                                             ccsFileName="UI/hero_skillup.json",
                                                 params={skillId=skillId}})
                                     end
@@ -281,54 +283,66 @@ function UIHeroInfo:ListenEquip()
         slot:addTouchEventListener(function(sender, eventType)
                                     if eventType == self.ccs.TouchEventType.ended then
                                             self:openUI({
-                                                        uiScript=require("app.ui.home.UIEquipUse"),
+                                                        uiScript=require("app.ui.UIEquipUse"),
                                                         ccsFileName="UI/equip_use.json",
                                                         params={state=slot.state,equip_slot=slot,hero_guid=self.heroinfo.GUID}
-                                                                                    })
+                                                    })
 
                                     end
                                 end)
     end
 end
 function UIHeroInfo:UpdataHeroEquip()
-    for i=1,#self._equip_solts do
-        self._equip_solts[i]:getChildByName("sign"):setEnabled(false)
-    end
+
     -- 已装备的道具
     self.heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(self.heroinfo.GUID)
-    local equips = self.heroinfo.equips
-    for i=1,#equips do
-        local equip_data = equips[i]
-        local equip_info = item_operator:get_equip_info( equip_data )
-        local slot=self._equip_solts[equip_info.equip_point]
-        if slot.state == 0 or slot.state == 1 then
-            slot.equip_info=equip_info
-            slot.state = 2
-            self:createUINode("ImageView",{
-                        name    = "EquipImg"..i,
+
+    for k,v in pairs(self._equip_solts ) do
+        v:getChildByName("sign"):setEnabled(false)
+
+        if v.state == 0 or v.state == 1 then
+            local equip_info = self.heroinfo.equips[k]
+            if equip_info then -- 已有装备
+                equip_info = item_operator:get_equip_info( equip_info )
+                v.equip_info = {GUID = equip_info.GUID, dataId = equip_info.dataId, num = equip_info.num}--equip_info
+                v.state = 2
+                self:createUINode("ImageView",{
+                        name    = "EquipImg"..k,
                         texture = equip_info.icon,
-                       -- pos     = ccp(0,0),
-                    }):addTo(slot)
-        end
-    end
-    for i=1,#self._equip_solts do
-        local slot=self._equip_solts[i]
-        if slot.state == 0 or slot.state == 1 then
-            local e_info=self:GetCanUseEquipByPos(slot.equip_pos)
-            if e_info then
-                slot.equip_info=e_info
-                slot.state = 1
-                slot:getChildByName("sign"):setEnabled(true)
+                    }):addTo(v)
+            else
+                -- 默认显示图片
+                local equip_id = hero_helper:getconf_require_equip( self.heroinfo.dataId )[k]
+                equip_info = item_operator:get_equip_info({dataId = equip_id,GUID = equip_id,num = 0})
+                v.equip_info = {GUID = equip_info.GUID, dataId = equip_info.dataId, num = equip_info.num}
+                v.state = 0
+
+               self:createUINode("ImageView",{
+                        name    = "EquipImg"..k,
+                        texture = equip_info.icon,
+                }):addTo(v):setColor(ccc3(299, 587, 114))
+
+                -- 检测是否有可以穿戴的装备
+                equip_info = self:GetCanUseEquipByPos(v.equip_pos)
+                if equip_info then -- can use
+                    v.equip_info = {GUID = equip_info.GUID, dataId = equip_info.dataId, num = equip_info.num}
+                    v.state = 1
+                    v:getChildByName("sign"):setEnabled(true)
+                end
+
+                -- 检测是否可合成则可穿戴
+                -- TODO
             end
         end
     end
 end
 function UIHeroInfo:GetCanUseEquipByPos(equip_pos)
+
     local data_ = CLIENT_PLAYER:get_mgr("equip"):get_data()
     for k,v in pairs(data_) do
         local info=v:get_info()
-        if info.equip_point == equip_pos then
-           return info
+        if info.equip_point == equip_pos and hero_helper:check_require_equip( self.heroinfo.dataId, info.dataId ) then
+            return info
         end
     end
     return nil

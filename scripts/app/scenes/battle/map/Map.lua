@@ -103,6 +103,7 @@ function Map:createView(parent)
     display.addSpriteFramesWithFile(Res.plpoison , Res.imgpoison )
     display.addSpriteFramesWithFile(Res.plstun , Res.imgstun)
     display.addSpriteFramesWithFile(Res.pltrap , Res.imgtrap)
+    display.addSpriteFramesWithFile("effect/shield.plist" , "effect/shield.png")
 
     -- 背景
     self.bgLayer_ = require("app.scenes.battle.bgLayer").new(self:getId()):addTo(parent)
@@ -194,29 +195,6 @@ end
 --
 function Map:getDMap()
     return self.dMap_
-end
-------------------------------------------------------------------------------
---
-function Map:getHeroByCellPos(cellPos,target_type)
-    local objects = self:getAllObjects()
-    target_type = target_type or "all"
-    if target_type == "player" then -- 目标为自己阵营
-        objects = self:getAllCampObjects(MapConstants.PLAYER_CAMP)
-    elseif target_type == "enemy" then -- 目标为敌方阵营
-        objects = self:getAllCampObjects(MapConstants.ENEMY_CAMP)
-    end
-    for id, object in pairs(objects) do
-        if object and object:GetModel():getClassId() == "hero" and not object:GetModel():isDead() then
-            --if object:GetModel():getId() ~= selfObj:GetModel():getId() then
-                local x,y= object:getPosition()
-                local pos = self:getDMap():worldPosToCellPos(ccp(x, y))
-                if pos.x==cellPos.x and pos.y==cellPos.y then
-                    return object
-                end
-            --end
-        end
-    end
-    return nil
 end
 ------------------------------------------------------------------------------
 -- 根据阵型生成
@@ -340,13 +318,149 @@ function Map:spawnEnemy(parent)
         self.ObjectManager_:newObject( parent, "build",self.buildData,viewParams)
 end
 ------------------------------------------------------------------------------
-function Map:scan(options) -- options={out_targets,cell_positions,target_type}
+function Map:scan(options) -- options={out_target_views,cell_positions,target_type,sender_obj}
     for k,cell_pos in pairs(options.cell_positions) do
-        local t=self:getHeroByCellPos(cell_pos,options.target_type)
-        if t then
-            table.insert(options.out_targets,t)
+        local obj_view=self:getHeroByCellPos(cell_pos,options.target_type)
+        if obj_view then
+            -- 是否包含发送者
+            local check = true
+            if options.is_contain_sender == nil or options.is_contain_sender == false then
+                if obj_view:GetModel():getId() == options.sender_obj:getId() then
+                    check = false
+                end
+            end
+            if check then
+                table.insert(options.out_target_views,obj_view)
+            end
         end
     end
+end
+function Map:scanByTargetLogic(options) -- options={out_target_views,cell_positions,use_target_type,is_contain_sender,sender_obj}
+    local target_camp ="enemy"
+    local target_count = nil
+    if options.use_target_type == 1 then -- 搜索为单个敌人
+        if options.sender_obj:getCampId() == MapConstants.ENEMY_CAMP then
+            target_camp = "player"
+        end
+    elseif options.use_target_type == 2 then -- 搜索对全体敌人
+        if options.sender_obj:getCampId() == MapConstants.ENEMY_CAMP then
+            target_camp = "player"
+        end
+        target_count=-1
+    elseif options.use_target_type == 3 then -- 搜索为单个队友
+        if options.sender_obj:getCampId() == MapConstants.PLAYER_CAMP then
+            target_camp = "player"
+        end
+    elseif options.use_target_type == 4 then -- 搜索为全体队友
+       if options.sender_obj:getCampId() == MapConstants.PLAYER_CAMP then
+            target_camp = "player"
+        end
+        target_count=-1
+    elseif options.use_target_type == 5 then -- 全场
+        target_camp = "all"
+        target_count=-1
+    elseif options.use_target_type == 0 then -- 自己
+        table.insert(options.out_target_views,options.sender_obj:getView())
+        return true
+    elseif options.use_target_type == 7 then
+        if options.sender_obj:getCampId() == MapConstants.ENEMY_CAMP then
+            target_camp = "player"
+        end
+    end
+    assert(target_camp~=nil,"scanByTarget() faild!")
+    assert(#options.cell_positions>0,"options.cell_positions == 0")
+    -- －1＝阵营的所有目标
+    if target_count == -1 then
+        -- options.out_target_views = self:getHeros(target_camp)
+         local object_views = self:getHeros(target_camp)
+         for k,obj_view in pairs(object_views) do
+            local obj = obj_view:GetModel()
+            -- 是否包含发送者
+            local check = true
+            if options.is_contain_sender == nil or options.is_contain_sender == false then
+                if obj:getId() == options.sender_obj:getId() then
+                    check = false
+                end
+            end
+            if check and obj:getClassId() == "hero" and not obj:isDead() then
+                table.insert(options.out_target_views,obj_view)
+            end
+         end
+    else
+        -- 根据位置找到对应的目标
+        for k,cell_pos in pairs(options.cell_positions) do
+            local obj_view =self:getHeroByCellPos(cell_pos,target_camp)
+            if obj_view then
+                local obj = obj_view:GetModel()
+                -- 是否包含发送者
+                local check = true
+                if options.is_contain_sender == nil or options.is_contain_sender == false then
+                    if obj:getId() == options.sender_obj:getId() then
+                        check = false
+                    end
+                end
+                -- 数量
+                -- if target_count == 0 then
+                --     break
+                -- end
+                if check then
+                    -- target_count = target_count - 1
+                    table.insert(options.out_target_views,obj_view)
+                end
+            end
+        end
+    end
+
+end
+function Map:getCampTypeByTargetLogic(target_logic,camp_id)
+    local target_camp ="enemy"
+    if target_logic== 1 then -- 搜索为单个敌人
+        if camp_id == MapConstants.ENEMY_CAMP then
+            target_camp = "player"
+        end
+    elseif target_logic == 2 then -- 搜索对全体敌人
+        if camp_id == MapConstants.ENEMY_CAMP then
+            target_camp = "player"
+        end
+    elseif target_logic == 3 then -- 搜索为单个队友
+        if camp_id == MapConstants.PLAYER_CAMP then
+            target_camp = "player"
+        end
+    elseif target_logic == 4 then -- 搜索为全体队友
+       if camp_id == MapConstants.PLAYER_CAMP then
+            target_camp = "player"
+        end
+    elseif target_logic == 5 then -- 全场
+        target_camp = "all"
+    elseif target_logic == 0 then -- 自己
+        target_camp = "self"
+    end
+    return target_camp
+end
+function Map:getHeroByCellPos(cellPos,target_type)
+    local objects = self:getHeros(target_type)
+    for id, object in pairs(objects) do
+        if object and object:GetModel():getClassId() == "hero" and not object:GetModel():isDead() then
+            --if object:GetModel():getId() ~= selfObj:GetModel():getId() then
+                local x,y= object:getPosition()
+                local pos = self:getDMap():worldPosToCellPos(ccp(x, y))
+                if pos.x==cellPos.x and pos.y==cellPos.y then
+                    return object
+                end
+            --end
+        end
+    end
+    return nil
+end
+function Map:getHeros(camp_type)
+    local objects = self:getAllObjects()
+    camp_type = camp_type or "all"
+    if camp_type == "player" then -- 目标为自己阵营
+        objects = self:getAllCampObjects(MapConstants.PLAYER_CAMP)
+    elseif camp_type == "enemy" then -- 目标为敌方阵营
+        objects = self:getAllCampObjects(MapConstants.ENEMY_CAMP)
+    end
+    return objects
 end
 ------------------------------------------------------------------------------
 function Map:updataSpecialObj()

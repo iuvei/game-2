@@ -62,7 +62,7 @@ end
 ---------------------------------------------------------------------------------
 --
 function ImpactLogic003:onActive(rMe,ownImpact)
-    local damageArr ={}
+    local damageArr ={nil,nil,nil}
     --计算伤害
     --物理
     damageArr[SkillDefine.ImpactParamL003_DamagePhy]=0

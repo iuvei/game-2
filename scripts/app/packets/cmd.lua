@@ -19,9 +19,9 @@ local cmd = {
 	--------------------------------------------------------------------------
 	-- hero
 	{ id=4, name="CS_AskCreateHero", 	handlefile=""},
-	{ id=5, name="SC_FlushHero", 		handlefile=".SC_FlushHero"},
+	{ id=5, name="SC_NewHero", 			handlefile=".hero.SC_NewHero"},
 	{ id=6, name="CS_AskHeros", 		handlefile=""},
-	{ id=7, name="SC_AskHeros", 		handlefile=".SC_AskHeros"},
+	{ id=7, name="SC_AskHeros", 		handlefile=".hero.SC_AskHeros"},
 	--------------------------------------------------------------------------
 	-- 阵形
 	{ id=8,  name="CS_AskFormations", 		handlefile=""},
@@ -33,12 +33,9 @@ local cmd = {
 	{ id=12, name="CS_AskItemBag", 		handlefile=""},
 	{ id=13, name="SC_AskItemBag", 		handlefile=".item.SC_AskItemBag"},
 	{ id=14, name="CS_AskCreateItem", 	handlefile=""},
-	{ id=15, name="SC_FlushItem", 		handlefile=".item.SC_FlushItem"},
-	--
-	-- { id=16, name="CS_UseEquip", 		handlefile=""},
-	-- { id=17, name="SC_UseEquip", 		handlefile=".item.SC_UseEquip"},
-	{ id=18, name="CS_UseItem", 		handlefile=""},
-	{ id=19, name="SC_UseItem", 		handlefile=".item.SC_UseItem"},
+	{ id=15, name="SC_NewItem", 		handlefile=".item.SC_NewItem"},
+	{ id=17, name="CS_UseItem", 		handlefile=""},
+	{ id=18, name="SC_UseItem", 		handlefile=".item.SC_UseItem"},
 	--------------------------------------------------------------------------
 }
 

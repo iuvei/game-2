@@ -24,19 +24,19 @@ local KNLoading = require("common.UI.KNLoading")
 local timer 	= require("common.utils.Timer")
 ------------------------------------------------------------------------------
 -- ui 脚本文件
-local UILogin 		= import(".UILogin")
-local UIServerlist 	= import(".UIServerlist")
+local UILogin 		= require("app.ui.UILogin")
+local UIServerlist 	= require("app.ui.UIServerlist")
 ------------------------------------------------------------------------------
-local M  = class("loginUIManager",require("app.ac.ui.UIManager"))
+local login_ui_manager  = class("login_ui_manager",require("app.ac.ui.UIManager"))
 ------------------------------------------------------------------------------
-function M:ctor(parent)
-    M.super.ctor(self,parent)
+function login_ui_manager:ctor(parent)
+    login_ui_manager.super.ctor(self,parent)
     self._timers = {}
 end
 ------------------------------------------------------------------------------
 -- 退出
-function M:onExit()
-    M.super.onExit(self)
+function login_ui_manager:onExit()
+    login_ui_manager.super.onExit(self)
     -- 必需删除所有的timer
     local function killAllTimer()
 	    for timerId, flag in pairs(self._timers) do
@@ -47,8 +47,8 @@ function M:onExit()
 end
 ------------------------------------------------------------------------------
 --
-function M:init()
-    M.super.init(self)
+function login_ui_manager:init()
+    login_ui_manager.super.init(self)
 
     -- 背景
     local bg = display.newSprite(IMG_BG,display.cx,display.cy)
@@ -87,18 +87,18 @@ function M:init()
 end
 ----------------------------------------------------------------
 -- 不联网直接进
-function M:test_login()
+function login_ui_manager:test_login()
 	switchscene("home",{ transitionType = "crossFade", time = 0.5})
 end
 ----------------------------------------------------------------
 -- 需连接服务端
-function M:testnet_login()
+function login_ui_manager:testnet_login()
 
 	self:openUI({uiScript=UILogin, ccsFileName="UI/serverlist/login.json"})
 end
 ----------------------------------------------------------------
 -- 登入按钮
-function M:createLoginBtn()
+function login_ui_manager:createLoginBtn()
 
     self.loginBtn = KNBtn:new(IMG_PATH, {IMG_SELECT_BTN , IMG_SELECT_BTN_PRE} , display.cx - 100 , 100 , {
         front = IMG_FONT_LOGIN,
@@ -115,7 +115,7 @@ function M:createLoginBtn()
 end
 ----------------------------------------------------------------
 -- 服务列表按钮
-function M:createServerListBtn()
+function login_ui_manager:createServerListBtn()
 
 	local btn1_img = {
 	    normal	= "UI/serverlist/serverselect_serverlist_frame.png",
@@ -205,7 +205,7 @@ function M:createServerListBtn()
 
 end
 ------------------------------------------------------------------------------
-function M:showerror(text)
+function login_ui_manager:showerror(text)
 
 	local timeid = timer:start(function( dt, data, timerId)
 		self:removeLoading() --去除loading
@@ -224,7 +224,7 @@ function M:showerror(text)
 end
 ------------------------------------------------------------------------------
 -- 得到服务器列表
-function M:getServerList()
+function login_ui_manager:getServerList()
 	-- self:closeUI()
 
 	self:showLoading() -- 显示loading
@@ -272,7 +272,7 @@ function M:getServerList()
 end
 ------------------------------------------------------------------------------
 -- 关闭服务列表ui
-function M:closeServerListUI(serverinfo)
+function login_ui_manager:closeServerListUI(serverinfo)
 	if serverinfo == nil then return end
 
 	self.selectedServer:setString(serverinfo.sname)
@@ -284,7 +284,7 @@ function M:closeServerListUI(serverinfo)
 end
 ------------------------------------------------------------------------------
 -- 显示或隐藏控件
-function M:showWidget(isshow)
+function login_ui_manager:showWidget(isshow)
 	if isshow == nil then
 		isshow = true
 	end
@@ -295,14 +295,14 @@ function M:showWidget(isshow)
 	self.selcetText:setVisible(isshow)
 end
 ------------------------------------------------------------------------------
-function M:showLoading()
+function login_ui_manager:showLoading()
 	self:removeLoading()
 	self.loading = KNLoading:new()
 	self:addChild( self.loading:getLayer() )
 end
 ------------------------------------------------------------------------------
 -- 去掉 loading
-function M:removeLoading()
+function login_ui_manager:removeLoading()
 
 	if self.loading then
 		self.loading:remove()
@@ -311,7 +311,7 @@ function M:removeLoading()
 end
 ------------------------------------------------------------------------------
 -- 进入游戏按钮
-function M:createEnterGameBtn()
+function login_ui_manager:createEnterGameBtn()
 
     -- cc.ui.UIPushButton.new({normal="scene/login/select_btn.png",pressed="scene/login/select_btn_pre.png"}, {scale9 = false})
     --     :onButtonClicked(function()
@@ -355,7 +355,7 @@ function M:createEnterGameBtn()
 end
 ------------------------------------------------------------------------------
 -- 得到服务器信息
-function M:getserverinfo( aid, sid)
+function login_ui_manager:getserverinfo( aid, sid)
 	if type(aid) == "string"then
 		aid = tonumber(aid)
 	end
@@ -393,7 +393,7 @@ function M:getserverinfo( aid, sid)
 end
 ------------------------------------------------------------------------------
 -- 得到状态文字和字体颜色
-function M:getstateText( stateid )
+function login_ui_manager:getstateText( stateid )
 	local color = ccc3(214,172,56) -- 金黄色
 	local text = ""
 
@@ -413,37 +413,37 @@ function M:getstateText( stateid )
 end
 ------------------------------------------------------------------------------
 --上次登陆的服务器
-function M:getlastserver()
+function login_ui_manager:getlastserver()
     local aid = KNFileManager.readfile(lastServerAccount_filepath , "aid" , "=")
    	local sid = KNFileManager.readfile(lastServerAccount_filepath , "sid" , "=")
    	return aid,sid
 end
 ------------------------------------------------------------------------------
 --
-function M:setlastserver(aid,sid)
+function login_ui_manager:setlastserver(aid,sid)
     KNFileManager.updatafile(lastServerAccount_filepath , "aid" , "=" , aid)
 	KNFileManager.updatafile(lastServerAccount_filepath , "sid" , "=" , sid)
 end
 ------------------------------------------------------------------------------
 --上次登陆的帐号密码
-function M:getlastacc()
+function login_ui_manager:getlastacc()
     local acc = KNFileManager.readfile(lastServerAccount_filepath , "acc" , "=")
    	local pwd = KNFileManager.readfile(lastServerAccount_filepath , "pwd" , "=")
    	return acc,pwd
 end
 ------------------------------------------------------------------------------
 --
-function M:setlastacc(acc,pwd)
+function login_ui_manager:setlastacc(acc,pwd)
     KNFileManager.updatafile(lastServerAccount_filepath , "acc" , "=" , acc)
 	KNFileManager.updatafile(lastServerAccount_filepath , "pwd" , "=" , pwd)
 end
 ------------------------------------------------------------------------------
 -- 连接登陆服
-function M:connetToLoginServer( _host, _port )
+function login_ui_manager:connetToLoginServer( _host, _port )
     local CMD = {
         onError     = function(error)
         	-- 去掉 loading,这里不能用self
-        	M:removeLoading()
+        	login_ui_manager:removeLoading()
 
             -- print(error)
             local text = error
@@ -477,5 +477,5 @@ function M:connetToLoginServer( _host, _port )
     NETWORK:connect("ls",_host, _port,CMD)
 end
 ------------------------------------------------------------------------------
-return M
+return login_ui_manager
 ------------------------------------------------------------------------------

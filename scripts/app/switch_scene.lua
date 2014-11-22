@@ -25,7 +25,7 @@ function switchscene( name , params)
 	-- 去掉所有未完成的动作
 	CCDirector:sharedDirector():getActionManager():removeAllActions()
 
-	local scene_file = "app.scenes."..name.."."..name.."scene"
+	local scene_file = "app.scenes."..name.."."..name.."_scene"
 
 	-- echoLog("Scene" , "Load Scene [" .. name .. "]")
 	display.replaceScene( require(scene_file).new(params.tempdata),params.transitionType, params.time)

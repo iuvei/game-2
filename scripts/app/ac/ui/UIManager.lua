@@ -64,6 +64,7 @@ end
     params.uiScript     require后的数据与scriptfile不共存，优先处理
     params.scriptFile   lua脚本文件
     params.ccsFileName  ccs文件
+    params.open_close_effect 是否有开启关闭动画
     params.params       附带的参数，会传到界面的init函数里
 
     例：
@@ -83,8 +84,7 @@ end
 --     self:close()
 -- end
 function M:openUI(params)
-    self:create(params)
-    self:open(params.ui)
+    self:open(self:create(params))
 end
 
 ------------------------------------------------------------------------------
@@ -114,7 +114,8 @@ function M:create(params)
     if DEBUG_BATTLE.showUILayerInfo then
         printf("open uiLayer dialogID = %d file = %s", ly.DialogID,params.ccsFileName)
     end
-    params.ui=ly
+    -- params.ui=ly
+    return ly
     --self.CurUILayer:init(params.ccsFileName,params.params or {})
 end
 ------------------------------------------------------------------------------
@@ -133,7 +134,7 @@ function M:open(uiLayer)
                 self.openstate = true
                 -- 暂停触摸
                 self:setTouchLayerEnabled(self:getTouchLayer(),false)
-                self:getTouchLayer():setOpacity(200)
+                -- self:getTouchLayer():setOpacity(200)
             end,
             onComplete = function()
                 -- 恢复触摸
@@ -143,6 +144,7 @@ function M:open(uiLayer)
             end,
         })
     else
+        self:getTouchLayer():setOpacity(200)
         self:setTouchLayerEnabled(self:getTouchLayer(),true)
         uiLayer:setTouchLayerEnabled(true,false)
         self.openstate = false

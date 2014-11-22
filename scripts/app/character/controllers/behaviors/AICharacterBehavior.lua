@@ -46,7 +46,8 @@ function AICharacterBehavior:bindMethods(object)
         local tx, ty = object:getPosition()
         local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(tx,ty))
         local cellPosEnemy=nil
-        if object:GetModel():getType()=="gongbing" then
+        -- if object:GetModel():getType()=="gongbing" then
+        if math.floor(object:GetModel():getArmId() / 1000) == 3 then
             cellPosEnemy=object:GetModel():getMovePosWayFindNearEnemy(mapEvent,false)
         else
             cellPosEnemy=object:GetModel():getMovePosWayForRow(mapEvent)

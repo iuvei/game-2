@@ -2,435 +2,65 @@
 -- don't change it manaully.
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/skill.xls
 
-local skillTemplate = {}
-
-skillTemplate.st_conks = {}
-local st_conks = skillTemplate.st_conks
-st_conks[1] = {
-	TypeId = 41,
-	TypeName = "st_conk",
-	id = 41000,
-	nickname = "眩晕",
-	skillDesc = "普通攻击",
-	instanceId = 41,
-	iconId = 1032,
-	sound = 10003,
-	shakeType = 0,
-	type = 2,
-	useTarget_type = 2,
-	isPlayHeadIcon = 0,
-	bigIconId = 0,
-	accuracyRate = 5000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
+local skillTemplate = {
+	[1] = {
+		{ id=1000,nickname="步兵攻击",skillDesc="普通攻击",instanceId=1,iconId=100,sound=10001,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[2] = {
+		{ id=2000,nickname="百步穿杨",skillDesc="弓箭攻击",instanceId=2,iconId=1033,sound=10002,shakeType=0,type=2,useTarget_type=2,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=1 },
+	},
+	[3] = {
+		{ id=3000,nickname="弓兵攻击",skillDesc="普通攻击",instanceId=3,iconId=1033,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=7000,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[4] = {
+		{ id=4000,nickname="骑兵攻击",skillDesc="普通攻击",instanceId=4,iconId=1035,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[5] = {
+		{ id=5000,nickname="工程车攻击2",skillDesc="普通攻击",instanceId=5,iconId=1036,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[21] = {
+		{ id=21000,nickname="火焰",skillDesc="普通攻击",instanceId=21,iconId=1002,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[22] = {
+		{ id=22000,nickname="蓝火",skillDesc="普通攻击",instanceId=22,iconId=1003,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[31] = {
+		{ id=31000,nickname="大火焰",skillDesc="普通攻击",instanceId=31,iconId=1001,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=1,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[32] = {
+		{ id=32000,nickname="台风",skillDesc="普通攻击",instanceId=32,iconId=1019,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[40] = {
+		{ id=40000,nickname="盾牌",skillDesc="普通攻击",instanceId=40,iconId=1029,sound=10003,shakeType=0,type=2,useTarget_type=0,isPlayHeadIcon=0,bigIconId=0,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[41] = {
+		{ id=41000,nickname="眩晕",skillDesc="普通攻击",instanceId=41,iconId=1032,sound=10003,shakeType=0,type=2,useTarget_type=2,isPlayHeadIcon=0,bigIconId=0,accuracyRate=5000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[61] = {
+		{ id=61000,nickname="加攻",skillDesc="普通攻击",instanceId=61,iconId=1046,sound=10003,shakeType=0,type=2,useTarget_type=0,isPlayHeadIcon=0,bigIconId=0,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+	},
+	[90] = {
+		{ id=90000,nickname="被动加血上限",skillDesc="普通攻击",instanceId=90,iconId=1016,sound=-1,shakeType=-1,type=3,useTarget_type=0,isPlayHeadIcon=-1,bigIconId=-1,accuracyRate=-1,critRate=-1,beLimitControl1=-1,beLimitControl2=-1,isDirectStudy=1,isUseNeedLearn=0,actTime=-1,actHitTime=-1,atkOrGatherTims=-1,isShowAktName=-1 },
+	},
+	[91] = {
+		{ id=91000,nickname="陷阱",skillDesc="陷阱攻击",instanceId=91,iconId=1016,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=0,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=1,actTime=1000,actHitTime=500,atkOrGatherTims=-1,isShowAktName=1 },
+	},
+	[92] = {
+		{ id=92000,nickname="混乱",skillDesc="混乱",instanceId=92,iconId=1032,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=1 },
+	},
+	[93] = {
+		{ id=93000,nickname="无法恢复怒气",skillDesc="无法恢复怒气",instanceId=93,iconId=1032,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=1 },
+	},
+	[94] = {
+		{ id=94000,nickname="抵消攻击护盾",skillDesc="抵消攻击护盾",instanceId=94,iconId=1032,sound=10003,shakeType=0,type=2,useTarget_type=0,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=1000,actHitTime=250,atkOrGatherTims=1,isShowAktName=1 },
+	},
+	[95] = {
+		{ id=95000,nickname="回合前出发效果",skillDesc="回合前出发效果",instanceId=95,iconId=1032,sound=10003,shakeType=0,type=2,useTarget_type=0,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=500,actHitTime=500,atkOrGatherTims=1,isShowAktName=1 },
+	},
 }
 
-skillTemplate.st_lanhuos = {}
-local st_lanhuos = skillTemplate.st_lanhuos
-st_lanhuos[1] = {
-	TypeId = 22,
-	TypeName = "st_lanhuo",
-	id = 22000,
-	nickname = "蓝火",
-	skillDesc = "普通攻击",
-	instanceId = 22,
-	iconId = 1003,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_taifengs = {}
-local st_taifengs = skillTemplate.st_taifengs
-st_taifengs[1] = {
-	TypeId = 32,
-	TypeName = "st_taifeng",
-	id = 32000,
-	nickname = "台风",
-	skillDesc = "普通攻击",
-	instanceId = 32,
-	iconId = 1019,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_passives = {}
-local st_passives = skillTemplate.st_passives
-st_passives[1] = {
-	TypeId = 90,
-	TypeName = "st_passive",
-	id = 90000,
-	nickname = "被动加血上限",
-	skillDesc = "普通攻击",
-	instanceId = 90,
-	iconId = 1016,
-	sound = -1,
-	shakeType = -1,
-	type = 2,
-	useTarget_type = 0,
-	isPlayHeadIcon = -1,
-	bigIconId = -1,
-	accuracyRate = -1,
-	critRate = -1,
-	beLimitControl1 = -1,
-	beLimitControl2 = -1,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = -1,
-	actHitTime = -1,
-	atkOrGatherTims = -1,
-	isShowAktName = -1,
-}
-
-skillTemplate.st_gongchengche_atks = {}
-local st_gongchengche_atks = skillTemplate.st_gongchengche_atks
-st_gongchengche_atks[1] = {
-	TypeId = 5,
-	TypeName = "st_gongchengche_atk",
-	id = 5000,
-	nickname = "工程车攻击2",
-	skillDesc = "普通攻击",
-	instanceId = 5,
-	iconId = 1036,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_huoyans = {}
-local st_huoyans = skillTemplate.st_huoyans
-st_huoyans[1] = {
-	TypeId = 21,
-	TypeName = "st_huoyan",
-	id = 21000,
-	nickname = "火焰",
-	skillDesc = "普通攻击",
-	instanceId = 21,
-	iconId = 1002,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_bubing_atks = {}
-local st_bubing_atks = skillTemplate.st_bubing_atks
-st_bubing_atks[1] = {
-	TypeId = 1,
-	TypeName = "st_bubing_atk",
-	id = 1000,
-	nickname = "步兵攻击",
-	skillDesc = "普通攻击",
-	instanceId = 1,
-	iconId = 100,
-	sound = 10001,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 0,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_zhengxings = {}
-local st_zhengxings = skillTemplate.st_zhengxings
-st_zhengxings[1] = {
-	TypeId = 91,
-	TypeName = "st_zhengxing",
-	id = 91000,
-	nickname = "陷阱",
-	skillDesc = "陷阱攻击",
-	instanceId = 91,
-	iconId = 1016,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 0,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 0,
-	isUseNeedLearn = 1,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = -1,
-	isShowAktName = 1,
-}
-
-skillTemplate.st_dahuoyans = {}
-local st_dahuoyans = skillTemplate.st_dahuoyans
-st_dahuoyans[1] = {
-	TypeId = 31,
-	TypeName = "st_dahuoyan",
-	id = 31000,
-	nickname = "大火焰",
-	skillDesc = "普通攻击",
-	instanceId = 31,
-	iconId = 1001,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 1,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_qibing_atks = {}
-local st_qibing_atks = skillTemplate.st_qibing_atks
-st_qibing_atks[1] = {
-	TypeId = 4,
-	TypeName = "st_qibing_atk",
-	id = 4000,
-	nickname = "骑兵攻击",
-	skillDesc = "普通攻击",
-	instanceId = 4,
-	iconId = 1035,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_gongbing_atks = {}
-local st_gongbing_atks = skillTemplate.st_gongbing_atks
-st_gongbing_atks[1] = {
-	TypeId = 3,
-	TypeName = "st_gongbing_atk",
-	id = 3000,
-	nickname = "弓兵攻击",
-	skillDesc = "普通攻击",
-	instanceId = 3,
-	iconId = 1033,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 1,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 7000,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_baibuchuanyangs = {}
-local st_baibuchuanyangs = skillTemplate.st_baibuchuanyangs
-st_baibuchuanyangs[1] = {
-	TypeId = 2,
-	TypeName = "st_baibuchuanyang",
-	id = 2000,
-	nickname = "百步穿杨",
-	skillDesc = "弓箭攻击",
-	instanceId = 2,
-	iconId = 1033,
-	sound = 10002,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 2,
-	isPlayHeadIcon = 0,
-	bigIconId = 10001,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 1,
-}
-
-skillTemplate.st_defends = {}
-local st_defends = skillTemplate.st_defends
-st_defends[1] = {
-	TypeId = 40,
-	TypeName = "st_defend",
-	id = 40000,
-	nickname = "盾牌",
-	skillDesc = "普通攻击",
-	instanceId = 40,
-	iconId = 1029,
-	sound = 10003,
-	shakeType = 0,
-	type = 2,
-	useTarget_type = 0,
-	isPlayHeadIcon = 0,
-	bigIconId = 0,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.st_addAtks = {}
-local st_addAtks = skillTemplate.st_addAtks
-st_addAtks[1] = {
-	TypeId = 61,
-	TypeName = "st_addAtk",
-	id = 61000,
-	nickname = "加攻",
-	skillDesc = "普通攻击",
-	instanceId = 61,
-	iconId = 1046,
-	sound = 10003,
-	shakeType = 0,
-	type = 1,
-	useTarget_type = 0,
-	isPlayHeadIcon = 0,
-	bigIconId = 0,
-	accuracyRate = 10000,
-	critRate = 0,
-	beLimitControl1 = 0,
-	beLimitControl2 = 0,
-	isDirectStudy = 1,
-	isUseNeedLearn = 0,
-	actTime = 1000,
-	actHitTime = 500,
-	atkOrGatherTims = 1,
-	isShowAktName = 0,
-}
-
-skillTemplate.type_map = {}
-local type_map = skillTemplate.type_map
-type_map[41] = "st_conks" type_map["st_conks"] = 41
-type_map[22] = "st_lanhuos" type_map["st_lanhuos"] = 22
-type_map[32] = "st_taifengs" type_map["st_taifengs"] = 32
-type_map[90] = "st_passives" type_map["st_passives"] = 90
-type_map[5] = "st_gongchengche_atks" type_map["st_gongchengche_atks"] = 5
-type_map[21] = "st_huoyans" type_map["st_huoyans"] = 21
-type_map[1] = "st_bubing_atks" type_map["st_bubing_atks"] = 1
-type_map[91] = "st_zhengxings" type_map["st_zhengxings"] = 91
-type_map[31] = "st_dahuoyans" type_map["st_dahuoyans"] = 31
-type_map[4] = "st_qibing_atks" type_map["st_qibing_atks"] = 4
-type_map[3] = "st_gongbing_atks" type_map["st_gongbing_atks"] = 3
-type_map[2] = "st_baibuchuanyangs" type_map["st_baibuchuanyangs"] = 2
-type_map[40] = "st_defends" type_map["st_defends"] = 40
-type_map[61] = "st_addAtks" type_map["st_addAtks"] = 61
-
-skillTemplate.all_type= {}
-local all_type = skillTemplate.all_type
-all_type[41] = st_conks
-all_type[22] = st_lanhuos
-all_type[32] = st_taifengs
-all_type[90] = st_passives
-all_type[5] = st_gongchengche_atks
-all_type[21] = st_huoyans
-all_type[1] = st_bubing_atks
-all_type[91] = st_zhengxings
-all_type[31] = st_dahuoyans
-all_type[4] = st_qibing_atks
-all_type[3] = st_gongbing_atks
-all_type[2] = st_baibuchuanyangs
-all_type[40] = st_defends
-all_type[61] = st_addAtks
-
-for i,v in pairs(skillTemplate.all_type) do
+local pairs = pairs
+for i,v in pairs(skillTemplate) do
 	local item = v
 	for j=1, #item do
 		item[j].__index = item[j]

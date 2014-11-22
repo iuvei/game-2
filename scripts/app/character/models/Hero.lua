@@ -74,8 +74,9 @@ function Hero:getDefensePhysice()
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_PhysicsDef)
         end
         --技能和效果对属性的影响
+        local passive_skill_point_refix = self:Skill_RefixItemAttr(CommonDefine.RoleAttr_PhysicsDef)
         local impact_and_skillrefix = self:getDefensePhysicsRefix()
-        value = base_attr + impact_and_skillrefix + item_point_refix
+        value = base_attr + impact_and_skillrefix + item_point_refix + passive_skill_point_refix
 
         self:setIntAttr(CommonDefine.RoleAttr_PhysicsDef,value)
         self:ClearAttrDirtyFlag(CommonDefine.RoleAttr_PhysicsDef)
@@ -98,8 +99,9 @@ function Hero:getAttackPhysics()
         end
 
         -- the influence of skill and impact to attributes
+        local passive_skill_point_refix = self:Skill_RefixItemAttr(CommonDefine.RoleAttr_PhysicsAtk)
         local impact_and_skillrefix = self:getAttackPhysicsRefix()
-        value= base_attr + impact_and_skillrefix + item_point_refix
+        value= base_attr + impact_and_skillrefix + item_point_refix + passive_skill_point_refix
 
         self:setIntAttr(CommonDefine.RoleAttr_PhysicsAtk,value)
         self:ClearAttrDirtyFlag(CommonDefine.RoleAttr_PhysicsAtk)
@@ -124,8 +126,9 @@ function Hero:getAttackMagic()
         end
 
         -- the influence of skill and impact to attributes
+        local passive_skill_point_refix = self:Skill_RefixItemAttr(CommonDefine.RoleAttrRefix_MagicAtk)
         local impact_and_skillrefix = self:getImpactIntAttRefix(CommonDefine.RoleAttrRefix_MagicAtk)
-        value= base_attr + impact_and_skillrefix + item_point_refix
+        value= base_attr + impact_and_skillrefix + item_point_refix + passive_skill_point_refix
 
         self:setIntAttr(CommonDefine.RoleAttr_MagicAtk,value)
         self:ClearAttrDirtyFlag(CommonDefine.RoleAttr_MagicAtk)
@@ -145,8 +148,9 @@ function Hero:getDefenseMagic()
         end
 
         -- the influence of skill and impact to attributes
+        local passive_skill_point_refix = self:Skill_RefixItemAttr(CommonDefine.RoleAttrRefix_MagicDef)
         local impact_and_skillrefix = self:getImpactIntAttRefix(CommonDefine.RoleAttrRefix_MagicDef)
-        value= base_attr + impact_and_skillrefix + item_point_refix
+        value= base_attr + impact_and_skillrefix + item_point_refix + passive_skill_point_refix
 
         self:setIntAttr(CommonDefine.RoleAttr_MagicDef,value)
         self:ClearAttrDirtyFlag(CommonDefine.RoleAttr_MagicDef)
@@ -167,8 +171,9 @@ function Hero:getAttackTactics()
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_PhysicsAtk)
         end
         -- the influence of skill and impact to attributes
+        local passive_skill_point_refix = self:Skill_RefixItemAttr(CommonDefine.RoleAttrRefix_TacticsAtk)
         local impact_and_skillrefix = self:getImpactIntAttRefix(CommonDefine.RoleAttrRefix_TacticsAtk)
-        value= base_attr + impact_and_skillrefix + item_point_refix
+        value= base_attr + impact_and_skillrefix + item_point_refix + passive_skill_point_refix
 
         self:setIntAttr(CommonDefine.RoleAttr_TacticsAtk,value)
         self:ClearAttrDirtyFlag(CommonDefine.RoleAttr_TacticsAtk)
@@ -187,8 +192,9 @@ function Hero:getDefenseTactics()
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_TacticsDef)
         end
         -- the influence of skill and impact to attributes
+        local passive_skill_point_refix = self:Skill_RefixItemAttr(CommonDefine.RoleAttrRefix_TacticsDef)
         local impact_and_skillrefix = self:getImpactIntAttRefix(CommonDefine.RoleAttrRefix_TacticsDef)
-        value= base_attr + impact_and_skillrefix + item_point_refix
+        value= base_attr + impact_and_skillrefix + item_point_refix + passive_skill_point_refix
 
         self:setIntAttr(CommonDefine.RoleAttr_TacticsDef,value)
         self:ClearAttrDirtyFlag(CommonDefine.RoleAttr_TacticsDef)
@@ -217,9 +223,7 @@ function Hero:getMaxHp()
         --     itemRateRefix=math.floor(baseAttr*e.value/CommonDefine.RATE_LIMITE)
         -- end
         -- 被动技能对属性值的影响
-        local out_attr = {value=0}
-        self:Skill_RefixItemAttr(0,0,CommonDefine.RoleAttr_MaxHP,out_attr)
-        passiveSkillPointRefix=out_attr.value
+        passiveSkillPointRefix=self:Skill_RefixItemAttr(CommonDefine.RoleAttr_MaxHP)
 
         --技能对属性的影响
         impact_and_skillrefix = self:getMaxHpRefix()
@@ -231,6 +235,38 @@ function Hero:getMaxHp()
         --end
     end
     return self:getIntAttr(CommonDefine.RoleAttr_MaxHP)
+end
+------------------------------------------------------------------------------
+-- 二级属性
+function Hero:getAttr2(role_attr_type)
+    if self:GetAttrDirtyFlag(role_attr_type) == true then
+        local value = 0
+        local impact_and_skill_refix=0
+        local passive_skill_point_refix = 0
+        local item_point_refix = 0
+        local base_attr = 0
+        if role_attr_type == CommonDefine.RoleAttr_Hit then
+            base_attr = self.attr_.Hit
+        elseif role_attr_type == CommonDefine.RoleAttr_Evd then
+            base_attr = self.attr_.Evd
+        elseif role_attr_type == CommonDefine.RoleAttr_Crt then
+            base_attr = self.attr_.Crt
+        elseif role_attr_type == CommonDefine.RoleAttr_Crtdef then
+            base_attr = self.attr_.Crtdef
+        elseif role_attr_type == CommonDefine.RoleAttr_DecDef then
+            base_attr = self.attr_.DecDef
+        elseif role_attr_type == CommonDefine.RoleAttr_DecDefRed then
+            base_attr = self.attr_.DecDefRed
+        end
+        -- 被动技能影响值
+        passive_skill_point_refix=self:Skill_RefixItemAttr(role_attr_type)
+        -- 技能和效果影响值
+        impact_and_skill_refix = self:getImpactIntAttRefix(role_attr_type)
+        value = base_attr+impact_and_skill_refix+item_point_refix+passive_skill_point_refix
+        self:setIntAttr(role_attr_type,value)
+        self:ClearAttrDirtyFlag(role_attr_type)
+    end
+    return self:getIntAttr(role_attr_type)
 end
 ------------------------------------------------------------------------------
 --属性修改
@@ -284,25 +320,47 @@ end
 ------------------------------------------------------------------------------
 --
 function Hero:canMove()
-    local b,value=self:Impact_GetBoolAttRefix(CommonDefine.RoleAttrRefix_MoveFlag)
-    if b==true then
+    local out_data = {value=nil}
+    if self:Impact_GetBoolAttRefix(CommonDefine.RoleAttrRefix_MoveFlag,out_data) ==true then
         if DEBUG_BATTLE.showSkillInfo then
-            printf("object = %s,canMove() - value = %s",self:getId(),tostring(value))
+            printf("object = %s,canMove() - value = %s",self:getId(),tostring(out_data.value))
         end
-        return value
+        return out_data.value
     end
     return true
 end
 function Hero:canAttack()
-    local b,value=self:Impact_GetBoolAttRefix(CommonDefine.RoleAttrRefix_AktFlag)
-    if b==true then
+    local out_data = {value=nil}
+    if self:Impact_GetBoolAttRefix(CommonDefine.RoleAttrRefix_AktFlag,out_data)==true then
         if DEBUG_BATTLE.showSkillInfo then
-            printf("object = %s,canAttack() - value = %s",self:getId(),tostring(value))
+            printf("object = %s,canAttack() - value = %s",self:getId(),tostring(out_data.value))
         end
-        return value
+        return out_data.value
     end
     return true
 end
+function Hero:getBoolAttRefix(role_attr_refix_type)
+    local out_data = {value=nil}
+    if self:Impact_GetBoolAttRefix(role_attr_refix_type,out_data)==true then
+        if DEBUG_BATTLE.showSkillInfo then
+            printf("object = %s,getBoolAttRefix() - value = %s",self:getId(),tostring(out_data.value))
+        end
+        return out_data.value
+    end
+    return true
+end
+-- 混乱
+function Hero:isChaos()
+    local out_data = {value=nil}
+    if self:Impact_GetBoolAttRefix(CommonDefine.RoleAttrRefix_ChaosFlag,out_data)==true then
+        if DEBUG_BATTLE.showSkillInfo then
+            printf("object = %s,canAttack() - value = %s",self:getId(),tostring(value))
+        end
+        return out_data.value
+    end
+    return false
+end
+------------------------------------------------------------------------------
 function Hero:isFriend(objv)
     return false
 end

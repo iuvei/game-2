@@ -25,15 +25,16 @@ function ImpactCore:ctor()
 end
 function ImpactCore:initImpactFromData(obj,impactTypeIdOrVal,ownImpact)
     ownImpact:reset()
-    local impactData = configMgr:getConfig("impacts"):GetImpact(impactTypeIdOrVal)
+    local conf_impact = configMgr:getConfig("impacts"):GetImpact(impactTypeIdOrVal)
     --ownImpact:setIndexOrVal(impactTypeIdOrVal)
-    if impactData ~= nil then
-        ownImpact:setImpactTypeId(impactData.TypeId)
-        ownImpact:setKeepBoutNum(impactData.keepBoutNum)
-        ownImpact:setResEffecId(impactData.effectId)
+    if conf_impact ~= nil then
+        ownImpact:setImpactTypeId(impactTypeIdOrVal)
+        ownImpact:setKeepBoutNum(conf_impact.keepBoutNum)
+        ownImpact:setResEffecId(conf_impact.effectId)
         local impLogic = Impact_GetLogic(obj,ownImpact)--rMe:getImpactLogicByLogicId(impactData.logicId)
+        ownImpact.logicId = impLogic.ID
         if impLogic~=nil then
-            impLogic:initFromData(ownImpact, impactData)
+            impLogic:initFromData(ownImpact, conf_impact)
             return true
         end
     end

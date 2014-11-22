@@ -1,7 +1,7 @@
 --
 -- Author: wangshaopei
 -- Date: 2014-09-03 20:17:21
---功能说明：效果 － 昏迷，定身，无敌状态
+-- 功能说明：效果 － 昏迷，定身，无敌状态，混乱
 local SkillDefine=require("app.character.controllers.skills.SkillDefine")
 local CommonDefine = require("app.ac.CommonDefine")
 local configMgr    = require("config.configMgr")         -- 配置
@@ -23,20 +23,30 @@ end
 function LogicImpact015:markModifiedAttrDirty(rMe,ownImpact)
     local value = 0
 end
-function LogicImpact015:getBoolAttrRefix(ownImpact,rMe,roleAttrType)
-    local value=CommonDefine.INVALID_ID
-    local b = false
+function LogicImpact015:getBoolAttrRefix(ownImpact,rMe,roleAttrType,out_data)
+    local result = false
    if roleAttrType == CommonDefine.RoleAttrRefix_MoveFlag then
-        value = Impact_GetImpactParamVal(ownImpact:getImpactTypeId(),SkillDefine.ImpactParamL015_MoveFlag)
-        b=true
+        out_data.value = Impact_GetImpactParamVal(ownImpact:getImpactTypeId(),SkillDefine.ImpactParamL015_MoveFlag)
+        result = true
     elseif roleAttrType == CommonDefine.RoleAttrRefix_UnbreakableFlag then
-        value = Impact_GetImpactParamVal(ownImpact:getImpactTypeId(),SkillDefine.ImpactParamL015_UnbreakableFlag)
-        b=true
+        out_data.value = Impact_GetImpactParamVal(ownImpact:getImpactTypeId(),SkillDefine.ImpactParamL015_UnbreakableFlag)
+        result = true
     elseif roleAttrType == CommonDefine.RoleAttrRefix_AktFlag then
-        value = Impact_GetImpactParamVal(ownImpact:getImpactTypeId(),SkillDefine.ImpactParamL015_AktFlag)
-        b=true
+        out_data.value = Impact_GetImpactParamVal(ownImpact:getImpactTypeId(),SkillDefine.ImpactParamL015_AktFlag)
+        result = true
+    elseif roleAttrType == CommonDefine.RoleAttrRefix_ChaosFlag then
+        out_data.value = Impact_GetImpactParamVal(ownImpact:getImpactTypeId(),4)
+        result = true
     end
-    return b,value
+    if out_data.value == 0 then
+        out_data.value = false
+    elseif out_data.value == 1 then
+        out_data.value = true
+    elseif out_data.value == CommonDefine.INVALID_ID then -- 值为－1 不处理
+       result = false
+    end
+
+    return result
 end
 function LogicImpact015:refixPowerByRate(ownImpact,rate)
     -- body

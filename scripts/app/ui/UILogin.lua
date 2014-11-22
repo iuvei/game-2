@@ -2,18 +2,18 @@
 -- Author: Anthony
 -- Date: 2014-09-17 11:39:40
 --
-local M  = class("UILogin", require("app.ac.ui.UIBase"))
+local UILogin  = class("UILogin", require("app.ac.ui.UIBase"))
 ------------------------------------------------------------------------------
 local uiLayerDef =require("app.ac.uiLayerDefine")
-M.DialogID=uiLayerDef.ID_Login
+UILogin.DialogID=uiLayerDef.ID_Login
 ------------------------------------------------------------------------------
-function M:ctor(UIManager)
-    M.super.ctor(self,UIManager)
+function UILogin:ctor(UIManager)
+    UILogin.super.ctor(self,UIManager)
 end
 ------------------------------------------------------------------------------
 -- 退出
-function M:onExit( )
-    M.super.onExit(self)
+function UILogin:onExit( )
+    UILogin.super.onExit(self)
 end
 ------------------------------------------------------------------------------
 -- 是否合法帐号
@@ -65,8 +65,8 @@ local function isRightEmail(str)
 	     return true
 end
 ------------------------------------------------------------------------------
-function M:init( ccsFileName, params )
-    M.super.init(self,ccsFileName)
+function UILogin:init( ccsFileName, params )
+    UILogin.super.init(self,ccsFileName)
 
 	self:getWidgetByName("Button_login",function(wd)
 		if wd then
@@ -109,5 +109,5 @@ function M:init( ccsFileName, params )
 end
 
 ------------------------------------------------------------------------------
-return M
+return UILogin
 ------------------------------------------------------------------------------

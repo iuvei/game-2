@@ -4,7 +4,6 @@
 -- packetFactory.lua
 ------------------------------------------------------------------------------
 require("common.pbc.protobuf")
-local cmdInfo = require("app.packets.cmd")
 ------------------------------------------------------------------------------
 local packet_factory = {}
 -- 创建一个消息工厂
@@ -33,9 +32,12 @@ local G = proto.packets.package
 ------------------------------------------------------------------------------
 function packet_factory:init()
 	self.proto = {}
+	self.proto_id = {}
 
 	local handle = nil
-	-- -- 注册所有包
+
+	local cmdInfo = require("app.packets.cmd")
+	-- 注册所有包
 	for k,v in pairs(cmdInfo) do
 		-- print(k,dump(v))
 		-- 过滤client才使用handle
@@ -43,6 +45,7 @@ function packet_factory:init()
 			handle =  require("app.packets"..v.handlefile)
 		end
 		self.proto[v.name] = {id=v.id,handle=handle}
+		self.proto_id[v.id] = v
 	end
 
 end
@@ -69,7 +72,7 @@ end
 
 function packet_factory:packet_unpack(text)
 	local packet = _unpack("Packet",text)
-	local ci = cmdInfo[packet.cmd]
+	local ci = self.proto_id[packet.cmd]
 	if ci == nil then
 		printError("packet_unpack cmdid:%d Unregistered!",packet.cmd)
 		return nil
@@ -80,7 +83,7 @@ end
 ------------------------------------------------------------------------------
 -- handle execute
 function packet_factory:get_handle(cmdid)
-	local ci = cmdInfo[cmdid]
+	local ci = self.proto_id[cmdid]
 	if ci == nil then
 		printError("packet_execute cmdid:%d Unregistered!",cmdid)
 		return nil

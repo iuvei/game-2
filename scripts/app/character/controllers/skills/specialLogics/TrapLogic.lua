@@ -19,7 +19,7 @@ function TrapLogic:_Activate(special_obj)
     if special_obj:IsFadeOut() then
         return
     end
-    local options = {out_targets={},cell_positions={}}
+    local options = {out_target_views={},cell_positions={}}
     local data = special_obj._conf_data
     --set target type
     options.target_type = "player"
@@ -42,7 +42,7 @@ function TrapLogic:_Activate(special_obj)
     special_obj._map:scan(options) -- options={out_targets,cell_positions,target_type}
     local trigger_obj=special_obj:GetTriggerObj()
     if trigger_obj then
-        for i,v in ipairs(options.out_targets) do
+        for i,v in ipairs(options.out_target_views) do
             if trigger_obj:getId() == v:GetModel():getId() then
                 self:_EffectOnChar(special_obj,v:GetModel())
                 special_obj:SetTriggerObj(nil)

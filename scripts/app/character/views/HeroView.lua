@@ -361,7 +361,7 @@ function HeroView:createBeAttackAction()
             transition.execute(sprite,sequence)
     end})
     --一般攻击效果
-    self:createImpactEffect(1,false)
+    -- self:createImpactEffect(1,false)
 end
 ------------------------------------------------------------------------------
 function HeroView:createWalkAction()

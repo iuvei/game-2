@@ -14,8 +14,7 @@ end
 -----------------------------------------
 function conf_mgr_item:get_icon(data_id)
 	local conf_art    = require("config.item.item_art")
-    local item = conf_item[data_id]
-    return conf_art[item.artid].icon
+    return conf_art[conf_item[data_id].artid].icon
 end
 ------------------------------------------------------------------------------
 return conf_mgr_item

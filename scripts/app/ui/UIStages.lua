@@ -5,30 +5,30 @@
 ------------------------------------------------------------------------------
 local config = require("config.configMgr")
 ------------------------------------------------------------------------------
-local M  = class("UIStages", require("app.ac.ui.UIBase"))
+local UIStages  = class("UIStages", require("app.ac.ui.UIBase"))
 ------------------------------------------------------------------------------
 local uiLayerDef =require("app.ac.uiLayerDefine")
-M.DialogID=uiLayerDef.ID_Stages
+UIStages.DialogID=uiLayerDef.ID_Stages
 ------------------------------------------------------------------------------
-function M:ctor(UIManager)
-    M.super.ctor(self,UIManager)
+function UIStages:ctor(UIManager)
+    UIStages.super.ctor(self,UIManager)
 end
 ------------------------------------------------------------------------------
 -- 退出
-function M:onExit( )
-    M.super.onExit(self)
+function UIStages:onExit( )
+    UIStages.super.onExit(self)
 end
 ------------------------------------------------------------------------------
 -- 编辑阵形UI
-function M:init( params )
-    M.super.init(self,params)
+function UIStages:init( params )
+    UIStages.super.init(self,params)
 
     self:CreateSgateSelectBtn()
 
     self:updateHeroPanel(1)
 end
 ------------------------------------------------------------------------------
-function M:CreateSgateSelectBtn()
+function UIStages:CreateSgateSelectBtn()
 
     local lastbtn = nil
     for i=1,3 do
@@ -80,7 +80,7 @@ function M:CreateSgateSelectBtn()
     self:setStageSelect(1)
 end
 ------------------------------------------------------------------------------
-function M:setStageSelect( seclected )
+function UIStages:setStageSelect( seclected )
 
     if self.lastSelectStage == nil then self.lastSelectStage = 1 end
 
@@ -103,7 +103,7 @@ end
 --iIdx:     插入位置
 --bClone:   是否克隆, 第一页已存在为false, 否则为true
 --callback_: 增加后回调处理函数
-function M:addPage(pageView,pIdx, iIdx, bClone,callback_)
+function UIStages:addPage(pageView,pIdx, iIdx, bClone,callback_)
 
     local newPage = pageView:getPage(0)
     -- 没有则退出
@@ -140,7 +140,7 @@ function M:addPage(pageView,pIdx, iIdx, bClone,callback_)
 end
 ------------------------------------------------------------------------------
 --面板刷新
-function M:updateHeroPanel(stageType)
+function UIStages:updateHeroPanel(stageType)
 
     local chapters = config:getConfig("stages")
 
@@ -279,7 +279,7 @@ function M:updateHeroPanel(stageType)
     self:showHide(true)
 end
 ------------------------------------------------------------------------------
-function M:setAllDefault()
+function UIStages:setAllDefault()
 
     -- 所有页面的按钮不可用
     self:getWidgetByName("PageView",function( pageView )
@@ -303,7 +303,7 @@ function M:setAllDefault()
     self:setStageBtnEnable(1)
 end
 ------------------------------------------------------------------------------
-function M:setSelected( seclectPage )
+function UIStages:setSelected( seclectPage )
 
     if self.lastSelectPage == nil then self.lastSelectPage = 1 end
 
@@ -326,7 +326,7 @@ function M:setSelected( seclectPage )
     end)
 end
 ------------------------------------------------------------------------------
-function M:setStageBtnEnable(index)
+function UIStages:setStageBtnEnable(index)
     self:getWidgetByName("PButton"..index,function ( Widget )
         if Widget == nil then return end
         Widget:setBright(true)
@@ -334,7 +334,7 @@ function M:setStageBtnEnable(index)
     end)
 end
 ------------------------------------------------------------------------------
-function M:showHide(isShow)
+function UIStages:showHide(isShow)
     -- 隐藏控件
     self:getWidgetByName("Panel_Title",function( Widget )
         if Widget == nil then return end
@@ -351,7 +351,7 @@ function M:showHide(isShow)
     end)
 end
 ------------------------------------------------------------------------------
-function M:openBattleWnd( stageType,stageId )
+function UIStages:openBattleWnd( stageType,stageId )
 
     local chapters = config:getConfig("stages")
     local data = chapters:getStage(stageId)
@@ -449,5 +449,5 @@ function M:openBattleWnd( stageType,stageId )
 
 end
 ------------------------------------------------------------------------------
-return M
+return UIStages
 ------------------------------------------------------------------------------

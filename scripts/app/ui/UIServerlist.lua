@@ -2,29 +2,29 @@
 -- Author: Anthony
 -- Date: 2014-09-12 10:17:58
 --
-local M  = class("UIServerlist", require("app.ac.ui.UIBase"))
+local UIServerlist  = class("UIServerlist", require("app.ac.ui.UIBase"))
 ------------------------------------------------------------------------------
 local uiLayerDef =require("app.ac.uiLayerDefine")
-M.DialogID=uiLayerDef.ID_Serverlist
+UIServerlist.DialogID=uiLayerDef.ID_Serverlist
 ------------------------------------------------------------------------------
-function M:ctor(UIManager)
-    M.super.ctor(self,UIManager)
+function UIServerlist:ctor(UIManager)
+    UIServerlist.super.ctor(self,UIManager)
 end
 ------------------------------------------------------------------------------
 -- 退出
-function M:onExit( )
-    M.super.onExit(self)
+function UIServerlist:onExit( )
+    UIServerlist.super.onExit(self)
 end
 ------------------------------------------------------------------------------
-function M:init( ccsFileName, params )
-    M.super.init(self,ccsFileName)
+function UIServerlist:init( ccsFileName, params )
+    UIServerlist.super.init(self,ccsFileName)
 
     self:createAreaList()
 
     self:createLastSelected(params)
 end
 ------------------------------------------------------------------------------
-function M:createLastSelected(params)
+function UIServerlist:createLastSelected(params)
 
 	local Image_last = self:getWidgetByName("Image_last")
 	Image_last:setTouchEnabled(true)
@@ -102,7 +102,7 @@ function M:createLastSelected(params)
 
 end
 ------------------------------------------------------------------------------
-function M:createAreaList()
+function UIServerlist:createAreaList()
 
     local lv = self:getWidgetByName("ListView_areas")
     -----------------------------------------
@@ -162,7 +162,7 @@ function M:createAreaList()
 	self:createServers(areacount)
 end
 ------------------------------------------------------------------------------
-function M:selecAreaList(index )
+function UIServerlist:selecAreaList(index )
 	-- print("(···)",self.lastSelectedArea,index)
 
 	if self.lastSelectedArea then
@@ -178,7 +178,7 @@ function M:selecAreaList(index )
 	self.lastSelectedArea = index
 end
 ------------------------------------------------------------------------------
-function M:createServers(areaid)
+function UIServerlist:createServers(areaid)
 	-- print("···",areaid)
 
 	local lv = self:getWidgetByName("ListView_servers")
@@ -260,7 +260,7 @@ function M:createServers(areaid)
     self.lastSelectedserver = nil
 end
 ------------------------------------------------------------------------------
-function M:selecserver(index)
+function UIServerlist:selecserver(index)
 	-- print("(···)",self.lastSelectedserver,index)
 
 	if self.lastSelectedserver then
@@ -276,5 +276,5 @@ function M:selecserver(index)
 	self.lastSelectedserver = index
 end
 ------------------------------------------------------------------------------
-return M
+return UIServerlist
 ------------------------------------------------------------------------------

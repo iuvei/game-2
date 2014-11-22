@@ -2,158 +2,50 @@
 -- don't change it manaully.
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/skill.xls
 
-local skillIcon = {}
-
-skillIcon.skillIcon10s = {}
-local skillIcon10s = skillIcon.skillIcon10s
-skillIcon10s[1] = {
-	TypeId = 1029,
-	TypeName = "skillIcon10",
-	iconId = 1029,
-	file = "skillIcon/1029.png",
+local skillIcon = {
+	[100] = {
+		{ iconId=100,file="skillIcon/100.png" },
+	},
+	[1034] = {
+		{ iconId=1034,file="skillIcon/1034.png" },
+	},
+	[1033] = {
+		{ iconId=1033,file="skillIcon/1033.png" },
+	},
+	[1035] = {
+		{ iconId=1035,file="skillIcon/1035.png" },
+	},
+	[1036] = {
+		{ iconId=1036,file="skillIcon/1036.png" },
+	},
+	[1002] = {
+		{ iconId=1002,file="skillIcon/1002.png" },
+	},
+	[1003] = {
+		{ iconId=1003,file="skillIcon/1003.png" },
+	},
+	[1001] = {
+		{ iconId=1001,file="skillIcon/1001.png" },
+	},
+	[1019] = {
+		{ iconId=1019,file="skillIcon/1019.png" },
+	},
+	[1029] = {
+		{ iconId=1029,file="skillIcon/1029.png" },
+	},
+	[1032] = {
+		{ iconId=1032,file="skillIcon/1032.png" },
+	},
+	[1046] = {
+		{ iconId=1046,file="skillIcon/1046.png" },
+	},
+	[1016] = {
+		{ iconId=1016,file="skillIcon/1016.png" },
+	},
 }
 
-skillIcon.skillIcon11s = {}
-local skillIcon11s = skillIcon.skillIcon11s
-skillIcon11s[1] = {
-	TypeId = 1032,
-	TypeName = "skillIcon11",
-	iconId = 1032,
-	file = "skillIcon/1032.png",
-}
-
-skillIcon.skillIcon13s = {}
-local skillIcon13s = skillIcon.skillIcon13s
-skillIcon13s[1] = {
-	TypeId = 1016,
-	TypeName = "skillIcon13",
-	iconId = 1016,
-	file = "skillIcon/1016.png",
-}
-
-skillIcon.skillIcon2s = {}
-local skillIcon2s = skillIcon.skillIcon2s
-skillIcon2s[1] = {
-	TypeId = 1034,
-	TypeName = "skillIcon2",
-	iconId = 1034,
-	file = "skillIcon/1034.png",
-}
-
-skillIcon.skillIcon3s = {}
-local skillIcon3s = skillIcon.skillIcon3s
-skillIcon3s[1] = {
-	TypeId = 1033,
-	TypeName = "skillIcon3",
-	iconId = 1033,
-	file = "skillIcon/1033.png",
-}
-
-skillIcon.skillIcon12s = {}
-local skillIcon12s = skillIcon.skillIcon12s
-skillIcon12s[1] = {
-	TypeId = 1046,
-	TypeName = "skillIcon12",
-	iconId = 1046,
-	file = "skillIcon/1046.png",
-}
-
-skillIcon.skillIcon1s = {}
-local skillIcon1s = skillIcon.skillIcon1s
-skillIcon1s[1] = {
-	TypeId = 100,
-	TypeName = "skillIcon1",
-	iconId = 100,
-	file = "skillIcon/100.png",
-}
-
-skillIcon.skillIcon6s = {}
-local skillIcon6s = skillIcon.skillIcon6s
-skillIcon6s[1] = {
-	TypeId = 1002,
-	TypeName = "skillIcon6",
-	iconId = 1002,
-	file = "skillIcon/1002.png",
-}
-
-skillIcon.skillIcon7s = {}
-local skillIcon7s = skillIcon.skillIcon7s
-skillIcon7s[1] = {
-	TypeId = 1003,
-	TypeName = "skillIcon7",
-	iconId = 1003,
-	file = "skillIcon/1003.png",
-}
-
-skillIcon.skillIcon4s = {}
-local skillIcon4s = skillIcon.skillIcon4s
-skillIcon4s[1] = {
-	TypeId = 1035,
-	TypeName = "skillIcon4",
-	iconId = 1035,
-	file = "skillIcon/1035.png",
-}
-
-skillIcon.skillIcon5s = {}
-local skillIcon5s = skillIcon.skillIcon5s
-skillIcon5s[1] = {
-	TypeId = 1036,
-	TypeName = "skillIcon5",
-	iconId = 1036,
-	file = "skillIcon/1036.png",
-}
-
-skillIcon.skillIcon8s = {}
-local skillIcon8s = skillIcon.skillIcon8s
-skillIcon8s[1] = {
-	TypeId = 1001,
-	TypeName = "skillIcon8",
-	iconId = 1001,
-	file = "skillIcon/1001.png",
-}
-
-skillIcon.skillIcon9s = {}
-local skillIcon9s = skillIcon.skillIcon9s
-skillIcon9s[1] = {
-	TypeId = 1019,
-	TypeName = "skillIcon9",
-	iconId = 1019,
-	file = "skillIcon/1019.png",
-}
-
-skillIcon.type_map = {}
-local type_map = skillIcon.type_map
-type_map[1029] = "skillIcon10s" type_map["skillIcon10s"] = 1029
-type_map[1032] = "skillIcon11s" type_map["skillIcon11s"] = 1032
-type_map[1016] = "skillIcon13s" type_map["skillIcon13s"] = 1016
-type_map[1034] = "skillIcon2s" type_map["skillIcon2s"] = 1034
-type_map[1033] = "skillIcon3s" type_map["skillIcon3s"] = 1033
-type_map[1046] = "skillIcon12s" type_map["skillIcon12s"] = 1046
-type_map[100] = "skillIcon1s" type_map["skillIcon1s"] = 100
-type_map[1002] = "skillIcon6s" type_map["skillIcon6s"] = 1002
-type_map[1003] = "skillIcon7s" type_map["skillIcon7s"] = 1003
-type_map[1035] = "skillIcon4s" type_map["skillIcon4s"] = 1035
-type_map[1036] = "skillIcon5s" type_map["skillIcon5s"] = 1036
-type_map[1001] = "skillIcon8s" type_map["skillIcon8s"] = 1001
-type_map[1019] = "skillIcon9s" type_map["skillIcon9s"] = 1019
-
-skillIcon.all_type= {}
-local all_type = skillIcon.all_type
-all_type[1029] = skillIcon10s
-all_type[1032] = skillIcon11s
-all_type[1016] = skillIcon13s
-all_type[1034] = skillIcon2s
-all_type[1033] = skillIcon3s
-all_type[1046] = skillIcon12s
-all_type[100] = skillIcon1s
-all_type[1002] = skillIcon6s
-all_type[1003] = skillIcon7s
-all_type[1035] = skillIcon4s
-all_type[1036] = skillIcon5s
-all_type[1001] = skillIcon8s
-all_type[1019] = skillIcon9s
-
-for i,v in pairs(skillIcon.all_type) do
+local pairs = pairs
+for i,v in pairs(skillIcon) do
 	local item = v
 	for j=1, #item do
 		item[j].__index = item[j]

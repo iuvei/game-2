@@ -5,6 +5,7 @@
 --
 ------------------------------------------------------------------------------
 local item_operator = require("app.mediator.item_operator")
+local ui_helper 	= require("app.ac.ui.ui_helper")
 ------------------------------------------------------------------------------
 local SC_UseItem = {}
 ------------------------------------------------------------------------------
@@ -21,21 +22,9 @@ function SC_UseItem:execute( player, args )
 	printInfo("SC_UseItem update item dataId:%d guid:%d num:%d",args.item.dataId,args.item.GUID,args.item.num)
 
 	if args.hero.GUID > 0 then
-		-- flush item effect
-		local hero_mgr = player:get_mgr("heros")
-		hero_mgr:update(args.hero)
-	   	hero_mgr:get_hero(args.hero.GUID):flush_item_effect()
-
-		local run_scene = display.getRunningScene()
-		if run_scene then
-			local layers=run_scene.UIlayer:getUiLayers()
-			for i=1,#layers do
-				layers[i]:ProcessNetResult({args=args,msg_type="SC_UseItem"
-					})
-			end
-		end
+		player:get_mgr("heros"):update(args.hero)
+		ui_helper:dispatch_event({msg_type="SC_UseItem",args=args})
 	end
-
 
 end
 ------------------------------------------------------------------------------

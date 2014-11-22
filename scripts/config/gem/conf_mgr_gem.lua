@@ -18,8 +18,7 @@ end
 -----------------------------------------
 function conf_mgr_gem:get_icon(data_id)
 	local conf_art    = require("config.gem.gem_art")
-    local info = conf[data_id]
-    return conf_art[info.artid].icon
+    return conf_art[conf[data_id].artid].icon
 end
 ------------------------------------------------------------------------------
 return conf_mgr_gem

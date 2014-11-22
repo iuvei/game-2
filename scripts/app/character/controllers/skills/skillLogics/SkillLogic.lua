@@ -19,21 +19,26 @@ function SkillLogic:activateOnceHandler(rMe)
     local params = rMe:getTargetAndDepleteParams()
     local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(params.skillId)
     local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(params.skillId)
-    local skillInfo = rMe:getSkillInfo()
+
     --技能消耗处理,前面已做了检测此处肯定成功
     local bRet = self:depleteProcess(rMe)
-    if bRet then
-        local activateTimes = skillInfo:getActivateTimes()
-        if activateTimes == 0 then
-            activateTimes=1
-        end
-        for i=1,activateTimes do
-            if self:activateOnce(rMe)==true then
-                 self:effectOtherTarOnUnitOnce(rMe)
-             end
-        end
-    end
     return bRet
+end
+function SkillLogic:activate(rMe)
+    local skillInfo = rMe:getSkillInfo()
+    local activateTimes = skillInfo:getActivateTimes()
+    if activateTimes == 0 then
+        activateTimes=1
+    end
+    if activateTimes == 0 then
+        return false
+    end
+    activateTimes = activateTimes - 1
+    if self:activateOnce(rMe)==true then
+        -- self:effectOtherTarOnUnitOnce(rMe)
+    end
+
+    return true
 end
 -- 执行一次
 function SkillLogic:activateOnce(rMe)
@@ -79,79 +84,124 @@ function SkillLogic:calcTargets(rMe,skillId,targetViews)
     local params = rMe:getTargetAndDepleteParams()
     local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(skillId)
     local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
-
     local attackDis = skillIns.atkDistance
-    self:getTarsByTarLogic(rMe,skillTemp.useTarget_type,attackDis,targetViews)
-    if #targetViews<=0 then return false end
-    local fristObjv = targetViews[1]
+    local target_logic = skillTemp.useTarget_type
+    local isChaos = rMe:isChaos()
+    -- if rMe:isChaos() then
+    --     -- target_type=self:_toInverseTargetLogic(target_type)
+    --     target_type=SkillDefine.TargetLogic_All
+    -- end
+    -- 根据目标逻辑计算攻击目标
+    local out_target_views = {}
+    self:getTarsByTarLogic(rMe,target_logic,attackDis,out_target_views)
+    if #out_target_views<=0 then return false end
+    -- 选择全体不需要在计算技能范围
+    if target_logic == SkillDefine.TargetLogic_All or
+        target_logic == SkillDefine.TargetLogic_AllEnemy or
+        target_logic == SkillDefine.TargetLogic_AllTeam
+        then
+        targetViews = out_target_views
+        return true
+    end
+    -- 混乱
+    if isChaos then
+        local rand = math.random(1,#out_target_views)
+        table.insert(targetViews, out_target_views[rand])
+    else
+        table.insert(targetViews, out_target_views[1])
+    end
 
-    --更新人物攻击方向
+    -- 更新人物攻击方向
+    local fristObjv = targetViews[1]
     local selfPos= rMe:getView():getCellPos()
     local targetPos= fristObjv:getCellPos()
     local dir= rMe:calcDir(selfPos,targetPos)
     params.atkDir=dir
-    --params.flip=flip
+
+    -- 技能攻击范围无效不处理
+    if skillIns.atkRangeType == -1 then
+        return true
+    end
+    local select_type = "enemy"
+    if isChaos then
+        select_type = "all"
+    end
+    -- 根据技能范围增加攻击目标
     if skillIns.atkRangeType==SkillDefine.AtkRange_Around then
-        self:getAktRangeAroundTars(rMe,fristObjv,skillId,targetViews,true)
+        self:getAktRangeAroundTars(rMe,skillId,targetViews,select_type)
     elseif skillIns.atkRangeType==SkillDefine.AtkRange_Hor then
-        self:getAktRangeHorTars(rMe,fristObjv,skillId,targetViews,true)
+        self:getAktRangeHorTars(rMe,skillId,targetViews,select_type)
     else
 
     end
 
     return true
+end
+-- 转换逻辑目标为对立
+function SkillLogic:_toInverseTargetLogic(target_logic)
+    if target_logic == SkillDefine.TargetLogic_Enemy_Unit then
+        return SkillDefine.TargetLogic_Team_Unit
+    elseif target_logic == SkillDefine.TargetLogic_AllEnemy then
+        return SkillDefine.TargetLogic_AllTeam
+    elseif target_logic == SkillDefine.TargetLogic_Team_Unit then
+        return SkillDefine.TargetLogic_Enemy_Unit
+    elseif target_logic == SkillDefine.TargetLogic_AllTeam then
+        return SkillDefine.TargetLogic_AllEnemy
+    end
+    return target_logic
 end
 -------------------------------------------------------------
 --取得目标相关
 --根据目标逻辑取得目标
 function SkillLogic:getTarsByTarLogic(rMe,tarLogicType,attackDis,targetViews)
-    local fristObjv = nil
-    if SkillDefine.TargetLogic_Self == tarLogicType then
-        fristObjv = rMe:getView()
-        table.insert(targetViews, fristObjv)
-    elseif SkillDefine.TargetLogic_AllEnemy == tarLogicType then
-        for k,v in pairs(rMe:getMap():getAllCampObjects(rMe:getEnemyCampId())) do
-            if v:GetModel():getClassId()=="hero" then
-                table.insert(targetViews, v)
-            end
-        end
-    elseif SkillDefine.TargetLogic_AllTeam == tarLogicType then
-        for k,v in pairs(rMe:getMap():getAllCampObjects(rMe:getCampId())) do
-            if v:GetModel():getClassId()=="hero" and v:GetModel():getId()~=rMe:getId() then
-                table.insert(targetViews, v)
-            end
-        end
+    local options = {
+        out_target_views = targetViews,
+        cell_positions = {},
+        use_target_type = tarLogicType,
+        is_contain_sender = false,
+        sender_obj = rMe,
+    }
+    -- AKT_DIRCTIONS = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}} -- 左，上，下，右
+    local dirs = nil
+    if  rMe:getDir() == MapConstants.DIR_L then
+        dirs = MapConstants.AKT_DIRCTIONS_L
     else
-        local objs={}
-        if attackDis > 0 then
-            --AKT_DIRCTIONS= {{-1, 0}, {0, -1}, {0, 1}, {1, 0}} -- 左，上，下，右
-            local dirs = nil
-            if  rMe:getDir() == MapConstants.DIR_L then
-                dirs=MapConstants.AKT_DIRCTIONS_L
-            else
-                dirs=MapConstants.AKT_DIRCTIONS_R
-            end
-            objs = rMe:getAktDirObjsByDisAndCamp(dirs,attackDis,true)
-        end
-        if #objs<=0 then
-            return false
-        end
-        if SkillDefine.TargetLogic_Enemy_Unit == tarLogicType then
-            fristObjv=objs[1]
-            table.insert(targetViews, fristObjv)
-        elseif SkillDefine.TargetLogic_Team_Unit == tarLogicType then
-
+        dirs = MapConstants.AKT_DIRCTIONS_R
+    end
+    -- 检测攻击距离，－1时设为0，可能目标为自己
+    if attackDis < 0 then attackDis = 0 end
+    local cell_pos = rMe:getView():getPositionCell()
+    for i=1, #dirs do
+        local offset =dirs[i]
+        for j=1,attackDis do
+            local p=ccp(cell_pos.x+offset[1]*j, cell_pos.y+offset[2]*j)
+            table.insert(options.cell_positions,p)
         end
     end
-    return true
+    -- objs = rMe:getAktDirObjsByDisAndCamp(dirs,attackDis,true)
+    rMe:getMap():scanByTargetLogic(options) -- options={out_targets,cell_positions,use_target_type,is_contain_sender,sender_obj}
 end
-function SkillLogic:getAktRangeHorTars(rMe,objectView,skillId,targets,isEnemy)
+function SkillLogic:getAktRangeHorTars(rMe,skillId,target_views,select_type)
+
+     local options = {
+        out_target_views=target_views,
+        cell_positions={},
+        target_type="enemy",
+        sender_obj=rMe
+    }
+    if select_type == "enemy" then
+        if rMe:getEnemyCampId() == MapConstants.PLAYER_CAMP then
+            options.target_type = "player"
+        end
+    elseif select_type == "all" then
+        options.target_type = "all"
+    end
     --数据
     local params = rMe:getTargetAndDepleteParams()
     local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(skillId)
     local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
     local amount = skillIns.aktRangeParam-1
-    local startCellPos = objectView:getCellPos()
+    local startCellPos = target_views[1]:getCellPos()
     local dir = {{1,0}}
     if params.atkDir == MapConstants.DIR_L then
         dir[1][1]=dir[1][1]*-1
@@ -159,15 +209,17 @@ function SkillLogic:getAktRangeHorTars(rMe,objectView,skillId,targets,isEnemy)
     if amount<0 then return end
     for i=1,amount do
         local p = ccp(startCellPos.x+dir[1][1]*i,startCellPos.y+dir[1][2])
-        self:getRangeTars(rMe,p,targets,true)
+        table.insert(options.cell_positions,p)
+        -- self:_getRangeTars(rMe,p,targets,true)
     end
+    rMe:getMap():scan(options)
 end
-function SkillLogic:getAktRangeAroundTars(rMe,objectView,skillId,targets,isEnemy)
+function SkillLogic:getAktRangeAroundTars(rMe,skillId,target_views,select_type)
     local params = rMe:getTargetAndDepleteParams()
     local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
     local amount = skillIns.aktRangeParam-1
     if amount<=0 then return end
-    local startCellPos = objectView:getCellPos()
+    local startCellPos = target_views[1]:getCellPos()
     local dirs=MapConstants.AKT_DIRCTIONS_R
     if params.atkDir == MapConstants.DIR_L then
         dirs=MapConstants.AKT_DIRCTIONS_L
@@ -175,12 +227,28 @@ function SkillLogic:getAktRangeAroundTars(rMe,objectView,skillId,targets,isEnemy
     if amount > #dirs then
         amount=#dirs
     end
+    local options = {
+    out_target_views=target_views,
+    cell_positions={},
+    target_type="enemy",
+    sender_obj = rMe,
+    }
+    if select_type == "enemy" then
+        if rMe:getEnemyCampId() == MapConstants.PLAYER_CAMP then
+            options.target_type = "player"
+        end
+    elseif select_type == "all" then
+        options.target_type = "all"
+    end
     for i=1,amount do
         local p = ccp(startCellPos.x+dirs[i][1],startCellPos.y+dirs[i][2])
-        self:getRangeTars(rMe,p,targets,true)
+        -- self:_getRangeTars(rMe,p,targets,true)
+        table.insert(options.cell_positions,p)
     end
+    rMe:getMap():scan(options) -- options={out_targets,cell_positions,target_type}
+    -- special_obj._map:scan(options) -- options={out_targets,cell_positions,target_type}
 end
-function SkillLogic:getRangeTars(rMe,cellPos,targets,isEnemy)
+function SkillLogic:_getRangeTars(rMe,cellPos,targets,isEnemy)
     local t=rMe:getMap():getHeroByCellPos(cellPos)
     if t and not t:GetModel():isDead() then
         if isEnemy == true then

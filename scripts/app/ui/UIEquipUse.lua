@@ -2,11 +2,14 @@
 -- Author: wangshaopei
 -- Date: 2014-10-28 10:19:33
 -- 装备使用
+local string = string
+
 local UIListView = require("app.ac.ui.UIListViewCtrl")
 local UIButtonCtrl = require("app.ac.ui.UIButtonCtrl")
 local UIUtil = require("app.ac.ui.UIUtil")
 local configMgr = require("config.configMgr")
 local StringData = require("config.zhString")
+local item_operator = require("app.mediator.item_operator")
 ------------------------------------------------------------------------------
 local UIEquipUse  = class("UIEquipUse", require("app.ac.ui.UIBase"))
 ------------------------------------------------------------------------------
@@ -31,6 +34,8 @@ function UIEquipUse:init( params )
     --self.heroinfo = CLIENT_PLAYER:get_mgr_heros():get_hero_by_GUID(params.GUID)
     UIEquipUse.super.init(self,params)
     self._parmas = params.params
+
+    -- btn text
     self._btn=self:getWidgetByName("btn1")
     if self._parmas.state == 0 then
         self._btn:setTitleText(StringData[100000036])
@@ -39,26 +44,32 @@ function UIEquipUse:init( params )
     elseif self._parmas.state == 2 then
         self._btn:setTitleText(StringData[890000001])
     end
-    if self._parmas.state == 1 or self._parmas.state == 2 then
-        local info_ = self._parmas.equip_slot.equip_info
-        local w=self:getWidgetByName("info")
-        w:setText(info_.desc)
-        local img=self:getWidgetByName("Item")
-        img:loadTexture(info_.icon)
-        local frame=self:getWidgetByName("ItemFrame")
-        UIUtil:SetQuality(frame,info_.quality)
-        w=self:getWidgetByName("Name")
-        w:setText(info_.name)
-        w=self:getWidgetByName("ItemNum")
-        w:setEnabled(false)
-        if info_.num then
-            w:setEnabled(true)
-            w:setText(string.format(StringData[100000037],info_.num))
-        end
-        w=self:getWidgetByName("AttInfo")
-        UIUtil:SetHeroAttLabes(w,info_)
-    end
+    -- show info
+    self:show_info(self._parmas.state, self._parmas.equip_slot.equip_info)
     self:Listen()
+end
+
+function UIEquipUse:show_info(state,equip_info)
+    -- 显示物品信息
+    local info_ = item_operator:get_equip_info( equip_info )
+    local w=self:getWidgetByName("info")
+    w:setText(info_.desc)
+    local img=self:getWidgetByName("Item")
+    img:loadTexture(info_.icon)
+    local frame=self:getWidgetByName("ItemFrame")
+    UIUtil:SetQuality(frame,info_.quality)
+    w=self:getWidgetByName("Name")
+    w:setText(info_.name)
+
+    w=self:getWidgetByName("ItemNum")
+    w:setEnabled(false)
+    -- 穿上的不显示数量
+    if state ~= 2 and info_.num and info_.num > 0 then
+        w:setEnabled(true)
+        w:setText(string.format(StringData[100000037],info_.num))
+    end
+    w=self:getWidgetByName("AttInfo")
+    UIUtil:SetHeroAttLabes(w,info_)
 end
 
 function UIEquipUse:Listen()

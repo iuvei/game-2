@@ -105,8 +105,9 @@ function HeroOperateCommand:doDoneBefore(rMe)
 end
 function HeroOperateCommand:doingBefore(rMe)
     if rMe then
-        rMe:updataImpacts()
+        rMe:onImpactBeforeBout()
         self.map_:updataTrigger(rMe)
+        rMe:updataImpacts()
     end
 
     self._isDoingBefore = true

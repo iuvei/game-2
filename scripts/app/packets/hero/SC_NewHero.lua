@@ -1,11 +1,11 @@
 --
 -- Author: Anthony
 -- Date: 2014-10-10 15:34:50
--- SC_FlushHero
+-- SC_NewHero
 ------------------------------------------------------------------------------
-local SC_FlushHero = {}
+local SC_NewHero = {}
 ------------------------------------------------------------------------------
-function SC_FlushHero:execute( player, args )
+function SC_NewHero:execute( player, args )
 
 	if args.result == 0 then
 		printError("create hero error! dataid:%d result:%d", args.heroinfo.dataId,args.result)
@@ -20,10 +20,10 @@ function SC_FlushHero:execute( player, args )
 		return
 	end
 
-	printInfo("SC_FlushHero dataId:%d guid:%d",heroinfo.dataId,heroinfo.GUID)
+	printInfo("SC_NewHero dataId:%d guid:%d",heroinfo.dataId,heroinfo.GUID)
 
 	player:get_mgr( "heros" ):update(heroinfo)
 end
 ------------------------------------------------------------------------------
-return SC_FlushHero
+return SC_NewHero
 ------------------------------------------------------------------------------

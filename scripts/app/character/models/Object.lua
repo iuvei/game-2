@@ -40,10 +40,6 @@ Object.BEATTACK_OVER_EVENT   = "BEATTACK_OVER_EVENT"
 Object.schema = clone(cc.mvc.ModelBase.schema)
 Object.schema["GUID"]              = {"number", 0}
 Object.schema["nickname"]          = {"string"}        -- 名字，没有默认值
--- Object.schema["typename"]          = {"string"}        -- 类型
--- Object.schema["speed"]             = {"number", 1}     -- 移动速度
--- Object.schema["hit"]               = {"number", 100}   -- 基础命中率
--- Object.schema["dir"]               = {"number", 1}     -- 方向
 Object.schema["campId"]            = {"number", 0}     -- 阵营
 Object.schema["level"]             = {"number", 1}     -- 等级，默认值 1
 Object.schema["hp"]                = {"number", 1}     -- HP
@@ -70,11 +66,6 @@ function Object:init()
     -- BehaviorsManager:initBehaviors(self)
     self:initDestroyedBeh()
 end
-
-------------------------------------------------------------------------------
--- function Object:getType()
---     return self.typename_
--- end
 ------------------------------------------------------------------------------
 function Object:getArmId()
     return self.ArmId_
@@ -178,11 +169,11 @@ end
 end
 ----------------------------------------
 --
- function Object:setMaxRage(maxRage)
-    maxRage = checkint(maxRage)
-    assert(maxRage > 0, string.format("DestroyedBehavior.setMaxRage() - invalid maxRage %s", tostring(maxRage)))
-    self.attr_.MaxRage = maxRage
-end
+--  function Object:setMaxRage(maxRage)
+--     maxRage = checkint(maxRage)
+--     assert(maxRage > 0, string.format("DestroyedBehavior.setMaxRage() - invalid maxRage %s", tostring(maxRage)))
+--     self.attr_.MaxRage = maxRage
+-- end
 ----------------------------------------
 --
  function Object:getRage()
@@ -192,7 +183,7 @@ end
 --
  function Object:setRage(rage)
     rage = checknumber(rage)
-    assert(rage >= 0 and rage <= self.attr_.MaxRage,
+    assert(rage >= 0 and rage <= self:getMaxRage(),
            string.format("DestroyedBehavior.setrage() - invalid rage %s", tostring(rage)))
     self.rage_ = rage
 end
@@ -265,46 +256,6 @@ function Object:setDir(dir)
         self:getView():flipX(false)
     end
 end
-------------------------------------------------------------------------------
--- maths
--- ------------------------------------------------------------------------------
--- -- 让Object移动posX，posY的距离
--- function Object:move(Object,posX,posY,_callback,isMoveto)
-
---     if self:canDoEvent("move") then -- 能做移动动作
---         print("----------")
---         local tx, ty = Object:getPosition()
---         local t
---         if isMoveto then
---             -- 时间 = 路程/速度
---             t = math.abs(math2d.dist(tx, ty, posX, posY))/self:getSpeed()
---         else
---             t = math.abs(math2d.dist(tx, ty, tx+posX, ty+posY))/self:getSpeed()
---         end
-
---         -- 执行Move事件
---         self:doMoveEvent(t)
-
---         if isMoveto then
---             -- print("···to",posX,posY,t)
---             transition.moveTo(Object, {x = posX, y = posY ,time = t,
---                 onComplete = function()
---                     -- 停止
---                     self:doStopEvent(t,_callback)
---                 end,
---             })
---         else
---             -- print("···by",posX,posY,t)
---             transition.moveBy(Object, {x = posX, y = posY ,time = t,
---                 onComplete = function()
---                     -- 停止
---                     self:doStopEvent(t,_callback)
---                 end,
---             })
---         end
---     end
--- end
-
 -- ------------------------------------------------------------------------------
 -- -- 创建视图，如果其他 Behavior 有绑定，则会一起执行。
 -- function createView(object, batch)

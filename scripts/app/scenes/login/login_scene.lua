@@ -6,13 +6,13 @@ collectgarbage("setpause"  ,  100)
 collectgarbage("setstepmul"  ,  5000)
 
 ------------------------------------------------------------------------------
-local uiscript = require("app.ui.login.loginUIManager")
+local ui_manager = import(".login_ui_manager")
 ------------------------------------------------------------------------------
-local loginScene = class("loginScene", function()
-    return display.newScene("loginScene")
+local login_scene = class("login_scene", function()
+    return display.newScene("login_scene")
 end)
 ----------------------------------------------------------------
-function loginScene:ctor()
+function login_scene:ctor()
     -- init
     CLIENT_PLAYER:init()
 
@@ -38,7 +38,7 @@ function loginScene:ctor()
                 exp         = confHeroData.exp,
                 favor       = confHeroData.favor,
 
-                typename    = confHeroData.typename,
+                -- typename    = confHeroData.typename,
                 nickname    = confHeroData.nickname,
                 level       = confHeroData.level,
                 speed       = confHeroData.speed,
@@ -87,18 +87,18 @@ function loginScene:ctor()
 
     ---------------插入layer---------------------
     -- UI管理层
-    self.UIlayer = uiscript.new(self)
+    self.UIlayer = ui_manager.new(self)
     ---------------------------------------------
 end
 ----------------------------------------------------------------
-function loginScene:onEnter()
+function login_scene:onEnter()
     INIT_FUNCTION.AppExistsListener(self)
 
     -- 初始
     if self.UIlayer then self.UIlayer:init() end
 end
 ----------------------------------------------------------------
-function loginScene:onExit()
+function login_scene:onExit()
 
     if self.UIlayer then
         self.UIlayer:removeFromParent()
@@ -106,5 +106,5 @@ function loginScene:onExit()
     end
 end
 ----------------------------------------------------------------
-return loginScene
+return login_scene
 ----------------------------------------------------------------

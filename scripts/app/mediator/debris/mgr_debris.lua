@@ -8,9 +8,9 @@ local table = table
 ----------------------------------------------------------------
 local client_debris = import(".client_debris")
 ----------------------------------------------------------------
-local M = class("mgr_debris")
+local mgr_debris = class("mgr_debris")
 ----------------------------------------------------------------
-function M:ctor(player)
+function mgr_debris:ctor(player)
 	self.__data = {}
     self.player = player
 end
@@ -18,30 +18,30 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function M:get_data()
+function mgr_debris:get_data()
     return self.__data
 end
 ----------------------------------------
-function M:set_data( data )
+function mgr_debris:set_data( data )
     table.walk(data, function(v, k)
-        self.__data[v.GUID] = client_debris.new(v)
+        self:update(v)
     end)
 
     -- print("---------set_debriss")
     -- dump(self.__data)
 end
 ----------------------------------------
-function M:get_count()
+function mgr_debris:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
-function M:remove( GUID )
+function mgr_debris:remove( GUID )
     self.__data[GUID] = nil
     -- dump(self.__data)
 end
 ----------------------------------------
 -- 根据guid得到hero
-function M:get_by_GUID(GUID)
+function mgr_debris:get_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
@@ -49,11 +49,11 @@ function M:get_by_GUID(GUID)
     return nil
 end
 ----------------------------------------
-function M:update(newdata)
+function mgr_debris:update(newdata)
     -- 添加一条新数据
     self.__data[newdata.GUID] = client_debris.new(newdata)
     -- print("---------update")
     -- dump(self.__data)
 end
 ----------------------------------------------------------------
-return M
+return mgr_debris

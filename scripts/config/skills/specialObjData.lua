@@ -2,32 +2,14 @@
 -- don't change it manaully.
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/skill.xls
 
-local specialObjData = {}
-
-specialObjData.traps = {}
-local traps = specialObjData.traps
-traps[1] = {
-	TypeId = 101,
-	TypeName = "trap",
-	logicId = 1,
-	resEffectId = 200001,
-	keepBoutNum = 5,
-	affectRangeType = 1,
-	targetType = 1,
-	affectNum = 2,
-	param1 = 500003,
-	param2 = 10000,
+local specialObjData = {
+	[101] = {
+		{ logicId=1,resEffectId=200001,keepBoutNum=5,affectRangeType=1,targetType=1,affectNum=2,param1=500003,param2=10000 },
+	},
 }
 
-specialObjData.type_map = {}
-local type_map = specialObjData.type_map
-type_map[101] = "traps" type_map["traps"] = 101
-
-specialObjData.all_type= {}
-local all_type = specialObjData.all_type
-all_type[101] = traps
-
-for i,v in pairs(specialObjData.all_type) do
+local pairs = pairs
+for i,v in pairs(specialObjData) do
 	local item = v
 	for j=1, #item do
 		item[j].__index = item[j]

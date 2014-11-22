@@ -8,14 +8,14 @@ collectgarbage("setstepmul"  ,  5000)
 --
 local CommonDefine = require("app.ac.CommonDefine")
 local configMgr = require("config.configMgr")
-local uiscript = require("app.ui.home.homeUIManager")
-local BaseScene = require("app.scenes.BaseScene")
+local ui_manager = import(".home_ui_manager")
+local base_cene = require("app.scenes.base_cene")
 ----------------------------------------------------------------
-local homeScene = class("homeScene", BaseScene)
-homeScene.SCROLL_DEACCEL_RATE = 0.95
-homeScene.SCROLL_DEACCEL_DIST = 1.0
+local home_scene = class("home_scene", base_cene)
+home_scene.SCROLL_DEACCEL_RATE = 0.95
+home_scene.SCROLL_DEACCEL_DIST = 1.0
 ----------------------------------------------------------------
-function homeScene:ctor()
+function home_scene:ctor()
     self.super.ctor(self)
     self.drag = nil
     self.offsetLimit_   = nil
@@ -59,7 +59,7 @@ function homeScene:ctor()
     -- self.bgSprite_:setScaleY(INIT_FUNCTION.height/mapcontent.height);
 
     -- UI管理层
-    self.UIlayer = uiscript.new(self)
+    self.UIlayer = ui_manager.new(self)
 
     ------------------------------------------
     -- test
@@ -191,7 +191,7 @@ function homeScene:ctor()
     ------------------------------------------
 end
 ----------------------------------------------------------------
-function homeScene:onTouch(event, x, y)
+function home_scene:onTouch(event, x, y)
     if event == "began" then
         self.drag = {
             startX  = x,
@@ -238,23 +238,23 @@ function homeScene:onTouch(event, x, y)
 
     return
 end
-function homeScene:tick(dt)
+function home_scene:tick(dt)
     if self.drag then
         if self.drag.isDeaccelerate then
-            self.drag.offsetX = self.drag.offsetX * homeScene.SCROLL_DEACCEL_RATE
+            self.drag.offsetX = self.drag.offsetX * home_scene.SCROLL_DEACCEL_RATE
             self:moveOffset(self.drag.offsetX, self.drag.offsetY)
-            if math.abs(self.drag.offsetX) <= homeScene.SCROLL_DEACCEL_DIST then
+            if math.abs(self.drag.offsetX) <= home_scene.SCROLL_DEACCEL_DIST then
                 self.drag.isDeaccelerate=false
             end
         end
     end
 end
 ----------------------------------------------------------------
-function homeScene:moveOffset(offsetX, offsetY)
+function home_scene:moveOffset(offsetX, offsetY)
     self:setOffset(self.offsetX_ + offsetX, self.offsetY_ + offsetY)
 end
 ----------------------------------------------------------------
-function homeScene:setOffset(x, y, movingSpeed, onComplete)
+function home_scene:setOffset(x, y, movingSpeed, onComplete)
     --if self.zooming_ then return end
 
     if x < self.offsetLimit_.minX then
@@ -302,7 +302,7 @@ function homeScene:setOffset(x, y, movingSpeed, onComplete)
     end
 end
 ----------------------------------------------------------------
-function homeScene:resetOffsetLimit()
+function home_scene:resetOffsetLimit()
     --local mapWidth, mapHeight = self.map_:getSize()
    -- local s = self.bgLayer_:
    local size = self:getSceneSize()
@@ -314,7 +314,7 @@ function homeScene:resetOffsetLimit()
     }
 end
 ----------------------------------------------------------------
-function homeScene:onEnter()
+function home_scene:onEnter()
     printInfo("enter home scene ok")
     INIT_FUNCTION.AppExistsListener(self)
 
@@ -327,14 +327,14 @@ function homeScene:onEnter()
 
     if self.UIlayer then self.UIlayer:init() end
 
-    -- flush item effect
-    local heros = CLIENT_PLAYER:get_mgr("heros"):get_data()
-    for k,v in pairs(heros) do
-        v:flush_item_effect()
-    end
+    -- -- flush item effect
+    -- local heros = CLIENT_PLAYER:get_mgr("heros"):get_data()
+    -- for k,v in pairs(heros) do
+    --     v:flush_item_effect()
+    -- end
 end
 ----------------------------------------------------------------
-function homeScene:onExit()
+function home_scene:onExit()
     if self.UIlayer then
         self.UIlayer:removeFromParentAndCleanup(true)
         self.UIlayer = nil
@@ -344,7 +344,7 @@ function homeScene:onExit()
 end
 ----------------------------------------------------------------
 --场景建筑相关
-function homeScene:onTouchBuilding(worldPos)
+function home_scene:onTouchBuilding(worldPos)
     for i=1,#self.builds_ do
         local bv = self.builds_[i]:getView()
         if bv and bv:contains(worldPos) then
@@ -353,7 +353,7 @@ function homeScene:onTouchBuilding(worldPos)
     end
     return nil
 end
-function homeScene:isContainsBySelBuildId(worldPos)
+function home_scene:isContainsBySelBuildId(worldPos)
     if self.selBuildId_ == CommonDefine.INVALID_ID then
         return false
     end
@@ -362,7 +362,7 @@ function homeScene:isContainsBySelBuildId(worldPos)
         return true
     end
 end
-function homeScene:createBuilds()
+function home_scene:createBuilds()
     local builds=configMgr:getConfig("home"):getHomeBuilds()
     for i=1,#builds do
         local build =require("app.scenes.home.HomeBuild").new(i,self)
@@ -370,9 +370,9 @@ function homeScene:createBuilds()
         self.builds_[i]=build
     end
 end
-function homeScene:getBuildsLayer()
+function home_scene:getBuildsLayer()
     return self.buildsLayer_
 end
 ----------------------------------------------------------------
-return homeScene
+return home_scene
 ----------------------------------------------------------------

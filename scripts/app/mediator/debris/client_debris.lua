@@ -7,36 +7,36 @@
 local item_helper = require("app.mediator.item_helper")
 local configMgr = require("config.configMgr")
 ----------------------------------------------------------------
-local M = class("client_debris")
+local client_debris = class("client_debris")
 ----------------------------------------------------------------
-function M:ctor(data)
+function client_debris:ctor(data)
     self.__data = nil
 	self:set_data(data)
 end
 ----------------------------------------
-function M:get_data()
+function client_debris:get_data()
     return self.__data
 end
 ----------------------------------------
-function M:set_data( data )
+function client_debris:set_data( data )
     self.__data = self:gen_new(data)
     -- dump(self.__data)
 end
 ----------------------------------------
-function M:get( key )
+function client_debris:get( key )
     if key == nil then
         return self.__data
     end
     return self.__data[key]
 end
 ----------------------------------------
-function M:setkey( key, data )
+function client_debris:setkey( key, data )
     self.__data[key] = data
 end
 ----------------------------------------
 -- 转为新数据，来自己服务端
 -- 因为pb会附带其他没用信息，所有需要这步
-function M:gen_new(olddata)
+function client_debris:gen_new(olddata)
     local newdata = {
         GUID    = olddata.GUID,
         dataId  = olddata.dataId,
@@ -49,7 +49,7 @@ end
         得到组合过的数据
         如果有配置文件，请放在这里处理!
 ]]
-function M:get_info()
+function client_debris:get_info()
     local dataid = self:get( "dataId" )
 	local conf = configMgr:getConfig("debris")
 	local conf_info = conf:get_info(dataid)
@@ -71,4 +71,4 @@ function M:get_info()
 end
 
 ----------------------------------------------------------------
-return M
+return client_debris

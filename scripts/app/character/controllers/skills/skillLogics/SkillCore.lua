@@ -66,12 +66,17 @@ function SkillCore:activeSkillNew(rMe)
      local skillLogic = Skill_GetLogic(rMe,logicId)
      if skillLogic==nil then return false end
      --前面已检测
-     if skillLogic:isPassive() then
-         return false
-     end
+     -- if skillLogic:isPassive() then
+     --     return false
+     -- end
      --skillLogic:getSkillType()
      return skillLogic:startLaunching(rMe)
     --return true
+end
+function SkillCore:activateSkill(rMe)
+    local logicId = rMe:getSkillInfo():getLogicId()
+    local skillLogic = Skill_GetLogic(rMe,logicId)
+    skillLogic:activate(rMe)
 end
 ---------------------------------------------------------
 function SkillCore:instanceSkill(skillInfo,rMe)

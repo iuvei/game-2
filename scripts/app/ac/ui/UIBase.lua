@@ -22,7 +22,7 @@ function M:init( params )
 
     self.open_close_effect = params.open_close_effect -- 是否有开启关闭特效
     if self.open_close_effect == nil then
-        self.open_close_effect = false
+        self.open_close_effect = true
     end
 
     -- 阵形界面

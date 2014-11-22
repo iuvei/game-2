@@ -4,32 +4,32 @@
 -- UI 层
 ------------------------------------------------------------------------------
 -- ui 脚本文件
-local UIStages     = import(".UIStages")
-local UIFormation  = import(".UIFormationLayer")
-local UIHero  = import(".UIHero")
-local UIPackage  = import(".UIPackage")
+local UIStages      = require("app.ui.UIStages")
+local UIFormation   = require("app.ui.UIFormationLayer")
+local UIHero        = require("app.ui.UIHero")
+local UIPackage     = require("app.ui.UIPackage")
 ------------------------------------------------------------------------------
-local M  = class("homeUIManager",require("app.ac.ui.UIManager"))
+local home_ui_manager  = class("home_ui_manager",require("app.ac.ui.UIManager"))
 ------------------------------------------------------------------------------
-function M:ctor(parent)
-    M.super.ctor(self,parent)
+function home_ui_manager:ctor(parent)
+    home_ui_manager.super.ctor(self,parent)
 end
 ------------------------------------------------------------------------------
 -- 退出
-function M:onExit()
-    M.super.onExit(self)
+function home_ui_manager:onExit()
+    home_ui_manager.super.onExit(self)
 end
 ------------------------------------------------------------------------------
 --
-function M:init()
-    M.super.init(self)
+function home_ui_manager:init()
+    home_ui_manager.super.init(self)
     self:createStagesBtn()
     self:createFormationBtn()
     self:createPackageBtn()
 end
 ----------------------------------------------------------------
 -- 进入战场按钮
-function M:createStagesBtn()
+function home_ui_manager:createStagesBtn()
 
     cc.ui.UIPushButton.new({normal="scene/home/mission.png",pressed="scene/home/mission_press.png"}, {scale9 = false})
         :onButtonClicked(function()
@@ -44,7 +44,7 @@ function M:createStagesBtn()
 end
 ----------------------------------------------------------------
 -- 编队
-function M:createFormationBtn()
+function home_ui_manager:createFormationBtn()
     cc.ui.UIPushButton.new("scene/home/my_formation.png", {scale9 = true})
         :onButtonClicked(function()
             -- print("....................open UIHero")
@@ -57,7 +57,7 @@ function M:createFormationBtn()
 end
 ----------------------------------------------------------------
 -- 背包
-function M:createPackageBtn()
+function home_ui_manager:createPackageBtn()
 
     cc.ui.UIPushButton.new({normal="scene/home/main_package_button.png",pressed="scene/home/main_package_button_shade.png"}, {scale9 = false})
         :onButtonClicked(function()
@@ -67,5 +67,5 @@ function M:createPackageBtn()
         :addTo(self)
 end
 ----------------------------------------------------------------
-return M
+return home_ui_manager
 ----------------------------------------------------------------

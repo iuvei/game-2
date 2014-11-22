@@ -19,13 +19,13 @@ end
 function conf_skillsMgr:GetSkillTemplate(SkillId)
     local TypeId = math.floor(SkillId/1000)
     local conf_skillTemps = require("config.skills.skillTemplate")
-    assert(conf_skillTemps.all_type[TypeId]~=nil,"GetSkillTemplate failed SkillId = "..SkillId)
-    return conf_skillTemps.all_type[TypeId][1]
+    assert(conf_skillTemps[TypeId]~=nil,"GetSkillTemplate failed SkillId = "..SkillId)
+    return conf_skillTemps[TypeId][1]
 end
 ------------------------------------------------------------------------------
 function conf_skillsMgr:GetSkillInstance(instanceId,lev)
     local conf_skillDatas = require("config.skills.skillData")
-    return conf_skillDatas.all_type[instanceId][lev]
+    return conf_skillDatas[instanceId][lev]
 end
 
 ------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ function conf_skillsMgr:GetSkillEffect(SkillId)
 end
 function conf_skillsMgr:GetSkillEffectByEffectId(EffectId)
     local conf_skillEffects = require("config.skills.skillEffects")
-    local eff = conf_skillEffects.all_type[EffectId][1]
+    local eff = conf_skillEffects[EffectId][1]
     assert(eff~=nil,string.format("GetSkillEffectByEffectId() - SkillEffect is nil,EffectId = %d", EffectId))
     return eff
 end
@@ -63,7 +63,7 @@ end
 function conf_skillsMgr:GetSkillIcon(SkillId)
     local skillTemp = self:GetSkillTemplate(SkillId)
     local conf_skillIcons = require("config.skills.skillIcon")
-    return conf_skillIcons.all_type[skillTemp.iconId][1]
+    return conf_skillIcons[skillTemp.iconId][1]
 end
 ------------------------------------------------------------------------------
 --技能效果相关
@@ -71,14 +71,14 @@ end
 function conf_skillsMgr:GetSkillAppendImpactIdDatas(SkillId)
     local skillInstance = self:GetSkillInstanceBySkillId(SkillId)
     local conf_appendImpacts = require("config.skills.appendImpacts")
-    return conf_appendImpacts.all_type[skillInstance.appendImpactRule]
+    return conf_appendImpacts[skillInstance.appendImpactRule]
 end
 function conf_skillsMgr:GetSkillAppendImpacParams(SkillId)
     local data=self:GetSkillAppendImpactIdDatas(SkillId)
     local paramsLst={}
     for i=1,#data do
         if not paramsLst[i] then
-            paramsLst[i]={}
+            paramsLst[i]={nil,nil,nil,nil}
         end
         paramsLst[i][1]=data[i].param1
         paramsLst[i][2]=data[i].param2
@@ -89,7 +89,7 @@ function conf_skillsMgr:GetSkillAppendImpacParams(SkillId)
 end
 function conf_skillsMgr:GetInitDataByType(initValType)
     local conf_initDatas = require("config.skills.initializeData")
-    return conf_initDatas.all_type[initValType][1].value
+    return conf_initDatas[initValType][1].value
 end
 ------------------------------------------------------------------------------
 return conf_skillsMgr

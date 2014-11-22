@@ -44,23 +44,12 @@ function BuildView:init(model,params)
 end
 ------------------------------------------------------------------------------
 function BuildView:createIdleAction()
-    -- local frameName = self:GetModel():getType().."-wait.png"
-    -- if self:GetModel():isEnemy() then
-    --     frameName= "d-"..self:GetModel():getType().."-wait.png"
-    -- end
-    -- local frame = display.newSpriteFrame(frameName)
     self:GetSprite():stopAllActions()
     --self:GetSprite():setDisplayFrame(frame)
 end
 ------------------------------------------------------------------------------
 function BuildView:createBeAttackAction()
     local cls = self:GetModel().class
-
-    -- local frameName = self:GetModel():getType().."-underatk.png"
-    -- if self:GetModel():isEnemy() then
-    --     frameName= "d-"..self:GetModel():getType().."-underatk.png"
-    -- end
-    -- local frame = display.newSpriteFrame(frameName)
 
     self:GetSprite():stopAllActions()
     -- self:GetSprite():setDisplayFrame(frame)
@@ -81,12 +70,6 @@ end
 ------------------------------------------------------------------------------
 function BuildView:createDeadAction()
     -- 死亡动作
-    -- local frameName = self:GetModel():getType().."-dead.png"
-    -- if self:GetModel():isEnemy() then
-    --     frameName= "d-"..self:GetModel():getType().."-dead.png"
-    -- end
-    -- local frame = display.newSpriteFrame(frameName)
-
     self:GetSprite():stopAllActions()
    -- self:GetSprite():setDisplayFrame(frame)
     EffectFadeInOut:run(self:GetSprite())

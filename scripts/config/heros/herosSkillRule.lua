@@ -2,122 +2,36 @@
 -- don't change it manaully.
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/heros.xls
 
-local herosSkillRule = {}
-
-herosSkillRule.rule_guanyus = {}
-local rule_guanyus = herosSkillRule.rule_guanyus
-rule_guanyus[1] = {
-	TypeId = 1,
-	TypeName = "rule_guanyu",
-	skillTempId = 21000,
-	skllLevel = 1,
-	skillName = "火焰",
-}
-rule_guanyus[2] = {
-	skillTempId = 31000,
-	skllLevel = 1,
-	skillName = "大火焰",
-}
-
-herosSkillRule.rule_sunces = {}
-local rule_sunces = herosSkillRule.rule_sunces
-rule_sunces[1] = {
-	TypeId = 5,
-	TypeName = "rule_sunce",
-	skillTempId = 21000,
-	skllLevel = 1,
-	skillName = "火焰",
-}
-rule_sunces[2] = {
-	skillTempId = 31000,
-	skllLevel = 1,
-	skillName = "大火焰",
+local herosSkillRule = {
+	[1] = {
+		{ skillTempId=21000,skllLevel=1,skillName="火焰" },
+		{ skillTempId=31000,skllLevel=1,skillName="大火焰" },
+	},
+	[2] = {
+		{ skillTempId=22000,skllLevel=1,skillName="蓝火" },
+		{ skillTempId=32000,skllLevel=1,skillName="台风" },
+	},
+	[3] = {
+		{ skillTempId=21000,skllLevel=1,skillName="火焰" },
+		{ skillTempId=40000,skllLevel=1,skillName="盾牌" },
+		{ skillTempId=90000,skllLevel=1,skillName="被动加血上限" },
+	},
+	[4] = {
+		{ skillTempId=22000,skllLevel=1,skillName="蓝火" },
+		{ skillTempId=32000,skllLevel=1,skillName="台风" },
+	},
+	[5] = {
+		{ skillTempId=21000,skllLevel=1,skillName="火焰" },
+		{ skillTempId=31000,skllLevel=1,skillName="大火焰" },
+	},
+	[6] = {
+		{ skillTempId=22000,skllLevel=1,skillName="蓝火" },
+		{ skillTempId=31000,skllLevel=1,skillName="大火焰" },
+	},
 }
 
-herosSkillRule.rule_caocaos = {}
-local rule_caocaos = herosSkillRule.rule_caocaos
-rule_caocaos[1] = {
-	TypeId = 4,
-	TypeName = "rule_caocao",
-	skillTempId = 22000,
-	skllLevel = 1,
-	skillName = "蓝火",
-}
-rule_caocaos[2] = {
-	skillTempId = 32000,
-	skllLevel = 1,
-	skillName = "台风",
-}
-
-herosSkillRule.rule_liubeis = {}
-local rule_liubeis = herosSkillRule.rule_liubeis
-rule_liubeis[1] = {
-	TypeId = 2,
-	TypeName = "rule_liubei",
-	skillTempId = 22000,
-	skllLevel = 1,
-	skillName = "蓝火",
-}
-rule_liubeis[2] = {
-	skillTempId = 32000,
-	skllLevel = 1,
-	skillName = "台风",
-}
-
-herosSkillRule.rule_sunquans = {}
-local rule_sunquans = herosSkillRule.rule_sunquans
-rule_sunquans[1] = {
-	TypeId = 6,
-	TypeName = "rule_sunquan",
-	skillTempId = 22000,
-	skllLevel = 1,
-	skillName = "蓝火",
-}
-rule_sunquans[2] = {
-	skillTempId = 31000,
-	skllLevel = 1,
-	skillName = "大火焰",
-}
-
-herosSkillRule.rule_zhangfeis = {}
-local rule_zhangfeis = herosSkillRule.rule_zhangfeis
-rule_zhangfeis[1] = {
-	TypeId = 3,
-	TypeName = "rule_zhangfei",
-	skillTempId = 21000,
-	skllLevel = 1,
-	skillName = "火焰",
-}
-rule_zhangfeis[2] = {
-	skillTempId = 40000,
-	skllLevel = 1,
-	skillName = "盾牌",
-}
-rule_zhangfeis[3] = {
-	skillTempId = 90000,
-	skllLevel = 1,
-	skillName = "被动加血上限",
-}
-
-herosSkillRule.type_map = {}
-local type_map = herosSkillRule.type_map
-type_map[1] = "rule_guanyus" type_map["rule_guanyus"] = 1
-type_map[5] = "rule_sunces" type_map["rule_sunces"] = 5
-type_map[4] = "rule_caocaos" type_map["rule_caocaos"] = 4
-type_map[2] = "rule_liubeis" type_map["rule_liubeis"] = 2
-type_map[6] = "rule_sunquans" type_map["rule_sunquans"] = 6
-type_map[3] = "rule_zhangfeis" type_map["rule_zhangfeis"] = 3
-
-herosSkillRule.all_type= {}
-local all_type = herosSkillRule.all_type
-all_type[1] = rule_guanyus
-all_type[5] = rule_sunces
-all_type[4] = rule_caocaos
-all_type[2] = rule_liubeis
-all_type[6] = rule_sunquans
-all_type[3] = rule_zhangfeis
-
-for i,v in pairs(herosSkillRule.all_type) do
+local pairs = pairs
+for i,v in pairs(herosSkillRule) do
 	local item = v
 	for j=1, #item do
 		item[j].__index = item[j]

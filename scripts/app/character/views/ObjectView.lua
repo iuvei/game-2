@@ -141,7 +141,8 @@ function ObjectView:createImpactEffect(resEffectId,isRepeatPlay,effectPoint)
     --播放动画
     if isRepeatPlay then
         transition.playAnimationForever(sprite, animation, 0)
-        self.impactSprite_[resEffectId]=sprite
+        -- 一直存在就会放到数组里
+        self.impactSprite_[resEffectId] = sprite
     else
         local onComplete = function()
         --print("move completed")

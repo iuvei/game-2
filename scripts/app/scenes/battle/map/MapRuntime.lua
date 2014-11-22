@@ -41,7 +41,6 @@ function MapRuntime:init()
 end
 ------------------------------------------------------------------------------
 function MapRuntime:tick(dt)
-
     -- 执行所有的事件
     local handler = self.handler_
 

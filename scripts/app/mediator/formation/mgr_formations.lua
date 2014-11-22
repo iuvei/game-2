@@ -55,7 +55,7 @@ function M:insertByPos(index,data)
 end
 ----------------------------------------
 -- 刷新数据，如果存在会先删除
-function M:udpate( index, data )
+function M:update( index, data )
 	-- 先删除
     self:remove(index)
 

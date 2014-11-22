@@ -194,123 +194,123 @@ end
 --     table.insert(arr, string.sub(str, pos))
 --     return arr
 -- end
-----------------------------------------------------------------
--- http get
-function INIT_FUNCTION:httpGet(url , _callback , params)
-    params = params or {}
-    local timeout = params.timeout or 15
+-- ----------------------------------------------------------------
+-- -- http get
+-- function INIT_FUNCTION:httpGet(url , _callback , params)
+--     params = params or {}
+--     local timeout = params.timeout or 15
 
-    -- local function createHTTPRequest(callback, url, method)
-    --     if not method then method = "GET" end
-    --     if string.upper(tostring(method)) == "GET" then
-    --         method = kCCHTTPRequestMethodGET
-    --     else
-    --         method = kCCHTTPRequestMethodPOST
-    --     end
-    --     return CCHTTPRequest:createWithUrlLua(callback, url, method)
-    -- end
+--     -- local function createHTTPRequest(callback, url, method)
+--     --     if not method then method = "GET" end
+--     --     if string.upper(tostring(method)) == "GET" then
+--     --         method = kCCHTTPRequestMethodGET
+--     --     else
+--     --         method = kCCHTTPRequestMethodPOST
+--     --     end
+--     --     return CCHTTPRequest:createWithUrlLua(callback, url, method)
+--     -- end
 
-    local function sendRequest(url , callback)
-        local request = network.createHTTPRequest(function(event)
-            printf("REQUEST - event.name = %s",event.name)
+--     local function sendRequest(url , callback)
+--         local request = network.createHTTPRequest(function(event)
+--             printf("REQUEST - event.name = %s",event.name)
 
-            if event.name == "progress" then
-                if params.progress_callback then
-                    params.progress_callback(event.total , event.now)
-                end
-                return
-            end
+--             if event.name == "progress" then
+--                 if params.progress_callback then
+--                     params.progress_callback(event.total , event.now)
+--                 end
+--                 return
+--             end
 
-            if event.name == "timeout" then
-                CCLuaLog("===== error: timeout " .. timeout .. "s =====" )
-                callback( -28 , "网络请求超时" )
-                return
-            end
+--             if event.name == "timeout" then
+--                 CCLuaLog("===== error: timeout " .. timeout .. "s =====" )
+--                 callback( -28 , "网络请求超时" )
+--                 return
+--             end
 
-            local request = event.request
+--             local request = event.request
 
-            local error_code = request:getErrorCode()
-            if error_code ~= 0 then
-                CCLuaLog("===== error: " .. error_code .. " , msg: " .. request:getErrorMessage() .. " =====" )
-                callback( error_code , request:getErrorMessage() )
-                return
-            end
+--             local error_code = request:getErrorCode()
+--             if error_code ~= 0 then
+--                 CCLuaLog("===== error: " .. error_code .. " , msg: " .. request:getErrorMessage() .. " =====" )
+--                 callback( error_code , request:getErrorMessage() )
+--                 return
+--             end
 
-            callback( 0 , request:getResponseData() )
-        end , url , "GET")
+--             callback( 0 , request:getResponseData() )
+--         end , url , "GET")
 
-        -- request:setAcceptEncoding(kCCHTTPRequestAcceptEncodingDeflate)
-        request:setTimeout(timeout)
-        request:start()
-    end
+--         -- request:setAcceptEncoding(kCCHTTPRequestAcceptEncodingDeflate)
+--         request:setTimeout(timeout)
+--         request:start()
+--     end
 
-    sendRequest( url , _callback)
-end
-
-
--- http post
-function INIT_FUNCTION:httpPost(url , request_data , _callback , params)
-    params = params or {}
-    local timeout = params.timeout or 30
-
-    local function http_build_query(data)
-        if type(data) ~= "table" then return "" end
-
-        local str = ""
-
-        for k , v in pairs(data) do
-            str = str .. k .. "=" .. v .. "&"
-        end
-
-        return str
-    end
-
-    local function createHTTPRequest(callback, url, method)
-        if not method then method = "GET" end
-        if string.upper(tostring(method)) == "GET" then
-            method = kCCHTTPRequestMethodGET
-        else
-            method = kCCHTTPRequestMethodPOST
-        end
-        return CCHTTPRequest:createWithUrlLua(callback, url, method)
-    end
-
-    local function sendRequest(url , postdata , callback)
-        local request = createHTTPRequest(function(event)
-            if event.name == "progress" then
-                if params.progress_callback then
-                    params.progress_callback(event.total , event.now)
-                end
-                return
-            end
-
-            if event.name == "timeout" then
-                CCLuaLog("===== error: timeout " .. timeout .. "s =====" )
-                callback( -28 , "网络请求超时" )
-                return
-            end
-
-            local request = event.request
-
-            local error_code = request:getErrorCode()
-            if error_code ~= 0 then
-                CCLuaLog("===== error: " .. error_code .. " , msg: " .. request:getErrorMessage() .. " =====" )
-                callback( error_code , request:getErrorMessage() )
-                return
-            end
-
-            callback( 0 , request:getResponseDataLua() )
-        end , url , "POST")
-
-        -- request:setAcceptEncoding(kCCHTTPRequestAcceptEncodingDeflate)
-        request:setPOSTData(postdata)
-        request:setTimeout(timeout)
-        request:start()
-    end
+--     sendRequest( url , _callback)
+-- end
 
 
-    sendRequest( url , http_build_query(request_data) , _callback)
-end
+-- -- http post
+-- function INIT_FUNCTION:httpPost(url , request_data , _callback , params)
+--     params = params or {}
+--     local timeout = params.timeout or 30
+
+--     local function http_build_query(data)
+--         if type(data) ~= "table" then return "" end
+
+--         local str = ""
+
+--         for k , v in pairs(data) do
+--             str = str .. k .. "=" .. v .. "&"
+--         end
+
+--         return str
+--     end
+
+--     local function createHTTPRequest(callback, url, method)
+--         if not method then method = "GET" end
+--         if string.upper(tostring(method)) == "GET" then
+--             method = kCCHTTPRequestMethodGET
+--         else
+--             method = kCCHTTPRequestMethodPOST
+--         end
+--         return CCHTTPRequest:createWithUrlLua(callback, url, method)
+--     end
+
+--     local function sendRequest(url , postdata , callback)
+--         local request = createHTTPRequest(function(event)
+--             if event.name == "progress" then
+--                 if params.progress_callback then
+--                     params.progress_callback(event.total , event.now)
+--                 end
+--                 return
+--             end
+
+--             if event.name == "timeout" then
+--                 CCLuaLog("===== error: timeout " .. timeout .. "s =====" )
+--                 callback( -28 , "网络请求超时" )
+--                 return
+--             end
+
+--             local request = event.request
+
+--             local error_code = request:getErrorCode()
+--             if error_code ~= 0 then
+--                 CCLuaLog("===== error: " .. error_code .. " , msg: " .. request:getErrorMessage() .. " =====" )
+--                 callback( error_code , request:getErrorMessage() )
+--                 return
+--             end
+
+--             callback( 0 , request:getResponseDataLua() )
+--         end , url , "POST")
+
+--         -- request:setAcceptEncoding(kCCHTTPRequestAcceptEncodingDeflate)
+--         request:setPOSTData(postdata)
+--         request:setTimeout(timeout)
+--         request:start()
+--     end
+
+
+--     sendRequest( url , http_build_query(request_data) , _callback)
+-- end
 ----------------------------------------------------------------
 -- function refreshCopy(percent)
 --  local action

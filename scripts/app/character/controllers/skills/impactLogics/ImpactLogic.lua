@@ -6,7 +6,7 @@ local CommonDefine = require("app.ac.CommonDefine")
 local ImpactLogic = class("ImpactLogic")
 function ImpactLogic:ctor()
 end
-function ImpactLogic:initFromData(ownImpact,impactData)
+function ImpactLogic:initFromData(ownImpact,conf_impact)
     return true
 end
 --修改效果值
@@ -49,8 +49,8 @@ function ImpactLogic:markModifiedAttrDirty(rMe,ownImpact)
 end
 function ImpactLogic:getIntAttrRefix(ownImpact,rMe,role_attr_refix,out_data)
 end
-function ImpactLogic:getBoolAttrRefix(ownImpact,rMe,role_attr_refix)
-    return false,CommonDefine.INVALID_ID
+function ImpactLogic:getBoolAttrRefix(ownImpact,rMe,role_attr_refix,out_data)
+    return false
 end
 --驻留CD
 function ImpactLogic:calcCDInterval(rMe,ownImpact)
@@ -89,6 +89,10 @@ function ImpactLogic:onDamageTarget(rMe,target,ownImpact,outData,skillId) -- out
     -- body
 end
 function ImpactLogic:onFiltrateImpact(rMe,ownImpact,impactNeedCheck)
+    -- body
+end
+-- 回合开始前执行
+function ImpactLogic:onBeforeBout(sender_obj,ownImpact)
     -- body
 end
 -------------------------------------------------------------

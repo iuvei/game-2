@@ -33,15 +33,18 @@ function BattleEffectCommand:execute()
         self.rMe_:getView():createAttackEff()
         self:setOpState(HeroOpState.Doing)
         self.skillExeTimesCounter=1
+         -- 激活技能
+        SkillCore:activeSkillNew(self.rMe_)
     --操作执行进行中
     elseif self:getOpState() == HeroOpState.Doing then
+
         self.elapseTime_=math.floor(self.elapseTime_+CCDirector:sharedDirector():getDeltaTime()*1000)
         if self.skillExeTimesCounter <= #self.arrHitTime then
             if self.elapseTime_ >= tonumber(self.arrHitTime[self.skillExeTimesCounter])   then
                 --执行攻击效果
-                SkillCore:activeSkillNew(self.rMe_)
+                SkillCore:activateSkill(self.rMe_)
                 --暂时只执行一次
-                self.skillExeTimesCounter = self.skillExeTimesCounter+5
+                self.skillExeTimesCounter = self.skillExeTimesCounter+1
             end
         end
         if self.elapseTime_ >= self.endTimeInterval_ then

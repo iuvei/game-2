@@ -2,327 +2,91 @@
 -- don't change it manaully.
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/skill.xls
 
-local appendImpacts = {}
-
-appendImpacts.impacts21s = {}
-local impacts21s = appendImpacts.impacts21s
-impacts21s[1] = {
-	TypeId = 91001,
-	TypeName = "impacts21",
-	logicId = 3,
-	param1 = 630001,
-	param2 = 101,
-	param3 = 1,
-	param4 = -1,
+local appendImpacts = {
+	[1001] = {
+		{ logicId=1,param1=1,param2=-1,param3=10001,param4=-1 },
+	},
+	[3001] = {
+		{ logicId=1,param1=1,param2=-1,param3=30001,param4=-1 },
+	},
+	[4001] = {
+		{ logicId=1,param1=1,param2=-1,param3=40001,param4=-1 },
+	},
+	[5001] = {
+		{ logicId=1,param1=1,param2=-1,param3=50001,param4=-1 },
+	},
+	[21001] = {
+		{ logicId=1,param1=1,param2=-1,param3=210001,param4=-1 },
+	},
+	[21002] = {
+		{ logicId=1,param1=1,param2=-1,param3=210002,param4=-1 },
+	},
+	[22001] = {
+		{ logicId=1,param1=1,param2=-1,param3=220001,param4=-1 },
+	},
+	[22002] = {
+		{ logicId=1,param1=1,param2=-1,param3=220002,param4=-1 },
+	},
+	[31001] = {
+		{ logicId=1,param1=2,param2=0,param3=640001,param4=-1 },
+		{ param1=2,param2=0,param3=650001,param4=-1 },
+		{ param1=1,param2=-1,param3=310001,param4=-1 },
+		{ param1=1,param2=-1,param3=500001,param4=10000 },
+	},
+	[31002] = {
+		{ logicId=1,param1=1,param2=-1,param3=310002,param4=-1 },
+	},
+	[32001] = {
+		{ logicId=1,param1=1,param2=-1,param3=320001,param4=-1 },
+	},
+	[32002] = {
+		{ logicId=1,param1=1,param2=-1,param3=320002,param4=-1 },
+	},
+	[33001] = {
+		{ logicId=1,param1=1,param2=-1,param3=330001,param4=-1 },
+	},
+	[33002] = {
+		{ logicId=1,param1=1,param2=-1,param3=330002,param4=-1 },
+	},
+	[33003] = {
+		{ logicId=1,param1=1,param2=-1,param3=330003,param4=-1 },
+	},
+	[33004] = {
+		{ logicId=1,param1=1,param2=-1,param3=330004,param4=-1 },
+	},
+	[40001] = {
+		{ logicId=1,param1=1,param2=-1,param3=400001,param4=-1 },
+		{ param1=2,param2=0,param3=710001,param4=-1 },
+		{ param1=2,param2=0,param3=620001,param4=-1 },
+	},
+	[50001] = {
+		{ logicId=1,param1=1,param2=-1,param3=500001,param4=-1 },
+	},
+	[41001] = {
+		{ logicId=1,param1=1,param2=-1,param3=410001,param4=-1 },
+	},
+	[90001] = {
+		{ logicId=2,param1=800001,param2=-1,param3=-1,param4=-1 },
+	},
+	[91001] = {
+		{ logicId=3,param1=630001,param2=101,param3=1,param4=-1 },
+	},
+	[92001] = {
+		{ logicId=1,param1=1,param2=-1,param3=660001,param4=-1 },
+	},
+	[93001] = {
+		{ logicId=1,param1=1,param2=-1,param3=670001,param4=-1 },
+	},
+	[94001] = {
+		{ logicId=1,param1=1,param2=-1,param3=680001,param4=-1 },
+	},
+	[95001] = {
+		{ logicId=1,param1=1,param2=-1,param3=690001,param4=-1 },
+	},
 }
 
-appendImpacts.impacts19s = {}
-local impacts19s = appendImpacts.impacts19s
-impacts19s[1] = {
-	TypeId = 41001,
-	TypeName = "impacts19",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 410001,
-	param4 = -1,
-}
-
-appendImpacts.impacts18s = {}
-local impacts18s = appendImpacts.impacts18s
-impacts18s[1] = {
-	TypeId = 50001,
-	TypeName = "impacts18",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 500001,
-	param4 = -1,
-}
-
-appendImpacts.impacts17s = {}
-local impacts17s = appendImpacts.impacts17s
-impacts17s[1] = {
-	TypeId = 40001,
-	TypeName = "impacts17",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 400001,
-	param4 = -1,
-}
-impacts17s[2] = {
-	param1 = 2,
-	param2 = 0,
-	param3 = 710001,
-	param4 = -1,
-}
-impacts17s[3] = {
-	param1 = 2,
-	param2 = 0,
-	param3 = 620001,
-	param4 = -1,
-}
-
-appendImpacts.impacts16s = {}
-local impacts16s = appendImpacts.impacts16s
-impacts16s[1] = {
-	TypeId = 33004,
-	TypeName = "impacts16",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 330004,
-	param4 = -1,
-}
-
-appendImpacts.impacts15s = {}
-local impacts15s = appendImpacts.impacts15s
-impacts15s[1] = {
-	TypeId = 33003,
-	TypeName = "impacts15",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 330003,
-	param4 = -1,
-}
-
-appendImpacts.impacts14s = {}
-local impacts14s = appendImpacts.impacts14s
-impacts14s[1] = {
-	TypeId = 33002,
-	TypeName = "impacts14",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 330002,
-	param4 = -1,
-}
-
-appendImpacts.impacts13s = {}
-local impacts13s = appendImpacts.impacts13s
-impacts13s[1] = {
-	TypeId = 33001,
-	TypeName = "impacts13",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 330001,
-	param4 = -1,
-}
-
-appendImpacts.impacts12s = {}
-local impacts12s = appendImpacts.impacts12s
-impacts12s[1] = {
-	TypeId = 32002,
-	TypeName = "impacts12",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 320002,
-	param4 = -1,
-}
-
-appendImpacts.impacts11s = {}
-local impacts11s = appendImpacts.impacts11s
-impacts11s[1] = {
-	TypeId = 32001,
-	TypeName = "impacts11",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 320001,
-	param4 = -1,
-}
-
-appendImpacts.impacts10s = {}
-local impacts10s = appendImpacts.impacts10s
-impacts10s[1] = {
-	TypeId = 31002,
-	TypeName = "impacts10",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 310002,
-	param4 = -1,
-}
-
-appendImpacts.impacts20s = {}
-local impacts20s = appendImpacts.impacts20s
-impacts20s[1] = {
-	TypeId = 90001,
-	TypeName = "impacts20",
-	logicId = 2,
-	param1 = 800001,
-	param2 = -1,
-	param3 = -1,
-	param4 = -1,
-}
-
-appendImpacts.impacts9s = {}
-local impacts9s = appendImpacts.impacts9s
-impacts9s[1] = {
-	TypeId = 31001,
-	TypeName = "impacts9",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 310001,
-	param4 = -1,
-}
-impacts9s[2] = {
-	param1 = 1,
-	param2 = -1,
-	param3 = 500001,
-	param4 = 10000,
-}
-
-appendImpacts.impacts8s = {}
-local impacts8s = appendImpacts.impacts8s
-impacts8s[1] = {
-	TypeId = 22002,
-	TypeName = "impacts8",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 220002,
-	param4 = -1,
-}
-
-appendImpacts.impacts3s = {}
-local impacts3s = appendImpacts.impacts3s
-impacts3s[1] = {
-	TypeId = 4001,
-	TypeName = "impacts3",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 40001,
-	param4 = -1,
-}
-
-appendImpacts.impacts2s = {}
-local impacts2s = appendImpacts.impacts2s
-impacts2s[1] = {
-	TypeId = 3001,
-	TypeName = "impacts2",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 30001,
-	param4 = -1,
-}
-
-appendImpacts.impacts1s = {}
-local impacts1s = appendImpacts.impacts1s
-impacts1s[1] = {
-	TypeId = 1001,
-	TypeName = "impacts1",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 10001,
-	param4 = -1,
-}
-
-appendImpacts.impacts7s = {}
-local impacts7s = appendImpacts.impacts7s
-impacts7s[1] = {
-	TypeId = 22001,
-	TypeName = "impacts7",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 220001,
-	param4 = -1,
-}
-
-appendImpacts.impacts6s = {}
-local impacts6s = appendImpacts.impacts6s
-impacts6s[1] = {
-	TypeId = 21002,
-	TypeName = "impacts6",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 210002,
-	param4 = -1,
-}
-
-appendImpacts.impacts5s = {}
-local impacts5s = appendImpacts.impacts5s
-impacts5s[1] = {
-	TypeId = 21001,
-	TypeName = "impacts5",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 210001,
-	param4 = -1,
-}
-
-appendImpacts.impacts4s = {}
-local impacts4s = appendImpacts.impacts4s
-impacts4s[1] = {
-	TypeId = 5001,
-	TypeName = "impacts4",
-	logicId = 1,
-	param1 = 1,
-	param2 = -1,
-	param3 = 50001,
-	param4 = -1,
-}
-
-appendImpacts.type_map = {}
-local type_map = appendImpacts.type_map
-type_map[91001] = "impacts21s" type_map["impacts21s"] = 91001
-type_map[41001] = "impacts19s" type_map["impacts19s"] = 41001
-type_map[50001] = "impacts18s" type_map["impacts18s"] = 50001
-type_map[40001] = "impacts17s" type_map["impacts17s"] = 40001
-type_map[33004] = "impacts16s" type_map["impacts16s"] = 33004
-type_map[33003] = "impacts15s" type_map["impacts15s"] = 33003
-type_map[33002] = "impacts14s" type_map["impacts14s"] = 33002
-type_map[33001] = "impacts13s" type_map["impacts13s"] = 33001
-type_map[32002] = "impacts12s" type_map["impacts12s"] = 32002
-type_map[32001] = "impacts11s" type_map["impacts11s"] = 32001
-type_map[31002] = "impacts10s" type_map["impacts10s"] = 31002
-type_map[90001] = "impacts20s" type_map["impacts20s"] = 90001
-type_map[31001] = "impacts9s" type_map["impacts9s"] = 31001
-type_map[22002] = "impacts8s" type_map["impacts8s"] = 22002
-type_map[4001] = "impacts3s" type_map["impacts3s"] = 4001
-type_map[3001] = "impacts2s" type_map["impacts2s"] = 3001
-type_map[1001] = "impacts1s" type_map["impacts1s"] = 1001
-type_map[22001] = "impacts7s" type_map["impacts7s"] = 22001
-type_map[21002] = "impacts6s" type_map["impacts6s"] = 21002
-type_map[21001] = "impacts5s" type_map["impacts5s"] = 21001
-type_map[5001] = "impacts4s" type_map["impacts4s"] = 5001
-
-appendImpacts.all_type= {}
-local all_type = appendImpacts.all_type
-all_type[91001] = impacts21s
-all_type[41001] = impacts19s
-all_type[50001] = impacts18s
-all_type[40001] = impacts17s
-all_type[33004] = impacts16s
-all_type[33003] = impacts15s
-all_type[33002] = impacts14s
-all_type[33001] = impacts13s
-all_type[32002] = impacts12s
-all_type[32001] = impacts11s
-all_type[31002] = impacts10s
-all_type[90001] = impacts20s
-all_type[31001] = impacts9s
-all_type[22002] = impacts8s
-all_type[4001] = impacts3s
-all_type[3001] = impacts2s
-all_type[1001] = impacts1s
-all_type[22001] = impacts7s
-all_type[21002] = impacts6s
-all_type[21001] = impacts5s
-all_type[5001] = impacts4s
-
-for i,v in pairs(appendImpacts.all_type) do
+local pairs = pairs
+for i,v in pairs(appendImpacts) do
 	local item = v
 	for j=1, #item do
 		item[j].__index = item[j]

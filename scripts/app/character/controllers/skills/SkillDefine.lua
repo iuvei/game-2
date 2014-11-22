@@ -29,7 +29,13 @@ SkillDefine.LogicImpact012=12
 SkillDefine.LogicImpact013=13
 SkillDefine.LogicImpact014=14
 SkillDefine.LogicImpact015=15
+SkillDefine.LogicImpact016=16
 SkillDefine.LogicImpact018=18
+SkillDefine.LogicImpact019=19
+SkillDefine.LogicImpact022=22
+SkillDefine.LogicImpact025=25
+SkillDefine.LogicImpact028=28
+SkillDefine.LogicImpact030=30
 -------------------------------------------------------------
 --效果逻辑参数类型
 --LogicID001
@@ -44,6 +50,7 @@ SkillDefine.ImpactParamL004_Hp=1
 SkillDefine.ImpactParamL004_HpRate=2
 SkillDefine.ImpactParamL004_Rage=3
 SkillDefine.ImpactParamL004_RageRate=4
+SkillDefine.ImpactParamL004_Speed=5
 --LogicID010
 SkillDefine.ImpactParamL010_ImpactId=1
 --LogicID011
@@ -70,8 +77,12 @@ SkillDefine.ImpactParamL014_DamagePhyDefenceRate=4
 SkillDefine.ImpactParamL015_MoveFlag=1
 SkillDefine.ImpactParamL015_AktFlag=2
 SkillDefine.ImpactParamL015_UnbreakableFlag=3
+-- LogicID020
+
 -- LogicID025
 SkillDefine.ImpactParamL025_AbsorbRate=1
+SkillDefine.ImpactParamL025_RecodeDamage=2
+
 --被动技能的LogicID none
 SkillDefine.ImpactParamPassvieSkill_MaxHp=1
 SkillDefine.ImpactParamPassvieSkill_MaxHpRate=2
@@ -101,6 +112,7 @@ SkillDefine.TargetLogic_Enemy_Unit=1
 SkillDefine.TargetLogic_AllEnemy=2
 SkillDefine.TargetLogic_Team_Unit=3
 SkillDefine.TargetLogic_AllTeam=4
+SkillDefine.TargetLogic_All=5
 --SkillDefine.TargetLogic_Specific_Unit=1
 --SkillDefine.TargetLogic_
 

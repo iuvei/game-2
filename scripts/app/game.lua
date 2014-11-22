@@ -11,7 +11,7 @@ function game:ctor()
     CCLuaLoadChunksFromZIP("c.c")
 
 
-    require("app.switchscene")
+    require("app.switch_scene")
 
 
     -- common
@@ -47,7 +47,7 @@ end
 
 function game:run()
     -- 进入登录场景
-    self:enterScene("login.loginscene")
+    self:enterScene("login.login_scene")
 end
 
 return game

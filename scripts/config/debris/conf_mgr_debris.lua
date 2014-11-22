@@ -14,8 +14,7 @@ end
 -----------------------------------------
 function conf_mgr_debris:get_icon(data_id)
 	local conf_art    = require("config.debris.debris_art")
-    local info = conf_debris[data_id]
-    return conf_art[info.artid].icon
+    return conf_art[conf_debris[data_id].artid].icon
 end
 ------------------------------------------------------------------------------
 return conf_mgr_debris

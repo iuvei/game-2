@@ -13,8 +13,7 @@ end
 -----------------------------------------
 function conf_mgr_equip:get_icon(data_id)
 	local conf_equip_art    = require("config.equip.equip_art")
-    local equip = conf_equip[data_id]
-    return conf_equip_art[equip.artid].icon
+    return conf_equip_art[conf_equip[data_id].artid].icon
 end
 ------------------------------------------------------------------------------
 return conf_mgr_equip

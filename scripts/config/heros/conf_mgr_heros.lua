@@ -2,6 +2,8 @@
 -- Author: Anthony
 -- Date: 2014-07-09 15:59:56
 -- hero的配置管理器
+local pairs = pairs
+local math = math
 ------------------------------------------------------------------------------
 local StringData    = require("config.zhString")
 local game_attr = require("app.ac.game_attr")
@@ -12,7 +14,7 @@ local conf_mgr_heros = {}
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetHeroData(typeId,quality)
 
-    local hero = conf_heros.all_type[typeId][quality]
+    local hero = conf_heros[typeId][quality]
     if hero == nil then
         print("conf_mgr_heros:GetHeroData error! typeId",typeId," quality",quality)
         return nil
@@ -22,30 +24,16 @@ function conf_mgr_heros:GetHeroData(typeId,quality)
 
     local skills = {}
     -- 初始装备
-    local conf_skills = conf_mgr_heros:getHeroSkills(hero.SkillRule)
-    if conf_skills then
-        for k,v in pairs(conf_skills) do
+    local conf_data = conf_mgr_heros:getHeroSkills(hero.SkillRule)
+    if conf_data then
+        for k,v in pairs(conf_data) do
             skills[k] = { templateId = v.skillTempId ,level = v.skllLevel}
         end
     end
 
-    -- 初始装备
-    local equip_rule = nil
-    local conf_equp_rule = conf_mgr_heros:get_equip_rule(hero.equip_rule)
-    if conf_equip_rule then
-        equip_rule = {
-            conf_equp_rule.equip_id_1,
-            conf_equp_rule.equip_id_2,
-            conf_equp_rule.equip_id_3,
-            conf_equp_rule.equip_id_4,
-            conf_equp_rule.equip_id_5,
-            conf_equp_rule.equip_id_6,
-        }
-    end
-
     -- 属性
     local outData = {
-        typename    = arm_.TypeName,
+        -- typename    = arm_.TypeName,
         nickname    = hero.nickname,
         level       = hero.Level,
         -- speed       = arm.Speed,
@@ -63,21 +51,20 @@ function conf_mgr_heros:GetHeroData(typeId,quality)
         Desc        = hero.Desc,
         arm         = arm_,
         attr         = game_attr.gen_hero_attr(hero),
-        require_equip  = equip_rule or {}, --初始绑定装备
+        skills      = skills,
+        require_equip  = conf_mgr_heros:get_equip_rule(hero.equip_rule), --初始绑定装备
     }
     return outData
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetHeroDataById(id)
-    local typeId = math.floor(id / 1000)
-    local quality = math.floor(id % 1000)
-    return self:GetHeroData(typeId,quality)
+    return self:GetHeroData(math.floor(id / 1000),math.floor(id % 1000))
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetConfHerosData(id)
     local typeId = math.floor(id / 1000)
     local quality = math.floor(id % 1000)
-    local hero = conf_heros.all_type[typeId][quality]
+    local hero = conf_heros[typeId][quality]
     if hero == nil then
         print("conf_mgr_heros:GetHeroData error! typeId",typeId," quality",quality)
         return nil
@@ -86,29 +73,23 @@ function conf_mgr_heros:GetConfHerosData(id)
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetHeroById(id)
-    local typeId = math.floor(id / 1000)
-    local quality = math.floor(id % 1000)
-    return conf_heros.all_type[typeId][quality]
+    return conf_heros[math.floor(id / 1000)][math.floor(id % 1000)]
 end
-------------------------------------------------------------------------------
-function conf_mgr_heros:GetHeroTypeCount()
-    return #conf_heros.all_type
-end
+-- ------------------------------------------------------------------------------
+-- function conf_mgr_heros:GetHeroTypeCount()
+--     return #conf_heros
+-- end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetArmsData(id)
     -- 兵种配置表
     local conf_arms = require("config.heros.arms")
 
-    local typeId = math.floor(id / 1000)
-    local level = math.floor(id % 1000)
-    return conf_arms.all_type[typeId][level]
+    return conf_arms[math.floor(id / 1000)][math.floor(id % 1000)]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetArmsDataByHeorId(HeroId)
-    local typeId = math.floor(HeroId / 1000)
-    local quality = math.floor(HeroId % 1000)
 
-    local hero = conf_heros.all_type[typeId][quality]
+    local hero = conf_heros[math.floor(HeroId / 1000)][math.floor(HeroId % 1000)]
     -- 兵种配置表
     local arm = self:GetArmsData(hero.ArmId)
     return arm
@@ -118,9 +99,7 @@ function conf_mgr_heros:GetHerosArt(id)
     -- 武将美术配置表
     local conf_herosArt = require("config.heros.herosArt")
 
-    local typeId = math.floor(id / 1000)
-    local level = math.floor(id % 1000)
-    return conf_herosArt.all_type[typeId][level]
+    return conf_herosArt[math.floor(id / 1000)][math.floor(id % 1000)]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetHerosArtById(heroid)
@@ -133,7 +112,7 @@ function conf_mgr_heros:GetArmFlie(id,state,isEnemy)
     local conf_armArt = require("config.heros.armArt")
 
     local i = 1
-    local armArt = conf_armArt.all_type[id]
+    local armArt = conf_armArt[id]
     if state == "idle" then i = 1
     elseif state == "dead" then i = 2
     elseif state == "move" then i = 3
@@ -173,12 +152,12 @@ end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:getHeroSkills(skillRuleOfHero)
     local config_herosSkillRule = require("config.heros.herosSkillRule")
-    return config_herosSkillRule.all_type[skillRuleOfHero]
+    return config_herosSkillRule[skillRuleOfHero]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:getArmSkills(skillRuleOfArm)
     local config_armsSkillRule = require("config.heros.armsSkillRule")
-    return config_armsSkillRule.all_type[skillRuleOfArm]
+    return config_armsSkillRule[skillRuleOfArm]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:get_equip_rule(ruleId)

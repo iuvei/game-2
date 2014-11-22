@@ -2,173 +2,28 @@
 -- don't change it manaully.
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/heros.xls
 
-local arms = {}
-
-arms.gongbings = {}
-local gongbings = arms.gongbings
-gongbings[1] = {
-	TypeId = 3,
-	TypeName = "gongbing",
-	id = 3001,
-	Level = 1,
-	artId = 3,
-	Desc = "1级弓兵",
-	skillRule = 3,
-	Speed = 110,
-	MovDis = 1,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-gongbings[2] = {
-	id = 3002,
-	Level = 2,
-	Desc = "2级弓兵",
-	skillRule = 3,
-	Speed = 110,
-	MovDis = 1,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
+local arms = {
+	[1] = {
+		{ id=1001,Level=1,artId=1,Desc="1级步兵",skillRule=1,Speed=120,MovDis=1,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+		{ id=1002,Level=2,Desc="2级步兵",skillRule=1,Speed=120,MovDis=1,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+		{ id=1003,Level=3,Desc="3级步兵",skillRule=1,Speed=120,MovDis=1,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+	},
+	[2] = {
+		{ id=2001,Level=1,artId=2,Desc="1级骑兵",skillRule=2,Speed=150,MovDis=2,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+		{ id=2002,Level=2,Desc="2级骑兵",skillRule=2,Speed=150,MovDis=2,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+		{ id=2003,Level=3,Desc="3级骑兵",skillRule=2,Speed=150,MovDis=2,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+	},
+	[3] = {
+		{ id=3001,Level=1,artId=3,Desc="1级弓兵",skillRule=3,Speed=110,MovDis=1,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+		{ id=3002,Level=2,Desc="2级弓兵",skillRule=3,Speed=110,MovDis=1,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+	},
+	[4] = {
+		{ id=4001,Level=1,artId=4,Desc="1级工程车",skillRule=4,Speed=100,MovDis=1,PhysicsAtkRatio=1,PhysicsDefRatio=1,MagicAtkRatio=1,MagicDefRatio=1,TacticsAtkRatio=1,TacticsDefRatio=1 },
+	},
 }
 
-arms.qibings = {}
-local qibings = arms.qibings
-qibings[1] = {
-	TypeId = 2,
-	TypeName = "qibing",
-	id = 2001,
-	Level = 1,
-	artId = 2,
-	Desc = "1级骑兵",
-	skillRule = 2,
-	Speed = 150,
-	MovDis = 2,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-qibings[2] = {
-	id = 2002,
-	Level = 2,
-	Desc = "2级骑兵",
-	skillRule = 2,
-	Speed = 150,
-	MovDis = 2,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-qibings[3] = {
-	id = 2003,
-	Level = 3,
-	Desc = "3级骑兵",
-	skillRule = 2,
-	Speed = 150,
-	MovDis = 2,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-
-arms.bubings = {}
-local bubings = arms.bubings
-bubings[1] = {
-	TypeId = 1,
-	TypeName = "bubing",
-	id = 1001,
-	Level = 1,
-	artId = 1,
-	Desc = "1级步兵",
-	skillRule = 1,
-	Speed = 120,
-	MovDis = 1,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-bubings[2] = {
-	id = 1002,
-	Level = 2,
-	Desc = "2级步兵",
-	skillRule = 1,
-	Speed = 120,
-	MovDis = 1,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-bubings[3] = {
-	id = 1003,
-	Level = 3,
-	Desc = "3级步兵",
-	skillRule = 1,
-	Speed = 120,
-	MovDis = 1,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-
-arms.gongchengches = {}
-local gongchengches = arms.gongchengches
-gongchengches[1] = {
-	TypeId = 4,
-	TypeName = "gongchengche",
-	id = 4001,
-	Level = 1,
-	artId = 4,
-	Desc = "1级工程车",
-	skillRule = 4,
-	Speed = 100,
-	MovDis = 1,
-	PhysicsAtkRatio = 1,
-	PhysicsDefRatio = 1,
-	MagicAtkRatio = 1,
-	MagicDefRatio = 1,
-	TacticsAtkRatio = 1,
-	TacticsDefRatio = 1,
-}
-
-arms.type_map = {}
-local type_map = arms.type_map
-type_map[3] = "gongbings" type_map["gongbings"] = 3
-type_map[2] = "qibings" type_map["qibings"] = 2
-type_map[1] = "bubings" type_map["bubings"] = 1
-type_map[4] = "gongchengches" type_map["gongchengches"] = 4
-
-arms.all_type= {}
-local all_type = arms.all_type
-all_type[3] = gongbings
-all_type[2] = qibings
-all_type[1] = bubings
-all_type[4] = gongchengches
-
-for i,v in pairs(arms.all_type) do
+local pairs = pairs
+for i,v in pairs(arms) do
 	local item = v
 	for j=1, #item do
 		item[j].__index = item[j]

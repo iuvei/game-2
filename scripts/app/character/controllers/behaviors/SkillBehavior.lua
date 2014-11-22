@@ -217,40 +217,34 @@ function SkillBehavior:bindMethods(object)
         end
     end
     self:bindMethod(object,"Impact_GetIntAttRefix", Impact_GetIntAttRefix)
-    local function Impact_GetBoolAttRefix(object,roleAttrType)
-        local v = CommonDefine.INVALID_ID
-        local b = false
+    local function Impact_GetBoolAttRefix(object,roleAttrType,out_data)
         for k,ownImpact in pairs(object.impacts_) do
             local impLogic = Impact_GetLogic(object, ownImpact)
             if impLogic==nil then
                 --todo
             elseif ownImpact:isFadeOut()==false and impLogic:isOverTimed()==true then
-                b,v=impLogic:getBoolAttrRefix(ownImpact,object,roleAttrType)
-                if b==true then
-                    break
+                local ret = impLogic:getBoolAttrRefix(ownImpact,object,roleAttrType,out_data)
+                if ret then
+                    return true
                 end
             end
         end
-        local bRet =nil
-        if v == 0 then
-            bRet = false
-        elseif v == 1 then
-            bRet = true
-        end
-        return b,bRet
+        return false
     end
     self:bindMethod(object,"Impact_GetBoolAttRefix", Impact_GetBoolAttRefix)
     --取得物品属性影响值
-    local function Skill_RefixItemAttr(object,slotId,itemType,attrType,outAttr)
-        if not object:getSkillsByUseType(SkillDefine.UseType_Passivity) then return end
+    local function Skill_RefixItemAttr(object,attrType)
+        if not object:getSkillsByUseType(SkillDefine.UseType_Passivity) then return 0 end
+        local out_attr = {value=0}
         for k,skill in pairs(object:getSkillsByUseType(SkillDefine.UseType_Passivity)) do
             local logic = Skill_GetLogic(object,Skill_GetLogicId(skill.id))
             --print("···",skill.id)
             if logic~=nil then
                 --logic:refix_ItemEffect(skill,slotId,itemType,attrType,outAttr)
-                logic:refix_SkillEffect(object,skill,attrType,outAttr)
+                logic:refix_SkillEffect(object,skill,attrType,out_attr)
             end
         end
+        return out_attr.value
     end
     self:bindMethod(object,"Skill_RefixItemAttr", Skill_RefixItemAttr)
     --效果过滤
@@ -274,6 +268,21 @@ function SkillBehavior:bindMethods(object)
         end
     end
     self:bindMethod(object,"updataImpacts", updataImpacts)
+    local function onImpactBeforeBout(object)
+        if table.nums(object.impacts_)<=0 then return end
+        --必须记录当前需要更新的，因为updata过程中impacts会被修改
+        local tmp = {}
+        for k,v in pairs(object.impacts_) do
+            tmp[k]=v
+        end
+        for k,ownImpact in pairs(tmp) do
+            local impLogic = Impact_GetLogic(object, ownImpact)
+            if impLogic then
+                impLogic:onBeforeBout(object, ownImpact)
+            end
+        end
+    end
+    self:bindMethod(object,"onImpactBeforeBout", onImpactBeforeBout)
     local function getImpactByTypeId(type_id)
         return object.impacts_[type_id]
     end
@@ -376,8 +385,10 @@ function SkillBehavior:bindMethods(object)
         -- end
         for k,v in pairs(object:getSkills()) do
             --判断怒气值消耗
-            if not object:isBeSkill(v.id) and object:getCDs():isCooldownedById(v.id)
+            if not object:isBeSkill(v.id)
+                and object:getCDs():isCooldownedById(v.id)
                 and object:checkCondition(v.id)
+                and not object:isInSceneSkill(v.id)
             then
                 return v
             end

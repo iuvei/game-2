@@ -7,19 +7,17 @@ local homeBuilds    =require("config.home.homeBuild")
 local homeRes       =require("config.home.homeRes")
 local conf_mgr_home = {}
 function conf_mgr_home:getHomeBuilds()
-    return homeBuilds.all_type
+    return homeBuilds
 end
 function conf_mgr_home:getHomeBuild(buildId)
-    return homeBuilds.all_type[buildId][1]
+    return homeBuilds[buildId][1]
 end
 function conf_mgr_home:getHomeBuildRes(buildId)
     local build = self:getHomeBuild(buildId)
-    local typeId = math.floor(build.resId/1000)
-    local index = math.floor(build.resId%1000)
-    return homeRes.all_type[typeId][index]
+    return homeRes[math.floor(build.resId/1000)][math.floor(build.resId%1000)]
 end
 function conf_mgr_home:getHomeRes(resType)
-    return homeRes.all_type[resType]
+    return homeRes[resType]
 end
 function conf_mgr_home:toRect(strRect)
     local ts = string.split(strRect, ",")

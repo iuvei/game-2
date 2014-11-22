@@ -1,5 +1,5 @@
 
-É
+¿
 packets.protomessage.packets"#
 Packet
 cmd (
@@ -41,8 +41,9 @@ createTime (	
 content (	"4
 CS_AskCreateHero
 playerid (
-heroid ("N
-SC_FlushHero
+heroid ("L
+
+SC_NewHero
 result (.
 heroinfo (2.message.packets.SC_HeroInfo"›
 SC_HeroInfo
@@ -96,25 +97,15 @@ formations (2!.message.packets.SC_FormationInfo"i
 debris (2.message.packets.SC_ItemInfo"4
 CS_AskCreateItem
 playerid (
-dataid ("J
-SC_FlushItem
+dataid ("H
+
+SC_NewItem
 result (*
 info (2.message.packets.SC_ItemInfo"8
 SC_ItemInfo
 dataId (
 GUID (
-num ("9
-CS_UseEquip
-
-op (
-GUID (
-HeroGUID ("I
-SC_UseEquip
-
-op (
-result (
-HeroGUID (
-GUID (",
+num (",
 
 CS_UseItem
 GUID (

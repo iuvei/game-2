@@ -1,14 +1,14 @@
 --
 -- Author: Anthony
 -- Date: 2014-10-22 18:09:26
--- Filename: SC_FlushItem.lua
+-- Filename: SC_NewItem.lua
 --
 ------------------------------------------------------------------------------
 local item_operator = require("app.mediator.item_operator")
 ------------------------------------------------------------------------------
-local SC_FlushItem = {}
+local SC_NewItem = {}
 ------------------------------------------------------------------------------
-function SC_FlushItem:execute( player, args )
+function SC_NewItem:execute( player, args )
 	if args.result == 0 then
 		-- printError("create item error! dataid:%d result:%d", args.info.dataId,args.result)
 		return
@@ -17,7 +17,7 @@ function SC_FlushItem:execute( player, args )
 	end
 
 	item_operator:update( player, args.info)
-	printInfo("SC_FlushItem update dataId:%d guid:%d num:%d",args.info.dataId,args.info.GUID,args.info.num)
+	printInfo("SC_NewItem update dataId:%d guid:%d num:%d",args.info.dataId,args.info.GUID,args.info.num)
 end
 ------------------------------------------------------------------------------
-return SC_FlushItem
+return SC_NewItem

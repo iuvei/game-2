@@ -131,11 +131,16 @@ function DestroyedBehavior:bindMethods(object)
     ----------------------------------------
     --怒气值
     local function increaseRage(object, delta)
+
         delta = checknumber(delta)
         assert(not object:isDead(), string.format("Object %s:%s is dead, can't change rage", object:getId(), object:getNickname()))
 
         local newVal = object.rage_ + delta
         if delta >= 0 then
+            -- 是否可恢复怒气
+            if object:getBoolAttRefix(CommonDefine.RoleAttrRefix_CanRegainRageFlag) == false then
+                return false
+            end
             if newVal > object:getMaxRage() then
                 newVal = object:getMaxRage()
             end
@@ -165,6 +170,10 @@ function DestroyedBehavior:bindMethods(object)
 
         local newhp = object.hp_ + increaseVal
         if increaseVal >= 0 then
+            -- 是否可恢复血量
+            if object:getBoolAttRefix(CommonDefine.RoleAttrRefix_CanRegainHpFlag) == false then
+                return false
+            end
             if newhp > object:getMaxHp() then
                 newhp = object:getMaxHp()
             end
