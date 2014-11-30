@@ -6,11 +6,11 @@ local pairs = pairs
 local table = table
 local tonumber = tonumber
 ----------------------------------------------------------------
-local client_formation = import(".client_formation")
+local formation = import(".formation")
 ----------------------------------------------------------------
-local M = class("mgr_formations")
+local formation_mgr = class("formation_mgr")
 ----------------------------------------------------------------
-function M:ctor(player)
+function formation_mgr:ctor(player)
 	self.__data = {}
     self.player = player
 end
@@ -18,20 +18,20 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function M:get_data()
+function formation_mgr:get_data()
 	return self.__data
 end
 ----------------------------------------
-function M:set_data( data )
+function formation_mgr:set_data( data )
     table.walk(data, function(v, k)
-        self.__data[k] = client_formation.new(v)
+        self.__data[k] = formation.new(v)
     end)
 
     -- print("---------set_formations")
     -- dump(self.__data)
 end
 ----------------------------------------
-function M:remove(index)
+function formation_mgr:remove(index)
     for k, v in pairs(self.__data) do
         if v:get("index") == 0 or v:get("index") == index then
             -- print("fomation:remove",v:get("GUID"),v:get("dataId"),index)
@@ -45,9 +45,9 @@ function M:remove(index)
 end
 ----------------------------------------
 --
-function M:insertByPos(index,data)
+function formation_mgr:insertByPos(index,data)
     data.index  = index
-    local newdata = client_formation.new(data)
+    local newdata = formation.new(data)
     -- print("insertByPos",newdata:get("GUID"),newdata:get("dataId"),newdata:get("index"))
     table.insert(self.__data,newdata)
 
@@ -55,7 +55,7 @@ function M:insertByPos(index,data)
 end
 ----------------------------------------
 -- 刷新数据，如果存在会先删除
-function M:update( index, data )
+function formation_mgr:update( index, data )
 	-- 先删除
     self:remove(index)
 
@@ -66,7 +66,7 @@ function M:update( index, data )
 end
 ----------------------------------------
 -- 更新位置根据GUID
-function M:update_index(GUID,index)
+function formation_mgr:update_index(GUID,index)
     for k, v in pairs(self.__data) do
         if tonumber(v:get("GUID")) == tonumber(GUID) then
             -- print("fomation:updatePosByGUID",v:get("GUID"),v:get("dataId"),index)
@@ -80,13 +80,13 @@ end
 ----------------------------------------
 -- 更新数据到服务端
 -- pos为位置编号,总共5个位
-function M:update_server_fomation( pos, herodata )
+function formation_mgr:update_server_fomation( pos, herodata )
     if CHANNEL_ID ~= "test" then
         local formation = nil
         if herodata then
             formation   = {
                 index   = herodata.index,
-                GUID    = herodata.GUID,
+                -- GUID    = herodata.GUID,
                 dataId  = herodata.dataId,
             }
         end
@@ -101,5 +101,5 @@ function M:update_server_fomation( pos, herodata )
     end
 end
 ----------------------------------------------------------------
-return M
+return formation_mgr
 ----------------------------------------------------------------

@@ -41,7 +41,7 @@ function game:ctor()
         NETWORK = require("app.ac.net.network")
     end
     -- 全局的玩家单例
-    CLIENT_PLAYER = require("app.mediator.client_player").create(NETWORK)
+    PLAYER = require("app.mediator.player").create(NETWORK)
 
 end
 

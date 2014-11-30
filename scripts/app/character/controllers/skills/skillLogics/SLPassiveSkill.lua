@@ -53,7 +53,7 @@ function SLPassiveSkill:refix_SkillEffect(rMe,skill,role_attr_type,out_attr)
                 end
                 return true
             end
-        elseif logic_id == 6 then -- 被动技能影响闪避，命中，暴击，格挡，破防伤害，破防防御
+        elseif logic_id == 6 then -- 被动技能影响闪避，命中，暴击，格挡，破防伤害，破防防御,速度
             if role_attr_type == CommonDefine.RoleAttr_Hit then  -- 命中
                 conf_index = 1
             elseif role_attr_type == CommonDefine.RoleAttr_Evd then -- 闪避
@@ -66,7 +66,11 @@ function SLPassiveSkill:refix_SkillEffect(rMe,skill,role_attr_type,out_attr)
                 conf_index = 5
             elseif role_attr_type == CommonDefine.RoleAttr_DecDefRed then -- 破防伤害减免值
                 conf_index = 6
+            elseif role_attr_type == CommonDefine.RoleAttr_Speed then -- 速度
+                conf_index = 7
+
             end
+            if conf_index == 0 then return false end
             value = Impact_GetImpactParamVal(impactTypeId,conf_index)
             if value ~= CommonDefine.INVALID_ID then
                 out_attr.value = out_attr.value + value
@@ -86,6 +90,7 @@ function SLPassiveSkill:refix_SkillEffect(rMe,skill,role_attr_type,out_attr)
             elseif role_attr_type == CommonDefine.RoleAttr_TacticsDef then -- 计策防御固定值
                 conf_index = 6
             end
+            if conf_index == 0 then return false end
             value = Impact_GetImpactParamVal(impactTypeId,conf_index)
             if value ~= CommonDefine.INVALID_ID then
                 out_attr.value = out_attr.value + value

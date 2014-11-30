@@ -1,7 +1,7 @@
 --
 -- Author: wangshaopei
 -- Date: 2014-11-21 17:43:53
---
+-- 回合开始阶段使用效果
 local SkillDefine=require("app.character.controllers.skills.SkillDefine")
 local CommonDefine = require("app.ac.CommonDefine")
 local configMgr       = require("config.configMgr")         -- 配置

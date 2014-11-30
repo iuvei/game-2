@@ -6,15 +6,15 @@ local configMgr       = require("config.configMgr")         -- 配置
 local MapConstants = require("app.ac.MapConstants")
 local OpCommand = import(".OpCommand")
 local BattleEffectCommand = class("BattleEffectCommand",OpCommand)
-function BattleEffectCommand:ctor(rMe)
+function BattleEffectCommand:ctor(rMe,FuncAktCmdAgain)
     BattleEffectCommand.super.ctor(self,CommandType.BattleEffect)
     self.params_ = rMe:getTargetAndDepleteParams()
     self.rMe_=rMe
     self.rMeView_=rMe:getView()
     self.elapseTime_=0
     self.arrHitTime={}
-    --默认普通攻击时间
-    -- self.arrHitTime[1]=math.floor(rMe.ATTACK_COOLDOWN*1000)
+    -- 效果结束后回调
+    self._FuncAktCmdAgain=FuncAktCmdAgain
     self.arrHitTime[1]=0
     self.endTimeInterval_=self.arrHitTime[1]
     --效果攻击时间
@@ -24,7 +24,6 @@ function BattleEffectCommand:ctor(rMe)
      self.arrHitTime = string.split(skillEffData.hitTime, MapConstants.SPLIT_SING)
      self.endTimeInterval_=skillEffData.time
     end
-
 end
 function BattleEffectCommand:execute()
     --操作开始执行
@@ -33,8 +32,6 @@ function BattleEffectCommand:execute()
         self.rMe_:getView():createAttackEff()
         self:setOpState(HeroOpState.Doing)
         self.skillExeTimesCounter=1
-         -- 激活技能
-        SkillCore:activeSkillNew(self.rMe_)
     --操作执行进行中
     elseif self:getOpState() == HeroOpState.Doing then
 
@@ -48,6 +45,9 @@ function BattleEffectCommand:execute()
             end
         end
         if self.elapseTime_ >= self.endTimeInterval_ then
+            if self._FuncAktCmdAgain then
+                 self._FuncAktCmdAgain()
+             end
             self:setOpState(HeroOpState.End)
         end
         --print("···",CCDirector:sharedDirector():getDeltaTime())

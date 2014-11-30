@@ -13,7 +13,7 @@ function geme_attr.gen_attr( data )
 		Str			= data.Str or 0, 	-- 力量
 		Int			= data.Int or 0,	-- 智力
 		Cha			= data.Cha or 0,	-- 魅力
-		AtkSpeed	= data.AtkSpeed or 0,	-- 攻击速度
+		Speed	= data.Speed or 0,	-- 攻击速度
 		-- 二级属性
 		Hit			= data.Hit or 0,	-- 命中率
 		Evd			= data.Evd or 0,	-- 闪避率
@@ -56,8 +56,8 @@ function geme_attr.gen_hero_attr( data )
 		IntInc		= data.IntInc or 0,
 		Cha			= data.Cha or 0,	-- 魅力
 		ChaInc		= data.ChaInc or 0,
-		AtkSpeed	= data.AtkSpeed or 0,	-- 攻击速度
-		AtkSpeedInc	= data.AtkSpeedInc or 0,
+		Speed	= data.Speed or 0,	-- 攻击速度
+		SpeedInc	= data.SpeedInc or 0,
 		-- 二级属性
 		MaxRage		= data.MaxRage or 0,	-- 最大怒气
 		MaxHP		= data.MaxHP or 0,	-- 最大hp

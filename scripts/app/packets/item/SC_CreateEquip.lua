@@ -2,10 +2,8 @@
 -- Author: Anthony
 -- Date: 2014-10-21 17:00:38
 -- Filename: SC_CreateEquip.lua
-------------------------------------------------------------------------------
-local SC_CreateEquip = {}
-------------------------------------------------------------------------------
-function SC_CreateEquip:execute( player, args )
+
+return function ( player, args )
 	if args.result == 0 then
 		printError("create equip error! dataid:%d result:%d", args.info.dataId,args.result)
 		return
@@ -22,5 +20,3 @@ function SC_CreateEquip:execute( player, args )
 
 	player:get_mgr("equip"):update(info)
 end
-------------------------------------------------------------------------------
-return SC_CreateEquip

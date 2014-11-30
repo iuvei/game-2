@@ -37,7 +37,7 @@ local pf 				= import(".packet_factory").create()
 ------------------------------------------------------------------------------
 --
 printInfo("socket.getTime:%f", cc.net.SocketTCP.getTime())
-printInfo("os.gettime:%f", os.time())
+printInfo("os.time:%f", os.time())
 printInfo("socket._VERSION: %s", cc.net.SocketTCP._VERSION)
 ------------------------------------------------------------------------------
 -- 该接口是全局变量
@@ -128,7 +128,7 @@ function network:encode_send(cmdname,...)
 	local text = pf:packet_pack(cmdname,...)
 	if text then
 		-- 加密
-		text = crypt.desencode(self.secret, text)
+		-- text = crypt.desencode(self.secret, text)
 		return self:send( text )
 		-- print("----------------")
 		-- print("encode_text is:", cc.utils.ByteArray.toString(text, 16))
@@ -144,26 +144,13 @@ function network:decode_execute(session, text)
 	-- print("decode_text is:", cc.utils.ByteArray.toString(text, 16))
 
 	if text == nil or text == "" then
-		-- 服务端只要有请求，服务端是一定会反回的，
+		-- 服务端只要有请求，服务端必定会有回馈，
 		-- 如果服务端不处理，返回的text为空
 		return
 	end
-
 	-- 解密
-	text = crypt.desdecode(self.secret, text)
-	local cmdid
-	cmdid, text = pf:packet_unpack(text)
-
-	-- 执行handle
-	local handle = pf:get_handle(cmdid)
-	if handle == nil then
-		printLog("WARN","decode_execute not find cmdid:%d handle!",cmdid)
-		return 0
-	end
-
-	local ret = handle:execute( player_instance, text )
-	handle = nil
-	return ret
+	-- text = crypt.desdecode(self.secret, text)
+	return pf:execute_handle(player_instance,pf:packet_unpack(text))
 end
 ------------------------------------------------------------------------------
 function network:on_status(__event)

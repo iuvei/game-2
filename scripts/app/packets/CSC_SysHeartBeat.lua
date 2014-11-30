@@ -2,12 +2,8 @@
 -- Author: Anthony
 -- Date: 2014-08-29 14:54:07
 -- CSC_SysHeartBeat.lua
-------------------------------------------------------------------------------
-local CSC_SysHeartBeat = {}
-------------------------------------------------------------------------------
-function CSC_SysHeartBeat:execute( player, args )
-	-- print("CSC_SysHeartBeat")
+
+return function ( player, args )
+	-- print("CSC_SysHeartBeat",args.servertime,os.time())
+	player:set_servertime(args.servertime)
 end
-------------------------------------------------------------------------------
-return CSC_SysHeartBeat
-------------------------------------------------------------------------------

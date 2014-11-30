@@ -13,7 +13,7 @@ local serverlist = {
 	-- 1区
 	{	aid=1,aname="一区 风零度",
 		servers = {
-			{sid=1,name="一服 乱世再起",sname="gs101",ip="192.168.0.17",port="8001",state=1},
+			{sid=1,name="一服 乱世再起",sname="gs101",ip="192.168.0.14",port="8001",state=1},
 			--{sid=2,name="二服 乱世再起1",sname="gs102",ip="192.168.0.14",port="8001",state=2},
 			--{sid=3,name="三服 乱世再起2",sname="gs103",ip="192.168.0.14",port="8001",state=3},
 		}

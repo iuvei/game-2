@@ -59,7 +59,7 @@ function battle_scene:ctor(id_)
         end)
         :onButtonClicked(function()
             local  cmds =CommandManager:getCmds()
-            local skill_id = 95001--92001--93001--92001--31001--91001
+            local skill_id = 91001--97001--95001--92001--93001--92001--31001
             table.insert(cmds,2,HeroBoutUseSkillCommand.new(CommandManager:getFrontCommand().opObj_,self.mapLayer_,skill_id))
         end)
         :pos(display.right - 300, display.top - 15)

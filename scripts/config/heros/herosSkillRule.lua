@@ -6,6 +6,7 @@ local herosSkillRule = {
 	[1] = {
 		{ skillTempId=21000,skllLevel=1,skillName="火焰" },
 		{ skillTempId=31000,skllLevel=1,skillName="大火焰" },
+		{ skillTempId=96000,skllLevel=1,skillName="被动加速度" },
 	},
 	[2] = {
 		{ skillTempId=22000,skllLevel=1,skillName="蓝火" },

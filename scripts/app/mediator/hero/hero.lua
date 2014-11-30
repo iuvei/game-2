@@ -7,39 +7,39 @@ local pairs = pairs
 local game_attr = require("app.ac.game_attr")
 local MapConstants  = require("app.ac.MapConstants")
 local configMgr = require("config.configMgr")
-local item_operator = require("app.mediator.item_operator")
+local item_operator = require("app.mediator.item.item_operator")
 ----------------------------------------------------------------
-local client_hero = class("client_hero")
+local hero = class("hero")
 ----------------------------------------------------------------
-function client_hero:ctor(data)
+function hero:ctor(data)
     self.__data = nil
 	self:set_data(data)
     self._item_effects={}
 end
 ----------------------------------------
-function client_hero:get_data()
+function hero:get_data()
     return self.__data
 end
 ----------------------------------------
-function client_hero:set_data( data )
+function hero:set_data( data )
     self.__data = self:gen_new(data)
     -- dump(self.__data)
 end
 ----------------------------------------
-function client_hero:get( key )
+function hero:get( key )
     if key == nil then
         return self.__data
     end
     return self.__data[key]
 end
 ----------------------------------------
-function client_hero:setkey( key, data )
+function hero:setkey( key, data )
     self.__data[key] = data
 end
 ----------------------------------------
 -- 转为新数据，来自己服务端
 -- 因为pb会附带其他没用信息，所有需要这步
-function client_hero:gen_new(olddata)
+function hero:gen_new(olddata)
     -- 转出skill
     local skills = {}
     if olddata.skills then
@@ -61,8 +61,7 @@ function client_hero:gen_new(olddata)
         end
     end
 
-    -- 新数据
-    local newdata = {
+    return {
         dataId  = olddata.dataId,
         GUID    = olddata.GUID,
         campId  = MapConstants.PLAYER_CAMP,
@@ -77,15 +76,13 @@ function client_hero:gen_new(olddata)
         equips  = equips,
 
     }
-    -- dump(newdata)
-    return newdata
 end
 ----------------------------------------
 --[[
         得到组合过的数据
         如果有配置文件，请放在这里处理!
 ]]
-function client_hero:get_info()
+function hero:get_info()
 
     local confHeros = configMgr:getConfig("heros")
     local confHeroData = confHeros:GetHeroDataById(self:get( "dataId" ))
@@ -102,7 +99,7 @@ function client_hero:get_info()
     local arm_ =confHeros:GetArmsData(armId_)
 
     --新数据
-    local outInfo = {
+    return {
         dataId      = self:get( "dataId" ),
         GUID        = self:get( "GUID" ),
         exp         = self:get( "exp" ) or 0,
@@ -122,7 +119,6 @@ function client_hero:get_info()
         formationId = confHeroData.formationId,
         ArmId       = armId_,
         SkillRule   = confHeroData.SkillRule,
-        -- skills      = confHeroData.skills,
         skills      = self:get( "skills" ),
         countryInfo = countryInfo,
 
@@ -131,11 +127,10 @@ function client_hero:get_info()
         attr        = confHeroData.attr,
         equips      = self:get( "equips" ),
     }
-    return outInfo
 end
 ----------------------------------------
 -- 装备相关
-function client_hero:flush_item_effect()
+function hero:flush_item_effect()
     local equips = self:get_info().equips
     self._item_effects={}
 
@@ -156,7 +151,7 @@ function client_hero:flush_item_effect()
     --     print(k,v.value)
     -- end
 end
-function client_hero:calc_effect(item_attr)
+function hero:calc_effect(item_attr)
     local item_effect_new ={is_active=true,value=0}
     local item_effect = self:get_item_effect(item_attr.attr_type)
     if item_effect==nil then
@@ -172,7 +167,7 @@ function client_hero:calc_effect(item_attr)
     end
 
 end
-function client_hero:get_item_value(attr_type)
+function hero:get_item_value(attr_type)
     local item_effect  = self:get_item_effect(attr_type)
     if item_effect then
         return item_effect.value
@@ -180,8 +175,8 @@ function client_hero:get_item_value(attr_type)
     return 0
 end
 -- 装备的各个影响因素
-function client_hero:get_item_effect(attr_type)
+function hero:get_item_effect(attr_type)
     return self._item_effects[attr_type]
 end
 ----------------------------------------------------------------
-return client_hero
+return hero

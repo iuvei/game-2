@@ -14,7 +14,7 @@ end)
 ----------------------------------------------------------------
 function login_scene:ctor()
     -- init
-    CLIENT_PLAYER:init()
+    PLAYER:init()
 
     -----------
     -- test数据
@@ -70,7 +70,7 @@ function login_scene:ctor()
             create_hero(105, 6001),
 
         }
-        CLIENT_PLAYER:get_mgr("heros"):set_data(data)
+        PLAYER:get_mgr("heros"):set_data(data)
 
        local Formationdata = {
             {index= 2, GUID=data[1].GUID, dataId = data[1].dataId },
@@ -80,7 +80,7 @@ function login_scene:ctor()
             {index= 8, GUID=data[5].GUID, dataId = data[5].dataId },
         }
         -- 上阵数据
-        CLIENT_PLAYER:get_mgr("formations"):set_data(Formationdata)
+        PLAYER:get_mgr("formations"):set_data(Formationdata)
     end
     -----------
 

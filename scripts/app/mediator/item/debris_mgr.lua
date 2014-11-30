@@ -1,16 +1,16 @@
 --
 -- Author: Anthony
--- Date: 2014-10-22 14:37:14
--- Filename: mgr_gem.lua
+-- Date: 2014-11-11 11:52:58
+-- Filename: debris_mgr.lua
 --
-local pairs = pairs
-local table = table
+-- local pairs = pairs
+-- local table = table
 ----------------------------------------------------------------
-local client_gem = import(".client_gem")
+local debris = import(".debris")
 ----------------------------------------------------------------
-local mgr_gem = class("mgr_gem")
+local debris_mgr = class("debris_mgr")
 ----------------------------------------------------------------
-function mgr_gem:ctor(player)
+function debris_mgr:ctor(player)
 	self.__data = {}
     self.player = player
 end
@@ -18,29 +18,30 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function mgr_gem:get_data()
+function debris_mgr:get_data()
     return self.__data
 end
 ----------------------------------------
-function mgr_gem:set_data( data )
+function debris_mgr:set_data( data )
     table.walk(data, function(v, k)
         self:update(v)
     end)
 
-    -- print("---------set_gems")
+    -- print("---------set_debriss")
     -- dump(self.__data)
 end
 ----------------------------------------
-function mgr_gem:get_count()
+function debris_mgr:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
-function mgr_gem:remove( GUID )
+function debris_mgr:remove( GUID )
     self.__data[GUID] = nil
+    -- dump(self.__data)
 end
 ----------------------------------------
 -- 根据guid得到hero
-function mgr_gem:get_by_GUID(GUID)
+function debris_mgr:get_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
@@ -48,13 +49,11 @@ function mgr_gem:get_by_GUID(GUID)
     return nil
 end
 ----------------------------------------
-function mgr_gem:update(newdata)
-
+function debris_mgr:update(newdata)
     -- 添加一条新数据
-    self.__data[newdata.GUID] = client_gem.new(newdata)
+    self.__data[newdata.GUID] = debris.new(newdata)
     -- print("---------update")
     -- dump(self.__data)
 end
 ----------------------------------------------------------------
-return mgr_gem
-----------------------------------------------------------------
+return debris_mgr

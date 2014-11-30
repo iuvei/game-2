@@ -4,7 +4,7 @@
 
 local skillTemplate = {
 	[1] = {
-		{ id=1000,nickname="步兵攻击",skillDesc="普通攻击",instanceId=1,iconId=100,sound=10001,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+		{ id=1000,nickname="步兵攻击",skillDesc="普通攻击",instanceId=1,iconId=100,sound=10001,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=2,isShowAktName=0 },
 	},
 	[2] = {
 		{ id=2000,nickname="百步穿杨",skillDesc="弓箭攻击",instanceId=2,iconId=1033,sound=10002,shakeType=0,type=2,useTarget_type=2,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=1 },
@@ -13,7 +13,7 @@ local skillTemplate = {
 		{ id=3000,nickname="弓兵攻击",skillDesc="普通攻击",instanceId=3,iconId=1033,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=7000,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
 	},
 	[4] = {
-		{ id=4000,nickname="骑兵攻击",skillDesc="普通攻击",instanceId=4,iconId=1035,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
+		{ id=4000,nickname="骑兵攻击",skillDesc="普通攻击",instanceId=4,iconId=1035,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=2,isShowAktName=0 },
 	},
 	[5] = {
 		{ id=5000,nickname="工程车攻击2",skillDesc="普通攻击",instanceId=5,iconId=1036,sound=10003,shakeType=0,type=2,useTarget_type=1,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=1,isUseNeedLearn=0,actTime=1000,actHitTime=500,atkOrGatherTims=1,isShowAktName=0 },
@@ -56,6 +56,12 @@ local skillTemplate = {
 	},
 	[95] = {
 		{ id=95000,nickname="回合前出发效果",skillDesc="回合前出发效果",instanceId=95,iconId=1032,sound=10003,shakeType=0,type=2,useTarget_type=0,isPlayHeadIcon=0,bigIconId=10001,accuracyRate=10000,critRate=0,beLimitControl1=0,beLimitControl2=0,isDirectStudy=0,isUseNeedLearn=0,actTime=500,actHitTime=500,atkOrGatherTims=1,isShowAktName=1 },
+	},
+	[96] = {
+		{ id=96000,nickname="被动加速度",skillDesc="被动加速度",instanceId=96,iconId=1032,sound=-1,shakeType=-1,type=3,useTarget_type=0,isPlayHeadIcon=-1,bigIconId=-1,accuracyRate=-1,critRate=-1,beLimitControl1=-1,beLimitControl2=-1,isDirectStudy=1,isUseNeedLearn=0,actTime=-1,actHitTime=-1,atkOrGatherTims=-1,isShowAktName=-1 },
+	},
+	[97] = {
+		{ id=97000,nickname="驱散",skillDesc="清理所有效果",instanceId=97,iconId=1032,sound=10003,shakeType=0,type=2,useTarget_type=0,isPlayHeadIcon=0,bigIconId=-1,accuracyRate=10000,critRate=0,beLimitControl1=-1,beLimitControl2=-1,isDirectStudy=1,isUseNeedLearn=0,actTime=-1,actHitTime=-1,atkOrGatherTims=-1,isShowAktName=-1 },
 	},
 }
 

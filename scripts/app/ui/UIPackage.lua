@@ -28,7 +28,7 @@ function UIPackage:onEnter()
     UIPackage.super.onEnter(self)
 end
 function UIPackage:init( params )
-    --self.heroinfo = CLIENT_PLAYER:get_mgr_heros():get_hero_by_GUID(params.GUID)
+    --self.heroinfo = PLAYER:get_mgr_heros():get_hero_by_GUID(params.GUID)
     UIPackage.super.init(self,params)
     self._channelBtns={
         UIButtonCtrl.new(self:getWidgetByName("all")),
@@ -83,7 +83,7 @@ end
 function UIPackage:PushBtn1(item_type)
     local options = self._cur_options
     if item_type == 2 then -- 装备
-        -- CLIENT_PLAYER:send("CS_UseEquip",{
+        -- PLAYER:send("CS_UseEquip",{
         --         op          = 0, -- 0:穿 1：卸下
         --         GUID        = options.GUID,
         --         HeroGUID    = 1,
@@ -200,9 +200,9 @@ function UIPackage:GetItem(item_type,out_data)
     elseif item_type == 3 then -- 碎片
         name = "debris"
     elseif item_type == 5 then -- 消耗品
-        name = "item"
+        name = "comitem"
     end
-    local data_ = CLIENT_PLAYER:get_mgr(name):get_data()
+    local data_ = PLAYER:get_mgr(name):get_data()
     for k,v in pairs(data_) do
         if item_type ~= 3 and item_type ~= 5 then
             out_data[item_type][k]=v

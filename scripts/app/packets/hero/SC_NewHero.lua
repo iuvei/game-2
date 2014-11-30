@@ -2,10 +2,8 @@
 -- Author: Anthony
 -- Date: 2014-10-10 15:34:50
 -- SC_NewHero
-------------------------------------------------------------------------------
-local SC_NewHero = {}
-------------------------------------------------------------------------------
-function SC_NewHero:execute( player, args )
+
+return function ( player, args )
 
 	if args.result == 0 then
 		printError("create hero error! dataid:%d result:%d", args.heroinfo.dataId,args.result)
@@ -24,6 +22,3 @@ function SC_NewHero:execute( player, args )
 
 	player:get_mgr( "heros" ):update(heroinfo)
 end
-------------------------------------------------------------------------------
-return SC_NewHero
-------------------------------------------------------------------------------

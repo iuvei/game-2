@@ -56,6 +56,7 @@ function SkillLogic:activateOnce(rMe)
     end
     return true
 end
+
 --消耗处理
 function SkillLogic:depleteProcess(rMe)
     local params = rMe:getTargetAndDepleteParams()
@@ -66,6 +67,8 @@ end
 
 --主技能目标的效果处理
 function SkillLogic:effectOnUnitOnce(rMe,rTar,bCritcalHit)
+end
+function SkillLogic:effectOnMultOnce(rMe,rTar,isHits,isCritcalHits)
 end
 --其他效果处理
 function SkillLogic:effectOtherTarOnUnitOnce(rMe)
@@ -187,7 +190,7 @@ function SkillLogic:getAktRangeHorTars(rMe,skillId,target_views,select_type)
         out_target_views=target_views,
         cell_positions={},
         target_type="enemy",
-        sender_obj=rMe
+        sender_obj_id=rMe:getId()
     }
     if select_type == "enemy" then
         if rMe:getEnemyCampId() == MapConstants.PLAYER_CAMP then
@@ -231,7 +234,7 @@ function SkillLogic:getAktRangeAroundTars(rMe,skillId,target_views,select_type)
     out_target_views=target_views,
     cell_positions={},
     target_type="enemy",
-    sender_obj = rMe,
+    sender_obj_id = rMe:getId(),
     }
     if select_type == "enemy" then
         if rMe:getEnemyCampId() == MapConstants.PLAYER_CAMP then
@@ -301,6 +304,10 @@ function SkillLogic:isHit(rMe,target,accuracy)
 end
 function SkillLogic:refix_SkillEffect(rMe,skill,attrType,outAttr)
     -- body
+end
+--
+function SkillLogic:getTimesAtk()
+    return 1
 end
 -----------------------------------------------------------------
 return SkillLogic

@@ -9,7 +9,8 @@ local UIButtonCtrl = require("app.ac.ui.UIButtonCtrl")
 local UIUtil = require("app.ac.ui.UIUtil")
 local configMgr = require("config.configMgr")
 local StringData = require("config.zhString")
-local item_operator = require("app.mediator.item_operator")
+local item_operator = require("app.mediator.item.item_operator")
+local item_helper = require("app.mediator.item.item_helper")
 local hero_helper = require("app.mediator.hero.hero_helper")
 ------------------------------------------------------------------------------
 local UIHeroInfo  = class("UIHeroInfo", require("app.ac.ui.UIBase"))
@@ -33,7 +34,7 @@ function UIHeroInfo:onEnter()
     UIHeroInfo.super.onEnter(self)
 end
 function UIHeroInfo:init( params )
-    self.heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(params.params.GUID)
+    self.heroinfo = PLAYER:get_mgr("heros"):get_hero_by_GUID(params.params.GUID)
     UIHeroInfo.super.init(self,params)
 
     --self:ListenClose()
@@ -295,13 +296,21 @@ end
 function UIHeroInfo:UpdataHeroEquip()
 
     -- 已装备的道具
-    self.heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(self.heroinfo.GUID)
+    self.heroinfo = PLAYER:get_mgr("heros"):get_hero_by_GUID(self.heroinfo.GUID)
 
-    for k,v in pairs(self._equip_solts ) do
+    local function get_equip( equips, point )
+        for k,v in ipairs(equips) do
+            if point == item_helper.get_serial_type(v.dataId) then
+                return v
+            end
+        end
+    end
+
+    for k,v in ipairs(self._equip_solts ) do
         v:getChildByName("sign"):setEnabled(false)
 
         if v.state == 0 or v.state == 1 then
-            local equip_info = self.heroinfo.equips[k]
+            local equip_info = get_equip( self.heroinfo.equips, k )
             if equip_info then -- 已有装备
                 equip_info = item_operator:get_equip_info( equip_info )
                 v.equip_info = {GUID = equip_info.GUID, dataId = equip_info.dataId, num = equip_info.num}--equip_info
@@ -338,7 +347,7 @@ function UIHeroInfo:UpdataHeroEquip()
 end
 function UIHeroInfo:GetCanUseEquipByPos(equip_pos)
 
-    local data_ = CLIENT_PLAYER:get_mgr("equip"):get_data()
+    local data_ = PLAYER:get_mgr("equip"):get_data()
     for k,v in pairs(data_) do
         local info=v:get_info()
         if info.equip_point == equip_pos and hero_helper:check_require_equip( self.heroinfo.dataId, info.dataId ) then
@@ -348,7 +357,9 @@ function UIHeroInfo:GetCanUseEquipByPos(equip_pos)
     return nil
 end
 function UIHeroInfo:ProcessNetResult(params)
-    if params.msg_type == "SC_UseItem" then
+    if params.msg_type == "SC_UseItem"
+        or params.msg_type == "SC_Compound"
+        then
         if params.args.result ~= 0 then
             self:UpdataHeroEquip()
         end

@@ -1,16 +1,16 @@
 --
 -- Author: Anthony
 -- Date: 2014-10-22 14:37:14
--- Filename: mgr_items.lua
+-- Filename: gem_mgr.lua
 --
-local pairs = pairs
-local table = table
+-- local pairs = pairs
+-- local table = table
 ----------------------------------------------------------------
-local client_item = import(".client_item")
+local gem = import(".gem")
 ----------------------------------------------------------------
-local mgr_item = class("mgr_item")
+local gem_mgr = class("gem_mgr")
 ----------------------------------------------------------------
-function mgr_item:ctor(player)
+function gem_mgr:ctor(player)
 	self.__data = {}
     self.player = player
 end
@@ -18,29 +18,29 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function mgr_item:get_data()
+function gem_mgr:get_data()
     return self.__data
 end
 ----------------------------------------
-function mgr_item:set_data( data )
+function gem_mgr:set_data( data )
     table.walk(data, function(v, k)
         self:update(v)
     end)
 
-    -- print("---------set_items")
+    -- print("---------set_gems")
     -- dump(self.__data)
 end
 ----------------------------------------
-function mgr_item:get_count()
+function gem_mgr:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
-function mgr_item:remove( GUID )
+function gem_mgr:remove( GUID )
     self.__data[GUID] = nil
 end
 ----------------------------------------
 -- 根据guid得到hero
-function mgr_item:get_by_GUID(GUID)
+function gem_mgr:get_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
@@ -48,12 +48,13 @@ function mgr_item:get_by_GUID(GUID)
     return nil
 end
 ----------------------------------------
-function mgr_item:update(newdata)
+function gem_mgr:update(newdata)
+
     -- 添加一条新数据
-    self.__data[newdata.GUID] = client_item.new(newdata)
+    self.__data[newdata.GUID] = gem.new(newdata)
     -- print("---------update")
     -- dump(self.__data)
 end
 ----------------------------------------------------------------
-return mgr_item
+return gem_mgr
 ----------------------------------------------------------------

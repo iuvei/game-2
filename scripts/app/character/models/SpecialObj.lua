@@ -19,8 +19,8 @@ function SpecialObj:ctor(properties,map)
     SpecialObj.super.ctor(self, properties,map)
     self._conf_data = properties
     self._map = map
-    local owner = properties.owner
-    self._ower_obj_id = owner:getId()
+    self._owner_obj = properties.owner
+    self._ower_obj_id = self._owner_obj:getId()
     self._is_fade_out = false
     self._cd=Cooldown.new(self._conf_data.keepBoutNum)
     self.view_=nil

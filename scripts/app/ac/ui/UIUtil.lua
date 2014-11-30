@@ -43,6 +43,12 @@ function UIUtil:SetHeroAttLabes(lab,equip_info)
     end
     lab:setText(str)
 end
+function UIUtil:SetIconFrame(root,icon,quality)
+    local img=UIHelper:seekWidgetByName(root,"Item")
+    img:loadTexture(icon)
+    local frame=UIHelper:seekWidgetByName(root,"ItemFrame")
+    self:SetQuality(frame,quality)
+end
 -- function UIUtil:CreateHeroAttLables(layout,parent,params)
 --     for i=1,#params.arr do
 --         local options = params.arr[i]

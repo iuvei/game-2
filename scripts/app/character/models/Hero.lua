@@ -68,7 +68,7 @@ function Hero:getDefensePhysice()
         local item_point_refix = 0
 
         -- the influence of equipment to attributes
-        local data = CLIENT_PLAYER:get_mgr("heros"):get_hero(self.GUID_)
+        local data = PLAYER:get_mgr("heros"):get_hero(self.GUID_)
         if data then
             -- 获取装备中影响人物物理防御的值
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_PhysicsDef)
@@ -92,7 +92,7 @@ function Hero:getAttackPhysics()
         local value = 0
         local item_point_refix = 0
         -- the influence of equipment to attributes
-        local data = CLIENT_PLAYER:get_mgr("heros"):get_hero(self.GUID_)
+        local data = PLAYER:get_mgr("heros"):get_hero(self.GUID_)
         if data then
             -- 获取装备中影响物理攻击的值
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_PhysicsAtk)
@@ -119,7 +119,7 @@ function Hero:getAttackMagic()
         local value = 0
         local item_point_refix = 0
         -- the influence of equipment to attributes
-        local data = CLIENT_PLAYER:get_mgr("heros"):get_hero(self.GUID_)
+        local data = PLAYER:get_mgr("heros"):get_hero(self.GUID_)
         if data then
             -- 获取装备中影响物理攻击的值
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_MagicAtk)
@@ -141,7 +141,7 @@ function Hero:getDefenseMagic()
         local value = 0
         local item_point_refix = 0
         -- the influence of equipment to attributes
-        local data = CLIENT_PLAYER:get_mgr("heros"):get_hero(self.GUID_)
+        local data = PLAYER:get_mgr("heros"):get_hero(self.GUID_)
         if data then
             -- 获取装备中影响物理攻击的值
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_MagicDef)
@@ -165,7 +165,7 @@ function Hero:getAttackTactics()
         local value = 0
         local item_point_refix = 0
         -- the influence of equipment to attributes
-        local data = CLIENT_PLAYER:get_mgr("heros"):get_hero(self.GUID_)
+        local data = PLAYER:get_mgr("heros"):get_hero(self.GUID_)
         if data then
             -- 获取装备中影响物理攻击的值
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_PhysicsAtk)
@@ -186,7 +186,7 @@ function Hero:getDefenseTactics()
         local value = 0
         local item_point_refix = 0
         -- the influence of equipment to attributes
-        local data = CLIENT_PLAYER:get_mgr("heros"):get_hero(self.GUID_)
+        local data = PLAYER:get_mgr("heros"):get_hero(self.GUID_)
         if data then
             -- 获取装备中影响物理攻击的值
             item_point_refix = data:get_item_value(CommonDefine.ItemAttrType_TacticsDef)
@@ -263,6 +263,25 @@ function Hero:getAttr2(role_attr_type)
         -- 技能和效果影响值
         impact_and_skill_refix = self:getImpactIntAttRefix(role_attr_type)
         value = base_attr+impact_and_skill_refix+item_point_refix+passive_skill_point_refix
+        self:setIntAttr(role_attr_type,value)
+        self:ClearAttrDirtyFlag(role_attr_type)
+    end
+    return self:getIntAttr(role_attr_type)
+end
+------------------------------------------------------------------------------
+--
+function Hero:getAttr1(role_attr_type)
+    if self:GetAttrDirtyFlag(role_attr_type) == true then
+        local value = 0
+        local passive_skill_point_refix = 0
+        local base_attr = 0
+        if role_attr_type == CommonDefine.RoleAttr_Speed then
+            base_attr = self.attr_.Speed
+        end
+        -- 被动技能影响值
+        passive_skill_point_refix=self:Skill_RefixItemAttr(role_attr_type)
+
+        value = base_attr + passive_skill_point_refix
         self:setIntAttr(role_attr_type,value)
         self:ClearAttrDirtyFlag(role_attr_type)
     end

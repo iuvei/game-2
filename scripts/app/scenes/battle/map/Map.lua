@@ -238,7 +238,7 @@ end
 function Map:spawnSelf(parent)
 
     -- 1. 显示我方(左边)
-    local Fdata_ = CLIENT_PLAYER:get_mgr("formations"):get_data()
+    local Fdata_ = PLAYER:get_mgr("formations"):get_data()
     local buildData = nil
     for key , v in pairs(Fdata_) do
         local info = v:get_info()
@@ -251,7 +251,7 @@ function Map:spawnSelf(parent)
             })
 
             -- 创建武将，从玩家武将数据得到
-            local data = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(info.GUID)
+            local data = PLAYER:get_mgr("heros"):get_hero_by_GUID(info.GUID)
             self.ObjectManager_:newObject( parent, "hero", data,{ -- parent == self
                 x = pos.x,
                 y = pos.y,
@@ -318,14 +318,14 @@ function Map:spawnEnemy(parent)
         self.ObjectManager_:newObject( parent, "build",self.buildData,viewParams)
 end
 ------------------------------------------------------------------------------
-function Map:scan(options) -- options={out_target_views,cell_positions,target_type,sender_obj}
+function Map:scan(options) -- options={out_target_views,cell_positions,target_type,sender_obj_id}
     for k,cell_pos in pairs(options.cell_positions) do
         local obj_view=self:getHeroByCellPos(cell_pos,options.target_type)
         if obj_view then
             -- 是否包含发送者
             local check = true
             if options.is_contain_sender == nil or options.is_contain_sender == false then
-                if obj_view:GetModel():getId() == options.sender_obj:getId() then
+                if obj_view:GetModel():getId() == options.sender_obj_id then
                     check = false
                 end
             end

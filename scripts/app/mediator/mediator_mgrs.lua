@@ -7,13 +7,12 @@
 	name: 管理器名字
 	file: 管理器所在目录， 以client_player为根目录
 ]]
-local mgrs = {
-	{name="heros", 		file=".hero.mgr_heros"},
-	{name="formations", file=".formation.mgr_formations"},
-	{name="equip", 		file=".equip.mgr_equip"},
-	{name="item", 		file=".item.mgr_item"},
-	{name="gem", 		file=".gem.mgr_gem"},
-	{name="debris", 	file=".debris.mgr_debris"},
-}
 
-return mgrs
+return {
+	{name="heros", 		file=".hero.hero_mgr"},
+	{name="formations", file=".formation.formation_mgr"},
+	{name="equip", 		file=".item.equip_mgr"},
+	{name="comitem", 	file=".item.comitem_mgr"},
+	{name="gem", 		file=".item.gem_mgr"},
+	{name="debris", 	file=".item.debris_mgr"},
+}

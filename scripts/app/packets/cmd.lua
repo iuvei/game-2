@@ -1,4 +1,4 @@
-
+--cmd.lua
 --[[
 	client:所有cmf都为发向gateserver的包。
 
@@ -12,7 +12,7 @@
 	SCS_XXXX 客户端和服务端相互发(服务端发起)
 ]]
 
-local cmd = {
+return  {
 	{ id=1, name="CSC_SysHeartBeat",	handlefile=".CSC_SysHeartBeat"},
 	{ id=2, name="CS_Login", 			handlefile=""},
 	{ id=3, name="SC_Login", 			handlefile=".SC_Login"},
@@ -34,9 +34,15 @@ local cmd = {
 	{ id=13, name="SC_AskItemBag", 		handlefile=".item.SC_AskItemBag"},
 	{ id=14, name="CS_AskCreateItem", 	handlefile=""},
 	{ id=15, name="SC_NewItem", 		handlefile=".item.SC_NewItem"},
-	{ id=17, name="CS_UseItem", 		handlefile=""},
-	{ id=18, name="SC_UseItem", 		handlefile=".item.SC_UseItem"},
+	{ id=16, name="CS_UseItem", 		handlefile=""},
+	{ id=17, name="SC_UseItem", 		handlefile=".item.SC_UseItem"},
+	{ id=18, name="CS_Compound", 		handlefile=""},
+	{ id=19, name="SC_Compound", 		handlefile=".item.SC_Compound"},
+	--------------------------------------------------------------------------
+	-- 战斗
+	{ id=20, name="CS_FightBegin", 		handlefile=""},
+	{ id=21, name="SC_FightBegin", 		handlefile=".fight.SC_FightBegin"},
+	{ id=22, name="CS_FightEnd", 		handlefile=""},
+	{ id=23, name="SC_FightEnd", 		handlefile=".fight.SC_FightEnd"},
 	--------------------------------------------------------------------------
 }
-
-return cmd

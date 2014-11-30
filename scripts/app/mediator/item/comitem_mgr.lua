@@ -1,16 +1,17 @@
 --
 -- Author: Anthony
--- Date: 2014-11-11 11:52:58
--- Filename: mgr_debris.lua
+-- Date: 2014-10-22 14:37:14
+-- Filename: comitem_mgr.lua
+-- 消耗品
 --
-local pairs = pairs
-local table = table
+-- local pairs = pairs
+-- local table = table
 ----------------------------------------------------------------
-local client_debris = import(".client_debris")
+local comitem = import(".comitem")
 ----------------------------------------------------------------
-local mgr_debris = class("mgr_debris")
+local comitem_mgr = class("comitem_mgr")
 ----------------------------------------------------------------
-function mgr_debris:ctor(player)
+function comitem_mgr:ctor(player)
 	self.__data = {}
     self.player = player
 end
@@ -18,30 +19,29 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function mgr_debris:get_data()
+function comitem_mgr:get_data()
     return self.__data
 end
 ----------------------------------------
-function mgr_debris:set_data( data )
+function comitem_mgr:set_data( data )
     table.walk(data, function(v, k)
         self:update(v)
     end)
 
-    -- print("---------set_debriss")
+    -- print("---------set_items")
     -- dump(self.__data)
 end
 ----------------------------------------
-function mgr_debris:get_count()
+function comitem_mgr:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
-function mgr_debris:remove( GUID )
+function comitem_mgr:remove( GUID )
     self.__data[GUID] = nil
-    -- dump(self.__data)
 end
 ----------------------------------------
 -- 根据guid得到hero
-function mgr_debris:get_by_GUID(GUID)
+function comitem_mgr:get_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
@@ -49,11 +49,12 @@ function mgr_debris:get_by_GUID(GUID)
     return nil
 end
 ----------------------------------------
-function mgr_debris:update(newdata)
+function comitem_mgr:update(newdata)
     -- 添加一条新数据
-    self.__data[newdata.GUID] = client_debris.new(newdata)
+    self.__data[newdata.GUID] = comitem.new(newdata)
     -- print("---------update")
     -- dump(self.__data)
 end
 ----------------------------------------------------------------
-return mgr_debris
+return comitem_mgr
+----------------------------------------------------------------

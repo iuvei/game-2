@@ -1,19 +1,21 @@
 
-¿
+„
 packets.protomessage.packets"#
 Packet
 cmd (
-body ("
-CSC_SysHeartBeat"$
+body ("&
+CSC_SysHeartBeat
+
+servertime ("$
 CS_Login
 uid (
-acc (	"¹
+acc (	"Ý
 SC_Login
 success (
 playerid (6
 content (2%.message.packets.SC_Login.contentData
 errCode (
-errMsg (	°
+errMsg (	Ô
 contentData
 aid (
 sid (
@@ -26,7 +28,10 @@
 createTime (	
 lastLoginTime	 (	
 lastLogoutTime
- (	"
+ (	
+
+max_vigour (
+vigour ("
 	CS_Logout"-
 	SC_Logout
 success (
@@ -69,11 +74,10 @@ templateId (
 playerid (+
 heros (2.message.packets.SC_HeroInfo"$
 CS_AskFormations
-playerid ("?
+playerid ("1
 SC_FormationInfo
-index (
-GUID (
-dataId ("I
+index (
+dataId ("I
 SC_AskFormations5
 
 formations (2!.message.packets.SC_FormationInfo"i
@@ -101,11 +105,12 @@ formations (2!.message.packets.SC_FormationInfo"i
 
 SC_NewItem
 result (*
-info (2.message.packets.SC_ItemInfo"8
+info (2.message.packets.SC_ItemInfo"H
 SC_ItemInfo
 dataId (
 GUID (
-num (",
+num (
+elevel (",
 
 CS_UseItem
 GUID (
@@ -114,4 +119,30 @@ CS_UseItem
 SC_UseItem
 result (*
 item (2.message.packets.SC_ItemInfo*
-hero (2.message.packets.SC_HeroInfo
+hero (2.message.packets.SC_HeroInfo"7
+CS_Compound
+item_dataId (
+hero_dataId ("}
+SC_Compound
+result (1
+result_item (2.message.packets.SC_ItemInfo+
+stuff (2.message.packets.SC_ItemInfo"5
+CS_FightBegin
+stageId (
+client_time ("4
+SC_FightBegin
+stageId (
+
+begin_time ("‡
+CS_FightEnd
+stageId (
+win (
+cbegin_time (
+	cend_time (
+round_count (
+count (
+all_hp ("Z
+SC_FightEnd
+stageId (
+stars (+
+award (2.message.packets.SC_ItemInfo

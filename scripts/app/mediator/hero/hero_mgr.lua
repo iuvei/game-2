@@ -2,14 +2,14 @@
 -- Author: Anthony
 -- Date: 2014-10-12 23:13:17
 -- heros数据管理器
-local pairs = pairs
+-- local pairs = pairs
 local table = table
 ----------------------------------------------------------------
-local client_hero = import(".client_hero")
+local hero = import(".hero")
 ----------------------------------------------------------------
-local mgr_heros = class("mgr_heros")
+local hero_mgr = class("hero_mgr")
 ----------------------------------------------------------------
-function mgr_heros:ctor(player)
+function hero_mgr:ctor(player)
     self.__data = {}
     self.player = player
 end
@@ -17,11 +17,11 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function mgr_heros:get_data()
+function hero_mgr:get_data()
 	return self.__data
 end
 ----------------------------------------
-function mgr_heros:set_data( data )
+function hero_mgr:set_data( data )
     table.walk(data, function(v, k)
         self:update(v)
     end)
@@ -30,30 +30,30 @@ function mgr_heros:set_data( data )
     -- dump(self.__data)
 end
 ----------------------------------------
-function mgr_heros:get_count()
+function hero_mgr:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
 -- 根据guid得到hero
-function mgr_heros:get_hero_by_GUID(GUID)
+function hero_mgr:get_hero_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
     end
     return nil
 end
-function mgr_heros:get_hero(GUID)
+function hero_mgr:get_hero(GUID)
     return self.__data[GUID]
 end
 ----------------------------------------
-function mgr_heros:update(newdata)
+function hero_mgr:update(newdata)
     -- local heros = self:get_data()
     -- if heros[newdata.GUID] then
-    --     print("mgr_heros update replace ",newdata.GUID)
+    --     print("hero_mgr update replace ",newdata.GUID)
     -- end
 
     -- 添加一条新数据
-    self.__data[newdata.GUID] = client_hero.new(newdata)
+    self.__data[newdata.GUID] = hero.new(newdata)
 
     -- 刷新相关
     self:get_hero(newdata.GUID):flush_item_effect()
@@ -62,13 +62,13 @@ function mgr_heros:update(newdata)
 
 end
 ----------------------------------------
-function mgr_heros:remove( GUID )
+function hero_mgr:remove( GUID )
     self.__data[GUID] = nil
 end
 ----------------------------------------------------------------
 -- 逻辑处理函数
 ----------------------------------------
-function mgr_heros:ask_createhero( heroid )
+function hero_mgr:ask_createhero( heroid )
     self.player:send("CS_AskCreateHero", {
         playerid    = self.player:get_playerid(),
         heroid      = heroid,
@@ -76,5 +76,5 @@ function mgr_heros:ask_createhero( heroid )
 end
 
 ----------------------------------------------------------------
-return mgr_heros
+return hero_mgr
 ----------------------------------------------------------------

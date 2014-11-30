@@ -15,8 +15,8 @@ local CommonDefine = {
     RoleAttr_IntInc      =  "IntInc",
     RoleAttr_Cha         =  "Cha"   , -- 魅力
     RoleAttr_ChaInc      =  "ChaInc",
-    RoleAttr_AtkSpeed    =  "AtkSpeed",   -- 攻击速度
-    RoleAttr_AtkSpeedInc =  "AtkSpeedInc",
+    RoleAttr_Speed    =  "Speed",   -- 攻击速度
+    RoleAttr_SpeedInc =  "SpeedInc",
     -- 二级属性
     RoleAttr_MaxRage     =  "MaxRage",    -- 最大怒气
     RoleAttr_MaxHP       =  "MaxHP" , -- 最大hp
@@ -70,8 +70,8 @@ local CommonDefine = {
     ItemAttrType_IntInc      =  "IntInc",
     ItemAttrType_Cha         =  "Cha"  ,  -- 魅力
     ItemAttrType_ChaInc      =  "ChaInc",
-    ItemAttrType_AtkSpeed    =  "AtkSpeed",   -- 攻击速度
-    ItemAttrType_AtkSpeedInc =  "AtkSpeedInc",
+    ItemAttrType_Speed    =  "Speed",   -- 攻击速度
+    ItemAttrType_SpeedInc =  "SpeedInc",
     -- 二级属性
     ItemAttrType_MaxRage     =  "MaxRage",    -- 最大怒气
     ItemAttrType_MaxHP       =  "MaxHP" , -- 最大hp

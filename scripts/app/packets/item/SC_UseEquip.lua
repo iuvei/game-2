@@ -3,12 +3,9 @@
 -- Date: 2014-10-24 14:47:39
 -- Filename: SC_UseEquip.lua
 --
-------------------------------------------------------------------------------
-local item_helper = require("app.mediator.item_helper")
-------------------------------------------------------------------------------
-local SC_UseEquip = {}
-------------------------------------------------------------------------------
-function SC_UseEquip:execute( player, args )
+local item_helper = require("app.mediator.item.item_helper")
+
+return function ( player, args )
 
 	-- print("SC_UseEquip",args.op, args.result, args.GUID, args.HeroGUID)
 	-- if args.result == 0 then
@@ -59,5 +56,3 @@ function SC_UseEquip:execute( player, args )
 	-- 	end
 	-- end
 end
-------------------------------------------------------------------------------
-return SC_UseEquip

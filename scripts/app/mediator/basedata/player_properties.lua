@@ -36,7 +36,7 @@ end
 -- 转为新数据,来自己服务端
 -- 因为pb会附带其他没用信息，所有需要这步
 function M:gen_new(olddata)
-    local newdata = {
+    return {
 		playerid = olddata.playerid,
 		aid 	= olddata.aid,	-- area id
 		sid 	= olddata.sid,	-- server id
@@ -48,8 +48,10 @@ function M:gen_new(olddata)
 		createtime 		= olddata.createTime,
 		last_logintime	= olddata.lastLoginTime,
 		last_logouttime	= olddata.lastLogoutTime,
+
+		max_vigour 		= olddata.max_vigour,
+		vigour  		= olddata.vigour,
     }
-    return newdata
 end
 ----------------------------------------
 --[[

@@ -19,7 +19,7 @@ function TrapLogic:_Activate(special_obj)
     if special_obj:IsFadeOut() then
         return
     end
-    local options = {out_target_views={},cell_positions={}}
+    local options = {out_target_views={},cell_positions={},sender_obj_id = special_obj._owner_obj:getId()}
     local data = special_obj._conf_data
     --set target type
     options.target_type = "player"
@@ -57,8 +57,9 @@ function TrapLogic:_Activate(special_obj)
 end
 function TrapLogic:_EffectOnChar(special_obj,target_obj)
     local data = special_obj._conf_data
-    local impact_id = data.param1
-    ImpactCore:sendImpactToUnit(target_obj, impact_id, nil, false)
+    -- local impact_id = data.param1
+    local impact_id=310001
+    ImpactCore:sendImpactToUnit_(target_obj, impact_id, special_obj._owner_obj, false)
 end
 -------------------------------------------------------------------------
 return TrapLogic

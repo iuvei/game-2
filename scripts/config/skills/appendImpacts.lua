@@ -83,6 +83,12 @@ local appendImpacts = {
 	[95001] = {
 		{ logicId=1,param1=1,param2=-1,param3=690001,param4=-1 },
 	},
+	[96001] = {
+		{ logicId=2,param1=800004,param2=-1,param3=-1,param4=-1 },
+	},
+	[97001] = {
+		{ logicId=1,param1=1,param2=-1,param3=700001,param4=-1 },
+	},
 }
 
 local pairs = pairs

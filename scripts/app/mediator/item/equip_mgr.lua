@@ -1,16 +1,16 @@
 --
 -- Author: Anthony
 -- Date: 2014-10-13 16:01:25
--- mgr_equip
+-- equip_mgr
 -- 这里面的为背包里面的装备，如果已经使用，则该数据是会存储到hero的equips里面
-local pairs = pairs
-local table = table
+-- local pairs = pairs
+-- local table = table
 ----------------------------------------------------------------
-local client_equip = import(".client_equip")
+local equip = import(".equip")
 ----------------------------------------------------------------
-local mgr_equip = class("mgr_equip")
+local equip_mgr = class("equip_mgr")
 ----------------------------------------------------------------
-function mgr_equip:ctor(player)
+function equip_mgr:ctor(player)
 	self.__data = {}
     self.player = player
 end
@@ -18,11 +18,11 @@ end
 --
 ----------------------------------------
 -- 得到所有数据
-function mgr_equip:get_data()
+function equip_mgr:get_data()
     return self.__data
 end
 ----------------------------------------
-function mgr_equip:set_data( data )
+function equip_mgr:set_data( data )
     table.walk(data, function(v, k)
         self:update(v)
     end)
@@ -31,16 +31,16 @@ function mgr_equip:set_data( data )
     -- dump(self.__data)
 end
 ----------------------------------------
-function mgr_equip:get_count()
+function equip_mgr:get_count()
     return table.nums(self.__data)
 end
 ----------------------------------------
-function mgr_equip:remove( GUID )
+function equip_mgr:remove( GUID )
     self.__data[GUID] = nil
 end
 ----------------------------------------
 -- 根据guid得到equip
-function mgr_equip:get_by_GUID(GUID)
+function equip_mgr:get_by_GUID(GUID)
     local data = self.__data[GUID]
     if data then
         return data:get_info()
@@ -48,16 +48,16 @@ function mgr_equip:get_by_GUID(GUID)
     return nil
 end
 ----------------------------------------
-function mgr_equip:update(newdata)
+function equip_mgr:update(newdata)
     -- local heros = self:get_data()
     -- if heros[newdata.GUID] then
-    --     print("mgr_equips update replace ",newdata.GUID)
+    --     print("equip_mgrs update replace ",newdata.GUID)
     -- end
 
     -- 添加一条新数据
-    self.__data[newdata.GUID] = client_equip.new(newdata)
+    self.__data[newdata.GUID] = equip.new(newdata)
     -- print("---------update")
     -- dump(self.__data)
 end
 ----------------------------------------------------------------
-return mgr_equip
+return equip_mgr

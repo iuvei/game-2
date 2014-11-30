@@ -3,6 +3,7 @@
 -- Date: 2014-10-21 18:46:10
 -- Filename: item_helper.lua
 --
+local math = math
 
 local item_helper = {}
 

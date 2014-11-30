@@ -15,5 +15,11 @@ function conf_mgr_equip:get_icon(data_id)
 	local conf_equip_art    = require("config.equip.equip_art")
     return conf_equip_art[conf_equip[data_id].artid].icon
 end
+-----------------------------------------
+-- 得到产出位置
+function conf_mgr_equip:get_output(data_id)
+	local conf = require("config.equip.equip_output")
+    return conf[data_id]
+end
 ------------------------------------------------------------------------------
 return conf_mgr_equip

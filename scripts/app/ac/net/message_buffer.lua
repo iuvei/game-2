@@ -118,6 +118,7 @@ end
 -- 重置缓冲区
 function message_buffer:reset_last_buff()
 	last_buff = ""
+	self.session = 0
 end
 ------------------------------------
 -- 收包，组包 并 执行包

@@ -69,6 +69,12 @@ local skillData = {
 	[95] = {
 		{ id=95001,lev=1,appendImpactRule=95001,sikllBrief="回合前出发效果",skillEffId=1001,coolBoutTimes=5,needHeroLev=1,consumeActPoint=0,consumeHp=0,consumeMp=0,consumeRage=0,isEnterUseSkill=0,atkDistance=-1,atkRangeType=-1,aktRangeParam=-1,isCauseMove=0,moveParam=0,upLevNeedItemId=0,upLevNeedItemId=0,upLevNeedUseMenoy=0,upLevNeedUseFood=0 },
 	},
+	[96] = {
+		{ id=96001,lev=1,appendImpactRule=96001,sikllBrief="被动加速度",skillEffId=1001,coolBoutTimes=-1,needHeroLev=1,consumeActPoint=0,consumeHp=0,consumeMp=0,consumeRage=0,isEnterUseSkill=0,atkDistance=-1,atkRangeType=-1,aktRangeParam=-1,isCauseMove=-1,moveParam=-1,upLevNeedItemId=0,upLevNeedItemId=0,upLevNeedUseMenoy=0,upLevNeedUseFood=0 },
+	},
+	[97] = {
+		{ id=97001,lev=1,appendImpactRule=97001,sikllBrief="清理所有效果",skillEffId=1001,coolBoutTimes=-1,needHeroLev=1,consumeActPoint=0,consumeHp=0,consumeMp=0,consumeRage=0,isEnterUseSkill=0,atkDistance=-1,atkRangeType=-1,aktRangeParam=-1,isCauseMove=-1,moveParam=-1,upLevNeedItemId=0,upLevNeedItemId=0,upLevNeedUseMenoy=0,upLevNeedUseFood=0 },
+	},
 }
 
 local pairs = pairs

@@ -37,21 +37,11 @@ function conf_mgr_stages:getStagesByTypeId( typeId )
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getStage( Id )
-    local typeId = math.floor(Id/100)
-    local id = Id%100
-    return require("config.stages.stages")[typeId][id]
+    return require("config.stages.stages")[math.floor(Id/100)][Id%100]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getStageRes( Id )
-    local typeId = math.floor(Id/100)
-    local id = Id%100
-    return require("config.stages.stageRes")[typeId][id]
-end
-------------------------------------------------------------------------------
-function conf_mgr_stages:getDeplete( Id )
-    local typeId = math.floor(Id/100)
-    local id = Id%100
-    return require("config.stages.depletes")[typeId][id]
+    return require("config.stages.stageRes")[math.floor(Id/100)][Id%100]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getMapResByStageId( Id )
@@ -60,9 +50,7 @@ function conf_mgr_stages:getMapResByStageId( Id )
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getMapRes( Id )
-    local typeId = math.floor(Id/100)
-    local id = Id%100
-    return require("config.stages.mapRes")[typeId][id]
+    return require("config.stages.mapRes")[math.floor(Id/100)][Id%100]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getMonstersByStageId( Id )
@@ -78,7 +66,9 @@ function conf_mgr_stages:getMasterByStageId( Id )
     local stage = self:getStage(Id)
     local ms = self:getMonsters(stage.monstersTypeId)
     for i=1,#ms do
-        if ms[i].isMaster == 1 then return ms[i].HeorId end
+        if ms[i].isMaster == 1 then
+            return ms[i].HeorId
+        end
     end
     return 0
 end
@@ -90,9 +80,7 @@ function conf_mgr_stages:getFormationByStageId( Id )
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getDepletes( Id )
-    local typeId = math.floor(Id/100)
-    local id = Id%100
-    return require("config.stages.depletes")[typeId][id]
+    return require("config.stages.depletes")[Id]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getDepleteByStageId( stageId )

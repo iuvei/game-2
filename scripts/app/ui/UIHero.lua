@@ -33,7 +33,7 @@ function M:init( params )
      self._lstItem =UIListView.new(lstItem)
      self._tplItem = tolua.cast(GUIReader:shareReader():widgetFromJsonFile("UI/hero_main_item.json"),"Layout")
 
-    local heros = CLIENT_PLAYER:get_mgr("heros"):get_data()
+    local heros = PLAYER:get_mgr("heros"):get_data()
     for k,v in pairs(heros) do
         local heroinfo = v:get_info()
         -- dump(heroinfo)
@@ -107,7 +107,7 @@ function M:sortList(type)
 end
 --
 function M:addItem(heroDt)
-    local heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(heroDt.GUID)
+    local heroinfo = PLAYER:get_mgr("heros"):get_hero_by_GUID(heroDt.GUID)
     local widgetItem = self._tplItem:clone()    -- 拷贝C++数据
     --名称
     local w = UIHelper:seekWidgetByName(widgetItem, "name")
@@ -169,7 +169,7 @@ function M:addItem(heroDt)
                                         }
                                         self:addReadyHero(data)
 
-                                        CLIENT_PLAYER:get_mgr("formations"):update(self:indexToPos(self.wg_sel_formation.formationType,i),heroDt)
+                                        PLAYER:get_mgr("formations"):update(self:indexToPos(self.wg_sel_formation.formationType,i),heroDt)
                                         -- 更新服务端数据
                                         self:update2server(data.slotIndex, data.heroDt)
                                         break
@@ -233,7 +233,7 @@ function M:addReadyHero(data)
              self:updataHeroItem(data.heroItem)
         end
         if data.slot then
-            local heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(data.heroDt.GUID)
+            local heroinfo = PLAYER:get_mgr("heros"):get_hero_by_GUID(data.heroDt.GUID)
             self:setFormationPosInfo({nickname=heroinfo.nickname,headImg=heroinfo.headIcon,isFlag=true},data.slot)
             self:setSelectedFormationCell(data.fId,data.slotIndex,true)
          end
@@ -468,7 +468,7 @@ function M:initFmtSlots()
                                         }
                             self:delReadyHero(data)
 
-                            CLIENT_PLAYER:get_mgr("formations"):remove(self:indexToPos(self.wg_sel_formation.formationType,i))
+                            PLAYER:get_mgr("formations"):remove(self:indexToPos(self.wg_sel_formation.formationType,i))
                             -- 更新服务端数据
                             self:update2server(data.slotIndex)
                         end
@@ -485,7 +485,7 @@ function M:initFmtSlots()
         end -- end for
     end)
 
-    local Fdata_ = CLIENT_PLAYER:get_mgr("formations"):get_data()
+    local Fdata_ = PLAYER:get_mgr("formations"):get_data()
     for key , v in pairs(Fdata_) do
         local info = v:get_info()
 
@@ -507,7 +507,7 @@ function M:updataHerosFormationPos()
     G_DefaultSelectedFormation=self.wg_sel_formation.formationType
     for k,v in pairs(self.readyHeros_) do
         v.fId=self.wg_sel_formation.formationType
-        CLIENT_PLAYER:get_mgr("formations"):update_index(v.heroDt.GUID,self:indexToPos(v.fId, v.slotIndex))
+        PLAYER:get_mgr("formations"):update_index(v.heroDt.GUID,self:indexToPos(v.fId, v.slotIndex))
     end
 end
 --
@@ -540,7 +540,7 @@ end
 ------------------------------------------------------------------------------
 -- 更新服务端数据
 function M:update2server(index, herodata)
-    CLIENT_PLAYER:get_mgr("formations"):update_server_fomation( index, herodata )
+    PLAYER:get_mgr("formations"):update_server_fomation( index, herodata )
 end
 ------------------------------------------------------------------------------
 return M

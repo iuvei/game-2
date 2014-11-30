@@ -377,8 +377,11 @@ function UIStages:openBattleWnd( stageType,stageId )
     self:getWidgetByName("Button_start",function(Widget)
         Widget:addTouchEventListener(function( widget, eventType )
             if eventType == self.ccs.TouchEventType.ended then
-                -- display.replaceScene( INIT_FUNCTION.reloadModule("app.scenes.battle.battleScene").new(stageId))
-                switchscene("battle",{ tempdata=stageId})
+                -- switchscene("battle",{ tempdata=stageId})
+                PLAYER:send("CS_FightBegin",{
+                    stageId     = stageId,
+                    client_time = os.time()
+                })
             end
         end)
     end)
@@ -405,7 +408,7 @@ function UIStages:openBattleWnd( stageType,stageId )
     self:getWidgetByName("Labe_junlingxiaohao",function(Widget)
         Widget:setFontName(self:getFont())
         local deplete = chapters:getDepleteByStageId(stageId)
-        Widget:setText(deplete.JunJing)
+        Widget:setText(deplete.vigour)
     end)
 
     -- 今日次数

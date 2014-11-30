@@ -3,34 +3,32 @@
 -- Date: 2014-08-01 16:24:29
 --
 ------------------------------------------------------------------------------
-local configMgr = {}
+local config_mgr = {}
 ------------------------------------------------------------------------------
 --根据type读取相应的配置文件管理器
-function configMgr:getConfig(type)
-    local config = nil
-
+function config_mgr:getConfig(type)
     if type == "heros" then
-        config = require("config.heros.conf_mgr_heros")
+        return require("config.heros.conf_mgr_heros")
     elseif  type == "stages" then
-        config = require("config.stages.conf_mgr_stages")
+        return require("config.stages.conf_mgr_stages")
     elseif  type == "skills" then
-        config = require("config.skills.conf_mgr_skills")
+        return require("config.skills.conf_mgr_skills")
     elseif  type == "impacts" then
-        config = require("config.skills.conf_mgr_impacts")
+        return require("config.skills.conf_mgr_impacts")
     elseif type=="home" then
-        config = require("config.home.conf_mgr_home")
+        return require("config.home.conf_mgr_home")
     elseif type == "equip" then
-        config = require("config.equip.conf_mgr_equip")
-    elseif type == "item" then
-        config = require("config.item.conf_mgr_item")
+        return require("config.equip.conf_mgr_equip")
+    elseif type == "comitem" then
+        return require("config.comitem.conf_mgr_comitem")
     elseif type == "gem" then
-        config = require("config.gem.conf_mgr_gem")
+        return require("config.gem.conf_mgr_gem")
     elseif type == "debris" then
-        config = require("config.debris.conf_mgr_debris")
+        return require("config.debris.conf_mgr_debris")
+    elseif type == "compound" then
+        return require("config.item_compound.conf_mgr_item_compound")
     end
-
-    return config
 end
 ------------------------------------------------------------------------------
-return configMgr
+return config_mgr
 ------------------------------------------------------------------------------

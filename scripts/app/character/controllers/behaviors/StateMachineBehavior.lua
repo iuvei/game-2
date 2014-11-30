@@ -153,12 +153,12 @@ function StateMachineBehavior:bindMethods(object)
     self:bindMethod(object,"canDoEvent", canDoEvent)
     ----------------------------------------
     -- 执行攻击事件
-    local function doAttackEvent(object,attackTime)
+    local function doAttackEvent(object,options)
         -- print("doAttackEvent")
         if object.fsm__:canDoEvent("attack") then
             self:log("----------")
             -- idle      ->     attacking
-            object.fsm__:doEvent("attack")
+            object.fsm__:doEvent("attack",options)
             -- attacking      ->     idle
             -- object.fsm__:doEvent("atkfinish", attackTime)
             return true
@@ -184,12 +184,12 @@ function StateMachineBehavior:bindMethods(object)
     self:bindMethod(object,"doReadyEvent", doReadyEvent)
     ----------------------------------------
     --
-    local function doBeAttackEvent(object,cooldown)
+    local function doBeAttackEvent(object,options) -- options ={cooldown,rece_obj}
         --if object.fsm__:canDoEvent("beattack") then
             self:log("----------")
             -- object.fsm__:doEventForce("beattack",_callback)
             -- object.fsm__:doEvent("beattackOver", cooldown)
-            object.fsm__:doEvent("beattack")
+            object.fsm__:doEvent("beattack",options)
             --return true
         --else
         --    return false
@@ -296,7 +296,7 @@ function StateMachineBehavior:onAttack_(event)
     local object  = self.object__
 
     self:log("StateMachineBehavior %s:%s afterAttackEvent", object:getId(), object.nickname_)
-    object:dispatchEvent({name = object.ATTACK_EVENT})
+    object:dispatchEvent({name = object.ATTACK_EVENT,options = event.args[1]})
 end
 ------------------------------------------------------------------------------
 --离开attacking状态时的响应函数
@@ -316,7 +316,8 @@ end
 function StateMachineBehavior:onBeAttack_(event)
     local object  = self.object__
     self:log("StateMachineBehavior %s:%s BeAttack", object:getId(), object.nickname_)
-    object:dispatchEvent({name = object.BEATTACK_EVENT})
+    -- dump(event.args)
+    object:dispatchEvent({name = object.BEATTACK_EVENT,options = event.args[1]})
 end
 ------------------------------------------------------------------------------
 function StateMachineBehavior:onBeAttackOver_(event)

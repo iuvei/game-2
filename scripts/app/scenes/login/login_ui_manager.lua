@@ -248,7 +248,7 @@ function login_ui_manager:getServerList()
 					self:createServerListBtn()
 					self:createEnterGameBtn()
 					self:removeLoading() --去除loading
-				end, 0.2,1)
+				end, 0.1,1)
 				self._timers[timeid] = 1
 
             end
@@ -468,7 +468,7 @@ function login_ui_manager:connetToLoginServer( _host, _port )
         end,
         onEnterSucc = function(subid)
             -- 发送进入包
-            CLIENT_PLAYER:send("CS_Login", {
+            PLAYER:send("CS_Login", {
                 uid = subid,
                 acc = token.user,
             })

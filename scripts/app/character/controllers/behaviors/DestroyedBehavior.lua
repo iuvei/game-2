@@ -4,7 +4,6 @@
 -- 破坏行为：HP的增减
 ------------------------------------------------------------------------------
 local MapConstants    = require("app.ac.MapConstants")
-local DelayCommand = require("app.character.controllers.commands.DelayCommand")
 local BehaviorBase = import(".BehaviorBase")
 local EffectChangeHP = require("common.effect.ChangeHP")
 local configMgr       = require("config.configMgr")
@@ -112,6 +111,7 @@ function DestroyedBehavior:bindMethods(object)
         object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_MagicDef)      -- 魔法防御力
         object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_TacticsAtk)  -- 战法攻击力
         object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_TacticsDef)
+        object:MarkAttrDirtyFlag(CommonDefine.RoleAttr_Speed)
 
     end
     self:bindMethod(object,"MarkAllAttrDirtyFlag", MarkAllAttrDirtyFlag)
@@ -191,12 +191,16 @@ function DestroyedBehavior:bindMethods(object)
             if newhp == 0 then
                 object:doBeKillEvent()
             else
-                object:doBeAttackEvent(object.ATTACK_COOLDOWN)--object.ATTACK_COOLDOWN
-                if CommandManager:getFrontCommand().opObjId_ == object:getId() then
-                    HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdSequence)
-                else
-                    HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdCocurrent)
-                end
+                local options = {
+                                    rece_obj = object,
+                                    cooldown = object.ATTACK_COOLDOWN*1000/2
+                                }
+                object:doBeAttackEvent(options)
+                -- if CommandManager:getFrontCommand().opObjId_ == object:getId() then
+                --     HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdSequence)
+                -- else
+                --     HeroOperateManager:addCommand(DelayCommand.new(object,object.ATTACK_COOLDOWN*1000),HeroOperateManager.CmdCocurrent)
+                -- end
 
             end
             if oldhp>0 and object:getHp()<=0 then

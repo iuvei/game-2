@@ -26,7 +26,7 @@ function UIHeroSkillUp:onEnter()
 end
 function UIHeroSkillUp:init( params )
     UIHeroSkillUp.super.init(self,params)
-    --self.heroinfo = CLIENT_PLAYER:get_mgr("heros"):get_hero_by_GUID(params.GUID)
+    --self.heroinfo = PLAYER:get_mgr("heros"):get_hero_by_GUID(params.GUID)
     --self:ListenClose()
     self._skillInfo=configMgr:getConfig("skills"):GetSkillData(params.params.skillId)
     self:Listen()

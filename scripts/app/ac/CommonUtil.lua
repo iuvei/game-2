@@ -13,7 +13,7 @@ function CommonUtil:GetItemAttrIndexMap()
         "Str"  ,     -- 力量
         "Int"    ,     -- 智力
         "Cha"   ,        -- 魅力
-        "AtkSpeed",    -- 攻击速度
+        "Speed",    -- 攻击速度
         -- 二级属性
         "Hit"    ,      -- 命中率
         "Evd"   ,       -- 闪避率

@@ -8,6 +8,7 @@ function UIListView:ctor(ScrollView,col,row)
     self.amountCol_=col or 0
     self.amountRow_ = row or 0
     self.items_={}
+    self.lstCtrlItem = nil
     local item=self:getItemByIndex(0)
     if item then
         self.sizeItem_=item:getSize()
@@ -16,6 +17,7 @@ function UIListView:ctor(ScrollView,col,row)
     end
     self.scrollAreaSize_=ScrollView:getInnerContainerSize()
 end
+-- 取得滚动层
 function UIListView:getScrollView()
     return self.scrollView_
 end
@@ -98,4 +100,51 @@ function UIListView:updataScrollArea(callback_)
     -- local layout=tolua.cast(self.sv_:getChildren():objectAtIndex(0), "Layout")
     -- self:setScrollAreaSize(CCRect(col*layout:getSize().width,layout:getSize().height*row))
 end
+----------------------------------------------------------------------------------------------------------
+-- item 相关
+function UIListView:InitialItem()
+    self.lstCtrlItem = UIHelper:seekWidgetByName(self.scrollView_, "PanelItem")
+end
+function UIListView:SetItemTemp(tempItem)
+    self.lstCtrlItem = tempItem
+end
+function UIListView:ClearItem()
+    for i=1,self:getCount() do
+        local item = self:getItemByIndex(i-1)
+        item:setEnabled(false)
+        item:setVisible(false)
+    end
+end
+function UIListView:AddItem(index)
+    assert(self.lstCtrlItem ~= nil,"UIListView:AddItem()")
+    if index==1 then
+        for i=1,self:getCount() do
+            local item = self:getItemByIndex(i-1)
+            item:setEnabled(false)
+            item:setVisible(false)
+        end
+    end
+    local item = nil
+    if index <= self:getCount() then
+        item = self:getItemByIndex(index-1)
+        item:setEnabled(true)
+        item:setVisible(true)
+    else
+        item = self:_AddItem(index)
+    end
+    return item
+end
+function UIListView:_AddItem(index)
+    local item=self.lstCtrlItem
+    if index>1 then
+        item = self.lstCtrlItem:clone()    -- 拷贝C++数据
+        self:insert(item)
+    else
+        item:setEnabled(true)
+        item:setVisible(true)
+    end
+    return item
+end
+----------------------------------------------------------------------------------------------------------
 return UIListView
+----------------------------------------------------------------------------------------------------------

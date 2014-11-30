@@ -2,6 +2,7 @@
 -- Author: wangshaopei
 -- Date: 2014-08-25 11:57:13
 --
+
 local CommonDefine = require("app.ac.CommonDefine")
 local ImpactLogic003 = import(".impactLogics.LogicImpact003")
 local CombatCore = class("CombatCore")

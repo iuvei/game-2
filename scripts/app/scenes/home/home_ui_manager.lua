@@ -33,7 +33,7 @@ function home_ui_manager:createStagesBtn()
 
     cc.ui.UIPushButton.new({normal="scene/home/mission.png",pressed="scene/home/mission_press.png"}, {scale9 = false})
         :onButtonClicked(function()
-            if table.nums(CLIENT_PLAYER:get_mgr("formations"):get_data()) <= 0 then
+            if table.nums(PLAYER:get_mgr("formations"):get_data()) <= 0 then
                 KNMsg:getInstance():flashShow("请选择上阵英雄")
                 return
             end

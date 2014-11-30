@@ -22,6 +22,7 @@ local LogicImpact018 = import(".impactLogics.LogicImpact018")
 local LogicImpact019 = import(".impactLogics.LogicImpact019")
 local LogicImpact022 = import(".impactLogics.LogicImpact022")
 local LogicImpact025 = import(".impactLogics.LogicImpact025")
+local LogicImpact028 = import(".impactLogics.LogicImpact028")
 -- special logic
 local TrapLogic = import(".specialLogics.TrapLogic")
 
@@ -44,6 +45,7 @@ function LogicManger:ctor(logicType)
         self:register(LogicImpact019.new())
         self:register(LogicImpact022.new())
         self:register(LogicImpact025.new())
+        self:register(LogicImpact028.new())
     elseif logicType == SkillDefine.LogicType_Skill then
         self:register(SLImpactsToTarget.new())
         self:register(SLPassiveSkill.new())

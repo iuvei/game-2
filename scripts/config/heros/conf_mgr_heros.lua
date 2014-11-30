@@ -32,7 +32,7 @@ function conf_mgr_heros:GetHeroData(typeId,quality)
     end
 
     -- 属性
-    local outData = {
+    return {
         -- typename    = arm_.TypeName,
         nickname    = hero.nickname,
         level       = hero.Level,
@@ -54,7 +54,6 @@ function conf_mgr_heros:GetHeroData(typeId,quality)
         skills      = skills,
         require_equip  = conf_mgr_heros:get_equip_rule(hero.equip_rule), --初始绑定装备
     }
-    return outData
 end
 ------------------------------------------------------------------------------
 function conf_mgr_heros:GetHeroDataById(id)

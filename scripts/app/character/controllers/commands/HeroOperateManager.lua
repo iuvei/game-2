@@ -2,10 +2,13 @@
 -- Author: Your Name
 -- Date: 2014-07-22 18:25:11
 --
-HeroOpState ={}
-HeroOpState.Start=1
-HeroOpState.Doing=2
-HeroOpState.End=3
+HeroOpState ={
+    Start=1,
+    Doing=2,
+    End=3,
+    None=4,
+}
+
 local HeroOperateManager = {}
 HeroOperateManager.CmdSequence=1
 HeroOperateManager.CmdCocurrent=2

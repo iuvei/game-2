@@ -94,7 +94,7 @@ function home_scene:ctor()
             if g_heortemp == nil then
                 g_heortemp = 1
             end
-           CLIENT_PLAYER:get_mgr("heros"):ask_createhero(tonumber(g_heortemp.."001"))
+           PLAYER:get_mgr("heros"):ask_createhero(tonumber(g_heortemp.."001"))
             if g_heortemp < 6 then
                 g_heortemp = g_heortemp+1
             else
@@ -118,23 +118,22 @@ function home_scene:ctor()
             -- local t = {10103000,
             --             10104000,
             --             10105000}
-            local t = {
-                40101000,
-                -- 40101001,
-                -- 40201000,
-                -- 40202000,
-                -- 10102000,
-                -- 10101000,
-                -- 20101000,
-                -- 20102000,
-                -- 20103000,
-                -- 30100000,
-                -- 30100001,
-                -- 30100002,
-            }
+            -- local t = {
+            --     -- 40101000,
+            --     -- 40101001,
+            --     -- 40201000,
+            --     -- 40202000,
+            --     -- 10102000,
+            --     -- 10101000,
+            --     -- 30100000,
+            --     -- 30100001,
+            --     -- 30100002,
+            -- }
+            local t = { 10101000,10102000,10103000,10104000,10105000,10106000,10101001 }
+            -- local t = {20101000,20102000,20103000}
             for i=1,#t do
-                CLIENT_PLAYER:send("CS_AskCreateItem",{
-                    playerid = CLIENT_PLAYER:get_playerid(),
+                PLAYER:send("CS_AskCreateItem",{
+                    playerid = PLAYER:get_playerid(),
                     dataid = t[i]
                 })
             end
@@ -153,40 +152,29 @@ function home_scene:ctor()
             event.target:setScale(1.0)
         end)
         :onButtonClicked(function()
-            CLIENT_PLAYER:send("CS_UseItem",{
-                GUID    = 40101000,
-                -- HeroGUID = 1,
-            })
+            local item_operator = require("app.mediator.item.item_operator")
+            item_operator:compound( PLAYER, 10202000,2001 )
+            -- PLAYER:send("CS_UseItem",{
+            --     GUID    = 40101000,
+            --     -- HeroGUID = 1,
+            -- })
+
+            -- for i=1,10 do
+            --                PLAYER:send("CS_FightEnd",{
+            --         stageId      = 101,
+            --         win          = 1,
+            --         cbegin_time  = os.time(),
+            --         cend_time    = os.time(),
+            --         round_count  = 5,
+            --         count        = 5,
+            --         all_hp       = 10,
+            --     })
+            -- end
+
         end)
         :pos(display.cx - 320, display.top - 30)
         :addTo(self)
 
-        -- local jelly_menu_item = require("common.UI.jelly_menu_item")
-        -- local button = jelly_menu_item.new({
-        --     image = "actor/Button01.png",
-        --     -- imageSelected = "CloseSelected.png",
-        --     listener = function ()
-        --         print("click")
-        --     end,
-        --     x = display.cx,
-        --     y = display.cy
-        -- })
-        -- local button1 = jelly_menu_item.new({
-        --     image = "actor/Button01.png",
-        --     -- imageSelected = "CloseSelected.png",
-        --     listener = function ()
-        --         -- print("click1")
-        --         local x,y = button:getPosition()
-        --         transition.moveTo(button, {x=x+100, time = 0.2})
-        --         button:setVisible(true)
-        --     end,
-        -- })
-
-        -- button:setVisible(false)
-        -- button1:setPosition(button:getPosition())
-
-        -- local menu = ui.newMenu({button,button1})
-        -- self:addChild(menu)
     -- test
     ------------------------------------------
 end
@@ -328,7 +316,7 @@ function home_scene:onEnter()
     if self.UIlayer then self.UIlayer:init() end
 
     -- -- flush item effect
-    -- local heros = CLIENT_PLAYER:get_mgr("heros"):get_data()
+    -- local heros = PLAYER:get_mgr("heros"):get_data()
     -- for k,v in pairs(heros) do
     --     v:flush_item_effect()
     -- end

@@ -13,6 +13,7 @@
 ------------------------------------------------------------------------------
 local MapConstants      = require("app.ac.MapConstants")
 local SkillDefine       = import("..controllers.skills.SkillDefine")
+local DelayCommand = require("app.character.controllers.commands.DelayCommand")
 local configMgr         = require("config.configMgr")         -- 配置
 local EffectFadeInOut   = require("common.effect.FadeInOut")  -- 淡入淡出特效
 local Formation         = import(".HeroFormation")  -- 方阵
@@ -38,6 +39,7 @@ function HeroView:ctor(model,params)
         :addEventListener(cls.ATTACK_EVENT, handler(self, self.onAttack_))
         -- :addEventListener(cls.FINISH_EVENT, handler(self, self.onAtkFinish_))
         :addEventListener(cls.BEFORE_EVENT, handler(self, self.onBefore_))
+        :addEventListener(cls.BEATTACK_EVENT, handler(self, self.onBeAttack_))
         -- :addEventListener(cls.BEATTACK_OVER_EVENT, handler(self, self.onBeAttackOver_))
 
     -- 图片资源
@@ -153,16 +155,25 @@ function HeroView:onBefore_(event)
 end
 ------------------------------------------------------------------------------
 function HeroView:onStateChange_(event)
-    self:updateSprite_(self:GetModel():getState())
+    self:_updataState(self:GetModel():getState(),event)
 end
 ------------------------------------------------------------------------------
 function HeroView:onBeKill_(event)
     self:removeImpactsEffect()
     self:createDeadAction()
 end
-function HeroView:onBeAttackOver_(event)
-    -- self:GetModel():setIsStop(true)
+function HeroView:onBeAttack_(event)
+    self:createBeAttackAction()
+    local options = event.options
+    if CommandManager:getFrontCommand().opObjId_ == options.rece_obj:getId() then
+        HeroOperateManager:addCommand(DelayCommand.new(options.rece_obj,options.cooldown),HeroOperateManager.CmdSequence)
+    else
+        HeroOperateManager:addCommand(DelayCommand.new(options.rece_obj,options.cooldown),HeroOperateManager.CmdCocurrent)
+    end
 end
+-- function HeroView:onBeAttackOver_(event)
+--     -- self:GetModel():setIsStop(true)
+-- end
 ------------------------------------------------------------------------------
 function HeroView:onStop_(event)
     -- self:GetModel():stop()
@@ -178,8 +189,9 @@ end
 -- end
 ------------------------------------------------------------------------------
 --
-function HeroView:onAttack_()
-    self:createAttackAction()
+function HeroView:onAttack_(event)
+    local options = event.options
+    self:createAttackAction(options.cooldown)
 end
 ------------------------------------------------------------------------------
 function HeroView:updateHP_()
@@ -194,12 +206,28 @@ function HeroView:updateHP_()
 end
 
 ------------------------------------------------------------------------------
-function HeroView:updateSprite_(state)
+function HeroView:updateSprite_(state,event)
     if      state == "idle"          then self:createIdleAction()
     --elseif  state == "attacking"     then self:createAttackAction()
     elseif  state == "moving"        then self:createWalkAction()
     elseif  state == "beattacking"   then
-        self:createBeAttackAction()
+        -- self:createBeAttackAction()
+    end
+end
+function HeroView:_updataState(state,event)
+    self:updateSprite_(state,event)
+    if      state == "idle"          then
+    elseif  state == "attacking"     then
+    elseif  state == "moving"        then
+    elseif  state == "beattacking"   then
+        -- local options = event.options
+        -- if CommandManager:getFrontCommand().opObjId_ == options.rece_obj:getId() then
+        --     print("···lllll",options.cooldown)
+        --     HeroOperateManager:addCommand(DelayCommand.new(options.rece_obj,options.cooldown),HeroOperateManager.CmdSequence)
+        -- else
+        --     print("···rrrr",options.cooldown)
+        --     HeroOperateManager:addCommand(DelayCommand.new(options.rece_obj,options.cooldown),HeroOperateManager.CmdCocurrent)
+        -- end
     end
 end
 ------------------------------------------------------------------------------
@@ -216,17 +244,17 @@ function HeroView:createIdleAction()
     end})
 end
 ------------------------------------------------------------------------------
-function HeroView:createAttackAction()
+function HeroView:createAttackAction(cooldown)
     --local cls = self:GetModel().class
     local params = self:GetModel():getTargetAndDepleteParams()
     local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(params.skillId)
-    local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(params.skillId)
+    -- local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(params.skillId)
 
-    local actTime = skillTemp.actTime/1000
+    local actTime = cooldown/1000
     local frameName = configMgr:getConfig("heros")
                         :GetArmArtById(self:GetModel():getArmId(),"attck",self:GetModel():isEnemy())
     local frames    = display.newFrames(frameName, 1, 4)
-    local animation = display.newAnimation(frames,  actTime/ 4)--cls.ATTACK_COOLDOWN
+    local animation = display.newAnimation(frames,  actTime/#frames)--cls.ATTACK_COOLDOWN
 
     --技能名称
     self:createSkillNameEff(skillTemp.nickname)
@@ -334,15 +362,14 @@ function HeroView:createBeAttackAction()
     if self:isFlipX() then moveby_ = -10 end
 
     -- heroview后移
-    --transition.stopTarget(self)
-    local sequence = transition.sequence({
-        transition.spawn({
-            CCDelayTime:create(0.4),
-            CCMoveBy:create(0.2, ccp(moveby_,0)),
-        }),
-        CCMoveBy:create(0.2, ccp(-moveby_,0))
-    })
-    transition.execute(self,sequence)
+    -- local sequence = transition.sequence({
+    --     transition.spawn({
+    --         CCDelayTime:create(0.4),
+    --         CCMoveBy:create(0.2, ccp(moveby_,0)),
+    --     }),
+    --     CCMoveBy:create(0.2, ccp(-moveby_,0))
+    -- })
+    -- transition.execute(self,sequence)
 
     -- 方阵
     Formation:handleFormation(self,"callback",{
@@ -351,14 +378,15 @@ function HeroView:createBeAttackAction()
             sprite:setDisplayFrame(frame)
 
             -- 变红 移动
-            local sequence = transition.sequence({
-                transition.spawn({
-                    CCTintBy:create(0.4, 0, 255, 255),
-                    CCMoveBy:create(0.2, ccp(moveby_,0)),
-                }),
-                CCMoveBy:create(0.2, ccp(-moveby_,0))
-            })
-            transition.execute(sprite,sequence)
+            -- local sequence = transition.sequence({
+            --     transition.spawn({
+            --         CCTintBy:create(0.4, 0, 255, 255),
+            --         CCMoveBy:create(0.2, ccp(moveby_,0)),
+            --     }),
+            --     CCMoveBy:create(0.2, ccp(-moveby_,0))
+            -- })
+            -- transition.execute(sprite,sequence)
+            -- transition.execute(sprite)
     end})
     --一般攻击效果
     -- self:createImpactEffect(1,false)

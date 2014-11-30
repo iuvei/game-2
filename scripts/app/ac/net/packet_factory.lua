@@ -32,20 +32,22 @@ local G = proto.packets.package
 ------------------------------------------------------------------------------
 function packet_factory:init()
 	self.proto = {}
-	self.proto_id = {}
-
-	local handle = nil
+	self.proto_name = {}
 
 	local cmdInfo = require("app.packets.cmd")
 	-- 注册所有包
-	for k,v in pairs(cmdInfo) do
+	for k,v in ipairs(cmdInfo) do
+		local handle = nil
 		-- print(k,dump(v))
 		-- 过滤client才使用handle
 		if v.handlefile and v.handlefile ~= "" then
 			handle =  require("app.packets"..v.handlefile)
 		end
 		self.proto[v.name] = {id=v.id,handle=handle}
-		self.proto_id[v.id] = v
+		if self.proto_name[v.id] then
+			error("had "..v.id.." "..v.name.." msg!!")
+		end
+		self.proto_name[v.id] = v.name
 	end
 
 end
@@ -72,24 +74,24 @@ end
 
 function packet_factory:packet_unpack(text)
 	local packet = _unpack("Packet",text)
-	local ci = self.proto_id[packet.cmd]
-	if ci == nil then
+	local name = self.proto_name[packet.cmd]
+	if name == nil then
 		printError("packet_unpack cmdid:%d Unregistered!",packet.cmd)
 		return nil
 	end
 
-	return packet.cmd,_unpack(ci.name,packet.body)
+	return packet.cmd,_unpack(name,packet.body)
 end
 ------------------------------------------------------------------------------
 -- handle execute
-function packet_factory:get_handle(cmdid)
-	local ci = self.proto_id[cmdid]
-	if ci == nil then
+function packet_factory:execute_handle(player_instance,cmdid,text)
+	local name = self.proto_name[cmdid]
+	if name == nil then
 		printError("packet_execute cmdid:%d Unregistered!",cmdid)
 		return nil
 	end
 
-	return self.proto[ci.name].handle
+	return self.proto[name].handle(player_instance,text)
 end
 ------------------------------------------------------------------------------
 return packet_factory
