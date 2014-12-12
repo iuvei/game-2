@@ -3,21 +3,9 @@
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/skill.xls
 
 local specialObjData = {
-	[101] = {
-		{ logicId=1,resEffectId=200001,keepBoutNum=5,affectRangeType=1,targetType=1,affectNum=2,param1=500003,param2=10000 },
+	[101]={
+		{logicId=1,resEffectId=200001,keepBoutNum=5,affectRangeType=1,targetType=1,affectNum=2,param1=500003,param2=10000},
 	},
 }
-
-local pairs = pairs
-for i,v in pairs(specialObjData) do
-	local item = v
-	for j=1, #item do
-		item[j].__index = item[j]
-		if j < #item then
-			setmetatable(item[j+1], item[j])
-		end
-	end
-end
-
 return specialObjData
 

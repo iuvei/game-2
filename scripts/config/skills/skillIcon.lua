@@ -3,57 +3,45 @@
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/skill.xls
 
 local skillIcon = {
-	[100] = {
-		{ iconId=100,file="skillIcon/100.png" },
+	[100]={
+		{iconId=100,file="skillIcon/100.png"},
 	},
-	[1034] = {
-		{ iconId=1034,file="skillIcon/1034.png" },
+	[1034]={
+		{iconId=1034,file="skillIcon/1034.png"},
 	},
-	[1033] = {
-		{ iconId=1033,file="skillIcon/1033.png" },
+	[1033]={
+		{iconId=1033,file="skillIcon/1033.png"},
 	},
-	[1035] = {
-		{ iconId=1035,file="skillIcon/1035.png" },
+	[1035]={
+		{iconId=1035,file="skillIcon/1035.png"},
 	},
-	[1036] = {
-		{ iconId=1036,file="skillIcon/1036.png" },
+	[1036]={
+		{iconId=1036,file="skillIcon/1036.png"},
 	},
-	[1002] = {
-		{ iconId=1002,file="skillIcon/1002.png" },
+	[1002]={
+		{iconId=1002,file="skillIcon/1002.png"},
 	},
-	[1003] = {
-		{ iconId=1003,file="skillIcon/1003.png" },
+	[1003]={
+		{iconId=1003,file="skillIcon/1003.png"},
 	},
-	[1001] = {
-		{ iconId=1001,file="skillIcon/1001.png" },
+	[1001]={
+		{iconId=1001,file="skillIcon/1001.png"},
 	},
-	[1019] = {
-		{ iconId=1019,file="skillIcon/1019.png" },
+	[1019]={
+		{iconId=1019,file="skillIcon/1019.png"},
 	},
-	[1029] = {
-		{ iconId=1029,file="skillIcon/1029.png" },
+	[1029]={
+		{iconId=1029,file="skillIcon/1029.png"},
 	},
-	[1032] = {
-		{ iconId=1032,file="skillIcon/1032.png" },
+	[1032]={
+		{iconId=1032,file="skillIcon/1032.png"},
 	},
-	[1046] = {
-		{ iconId=1046,file="skillIcon/1046.png" },
+	[1046]={
+		{iconId=1046,file="skillIcon/1046.png"},
 	},
-	[1016] = {
-		{ iconId=1016,file="skillIcon/1016.png" },
+	[1016]={
+		{iconId=1016,file="skillIcon/1016.png"},
 	},
 }
-
-local pairs = pairs
-for i,v in pairs(skillIcon) do
-	local item = v
-	for j=1, #item do
-		item[j].__index = item[j]
-		if j < #item then
-			setmetatable(item[j+1], item[j])
-		end
-	end
-end
-
 return skillIcon
 

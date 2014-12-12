@@ -27,11 +27,14 @@ function M:run( sprite_ , num , param )
         group , group_width = getImageNum( math.abs( num ) , "common/cirt.png" , { offset = -10 } )
     else
         --掉血或者加血
-        group , group_width = getImageNum( math.abs( num ) , num>0 and "common/hp_green.png" or "common/hp.png" )
+        -- group , group_width = getImageNum( math.abs( num ) , num>0 and "common/hp_green.png" or "common/hp.png" )
+        group , group_width = getImageNum_( num , num>0 and "num_green_" or "num_red_" )
     end
 
     setAnchPos( group , 0 , 0 , 0.5 )
-    sprite_:addChild(group)
+    sprite_:getParent():addChild(group,param.zorder)
+    local x_,y_=sprite_:getPosition()
+    group:setPosition(ccp(x_,y_))
 
     --[[特效开始]]
     group:setScale(0.3)
@@ -47,7 +50,7 @@ function M:run( sprite_ , num , param )
         scale = 0.5,
     })
 
-    transition.moveTo(group, { delay = 0.6 , time = 0.4, x = 0 , y = 100  })
+    transition.moveTo(group, { delay = 0.6 , time = 0.4, x = x_ , y = y_+100  })
 
     transition.fadeOut(group, {
         delay = 0.7,

@@ -29,14 +29,17 @@ function home_scene:ctor()
     self:addChild(self.bgLayer_)
     local sceneSize = CCSize(display.width,display.height)
     local bgs=configMgr:getConfig("home"):getHomeRes(CommonDefine.HomeRes_BG)
+    local bg_sp = {}
     for i=1,#bgs do
         local rect=configMgr:getConfig("home"):toRect(bgs[i].rect)
-         self.bgSprite_ = display.newSprite(bgs[i].normal,rect.origin.x,rect.origin.y)
+         local sp_ = display.newSprite(bgs[i].normal,rect.origin.x,rect.origin.y)
+         bg_sp[#bg_sp+1]=sp_
         :addTo(self.bgLayer_,bgs[i].ZOrder)
-        if self.bgSprite_:getContentSize().width > sceneSize.width then
-            sceneSize.width=self.bgSprite_:getContentSize().width
-        end
+        -- if self.bgSprite_:getContentSize().width > sceneSize.width then
+        --     sceneSize.width=self.bgSprite_:getContentSize().width
+        -- end
     end
+    sceneSize.width=bg_sp[1]:getContentSize().width+bg_sp[2]:getContentSize().width
     self:setSceneSize(sceneSize)
 
     --触碰层
@@ -63,6 +66,12 @@ function home_scene:ctor()
 
     ------------------------------------------
     -- test
+    -- self:test()
+    -- test
+    ------------------------------------------
+end
+function home_scene:test()
+    ------------------------------------------
     --重启
     cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
         :setButtonSize(160, 50)
@@ -94,7 +103,9 @@ function home_scene:ctor()
             if g_heortemp == nil then
                 g_heortemp = 1
             end
-           PLAYER:get_mgr("heros"):ask_createhero(tonumber(g_heortemp.."001"))
+            PLAYER:send("CS_Command",{
+                content = "createhero "..g_heortemp.."001"
+            })
             if g_heortemp < 6 then
                 g_heortemp = g_heortemp+1
             else
@@ -129,14 +140,17 @@ function home_scene:ctor()
             --     -- 30100001,
             --     -- 30100002,
             -- }
-            local t = { 10101000,10102000,10103000,10104000,10105000,10106000,10101001 }
+            -- local t = { 10101000,10102000,10103000,10104000,10105000,10106000,10101001 }
             -- local t = {20101000,20102000,20103000}
+            -- local t = { 10101000,10102000,10103000,10104000,10105000,10106000, }
+            -- local t = {20101000,20102000,20103000,20104000,20105000}
+            local t = {30100000,30100001,30100002}
             for i=1,#t do
-                PLAYER:send("CS_AskCreateItem",{
-                    playerid = PLAYER:get_playerid(),
-                    dataid = t[i]
-                })
+                PLAYER:send("CS_Command",{
+                        content = "createitem "..t[i]
+                    })
             end
+
         end)
         :pos(display.right - 150, display.top - 30)
         :addTo(self)
@@ -152,24 +166,27 @@ function home_scene:ctor()
             event.target:setScale(1.0)
         end)
         :onButtonClicked(function()
-            local item_operator = require("app.mediator.item.item_operator")
-            item_operator:compound( PLAYER, 10202000,2001 )
+            -- local item_operator = require("app.mediator.item.item_operator")
+            -- item_operator:compound(1001,10202000)
+
             -- PLAYER:send("CS_UseItem",{
-            --     GUID    = 40101000,
-            --     -- HeroGUID = 1,
+            --     GUID    = 20103000,
+            --     HeroGUID = 4001,
             -- })
 
-            -- for i=1,10 do
-            --                PLAYER:send("CS_FightEnd",{
-            --         stageId      = 101,
-            --         win          = 1,
-            --         cbegin_time  = os.time(),
-            --         cend_time    = os.time(),
-            --         round_count  = 5,
-            --         count        = 5,
-            --         all_hp       = 10,
-            --     })
-            -- end
+            for i=1,10 do
+                           PLAYER:send("CS_FightEnd",{
+                    stageId      = 101,
+                    win          = 1,
+                    cbegin_time  = os.time(),
+                    cend_time    = os.time(),
+                    round_count  = 5,
+                    count        = 5,
+                    all_hp       = 10,
+                })
+            end
+
+            -- item_operator:enhance( 2001, 10102000 )
 
         end)
         :pos(display.cx - 320, display.top - 30)
@@ -224,7 +241,7 @@ function home_scene:onTouch(event, x, y)
         self.drag = nil
     end
 
-    return
+    return true
 end
 function home_scene:tick(dt)
     if self.drag then
@@ -314,12 +331,7 @@ function home_scene:onEnter()
     self:scheduleUpdate()
 
     if self.UIlayer then self.UIlayer:init() end
-
-    -- -- flush item effect
-    -- local heros = PLAYER:get_mgr("heros"):get_data()
-    -- for k,v in pairs(heros) do
-    --     v:flush_item_effect()
-    -- end
+-----------
 end
 ----------------------------------------------------------------
 function home_scene:onExit()
@@ -333,10 +345,17 @@ end
 ----------------------------------------------------------------
 --场景建筑相关
 function home_scene:onTouchBuilding(worldPos)
-    for i=1,#self.builds_ do
-        local bv = self.builds_[i]:getView()
+    -- for i=1,#self.builds_ do
+    --     local bv = self.builds_[i]:getView()
+    --     if bv and bv:contains(worldPos) then
+    --         return bv:GetModel()
+    --     end
+    -- end
+    -- print("toouch world pos :",worldPos.x,worldPos.y)
+    for k,v in pairs(self.builds_) do
+        local bv = v:getView()
         if bv and bv:contains(worldPos) then
-            return bv:GetModel()
+            return v
         end
     end
     return nil
@@ -352,10 +371,12 @@ function home_scene:isContainsBySelBuildId(worldPos)
 end
 function home_scene:createBuilds()
     local builds=configMgr:getConfig("home"):getHomeBuilds()
-    for i=1,#builds do
-        local build =require("app.scenes.home.HomeBuild").new(i,self)
-        local buildView =require("app.scenes.home.HomeBuildView").new(build,nil)
-        self.builds_[i]=build
+    for build_id,v in pairs(builds) do
+        if v[1].isOpen then
+            local build =require("app.scenes.home.HomeBuild").new(build_id,self)
+            local buildView =require("app.scenes.home.HomeBuildView").new(build,nil)
+            self.builds_[build_id]=build
+        end
     end
 end
 function home_scene:getBuildsLayer()

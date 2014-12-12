@@ -112,7 +112,8 @@ function UIStages:addPage(pageView,pIdx, iIdx, bClone,callback_)
     if bClone then newPage = pageView:getPage(0):clone() end
 
     -- 回调
-    if callback_ and callback_(newPage,pIdx,iIdx) then
+    if callback_  and callback_(newPage,pIdx,iIdx) then
+
         -- 先设置为可用
         newPage:setEnabled(true)
         -- 插入
@@ -236,18 +237,35 @@ function UIStages:updateHeroPanel(stageType)
             texture = "UI/UIstages_1/map_bg/map"..pIdx..".png",
         }):addTo(newPage)
 
+        local smgr = PLAYER:get_mgr("stage")
+        local isc = false
+
         -- 根据配置，创建出key
         for i = 1, #data.stages do
+
+            local isshow = false
+            if smgr:get_info(data.stages[i].StageId) then
+                isc = true
+                isshow = true
+            end
+
+            if not isc then --同章节的都显示
+                return
+            end
+
             local res = chapters:getStageRes(data.stages[i].stageResId)
-            local pos = string.split(res.pos,",")
+            local textures = {res.normal, res.selected,res.disabled}
+            if res.normal then textures[1] = "UI/UIstages_1/key_stages/"..textures[1] end
+            if res.selected then textures[2] = "UI/UIstages_1/key_stages/"..textures[2] end
+            if res.disabled then textures[3] = "UI/UIstages_1/key_stages/"..textures[3] end
 
             -- 增加
             local ButtonUI = self:createUINode("Button",{
                 name        = "PButton"..pIdx,
                 tag         = data.stages[i].StageId,
-                pos         = ccp(pos[1],pos[2]),
+                pos         = ccp(res.pos[1],res.pos[2]),
                 scale       = res.scale/100,
-                textures    = {res.normal,res.selected,res.disabled},
+                textures    = textures,
                 touchEnable = true,
                 TouchEvent  = function(widget, eventType)
                     if eventType == self.ccs.TouchEventType.ended then
@@ -255,6 +273,12 @@ function UIStages:updateHeroPanel(stageType)
                     end
                 end,
             })
+
+            if not isshow then
+                -- 不可用
+                ButtonUI:setBright(false)
+                ButtonUI:setTouchEnabled(false)
+            end
             -- 需用这种方式，不然会有问题
             newPage:addChild(ButtonUI,res.ZOrder)
 
@@ -273,35 +297,38 @@ function UIStages:updateHeroPanel(stageType)
         self:addPage(pvWnd,i, i-1, isClone,createStage)
     end
 
-    --设置默认
-    -- self:setAllDefault()
-
+    -- -- -- 滑到最新的一页
+    -- if CURSELECTPAGE then
+    --     pvWnd:scrollToPage(CURSELECTPAGE-1)
+    -- else
+    --     pvWnd:scrollToPage(pvWnd:getPages():count()-1)
+    -- end
     self:showHide(true)
 end
-------------------------------------------------------------------------------
-function UIStages:setAllDefault()
+-- ------------------------------------------------------------------------------
+-- function UIStages:setAllDefault()
 
-    -- 所有页面的按钮不可用
-    self:getWidgetByName("PageView",function( pageView )
-        for i = 1,pageView:getChildren():count() do
-            self:getWidgetByName("Panel_Page"..i,function( pageWnd )
-                if pageWnd == nil then return end
+--     -- 所有页面的按钮不可用
+--     self:getWidgetByName("PageView",function( pageView )
+--         for i = 1,pageView:getChildren():count() do
+--             self:getWidgetByName("Panel_Page"..i,function( pageWnd )
+--                 if pageWnd == nil then return end
 
-                local children = pageWnd:getChildren()
-                local cnt = children:count()
-                for i=0,cnt-1 do
-                    local c = children:objectAtIndex(i)
-                    c:setBright(false)
-                    c:setTouchEnabled(false)
-                end
-            end)
-        end -- end for
-    end)
-    -- 默认选中页点
-    self:setSelected(1)
-    -- 第一关默认可用
-    self:setStageBtnEnable(1)
-end
+--                 local children = pageWnd:getChildren()
+--                 local cnt = children:count()
+--                 for i=0,cnt-1 do
+--                     local c = children:objectAtIndex(i)
+--                     c:setBright(false)
+--                     c:setTouchEnabled(false)
+--                 end
+--             end)
+--         end -- end for
+--     end)
+--     -- 默认选中页点
+--     self:setSelected(1)
+--     -- 第一关默认可用
+--     self:setStageBtnEnable(1)
+-- end
 ------------------------------------------------------------------------------
 function UIStages:setSelected( seclectPage )
 
@@ -356,8 +383,6 @@ function UIStages:openBattleWnd( stageType,stageId )
     local chapters = config:getConfig("stages")
     local data = chapters:getStage(stageId)
 
-    -- 敌方武将
-    local monsters = chapters:getMonstersByStageId( stageId )
     -- 主将
     local MasterId = chapters:getMasterByStageId( stageId )
 
@@ -407,15 +432,23 @@ function UIStages:openBattleWnd( stageType,stageId )
     -- 消耗
     self:getWidgetByName("Labe_junlingxiaohao",function(Widget)
         Widget:setFontName(self:getFont())
-        local deplete = chapters:getDepleteByStageId(stageId)
-        Widget:setText(deplete.vigour)
+        local vigour = chapters:getDepleteByStageId(stageId)
+        Widget:setText(vigour)
     end)
 
     -- 今日次数
-    self:getWidgetByName("Labe_jinrixishu",function(Widget)
-        Widget:setFontName(self:getFont())
-        Widget:setText(data.Count.."/"..data.Count)
-    end)
+    local stageinfo = PLAYER:get_mgr("stage"):get_info(stageId)
+    if stageinfo and stageinfo.count and data.Count then
+        self:getWidgetByName("Labe_jinrixishu",function(Widget)
+            Widget:setVisible(true)
+            Widget:setFontName(self:getFont())
+            Widget:setText(stageinfo.count.."/"..data.Count)
+        end)
+    else
+        self:getWidgetByName("Labe_jinrixishu",function(Widget)
+            Widget:setVisible(false)
+        end)
+    end
 
     -- 地方阵形
     self:getWidgetByName("Image_formation",function(Widget)
@@ -424,32 +457,51 @@ function UIStages:openBattleWnd( stageType,stageId )
         Widget:loadTexture("UI/FormationUi_1/fomation/"..Fid..".png")
     end)
 
-    -- 敌方武将
     local count = 0
-    for i=1,#monsters do
-        local monster = monsters[i]
-        if monster.isMaster == 1 then
+    chapters:getMonster_walk( stageId,function( index, heroid, ismaster )
+        -- if heroid then
+        --     return
+        -- end
+
+        if ismaster then
             self:getWidgetByName("Image_hero5",function(Widget)
-                Widget:setVisible(true)
-                local ha =  config:getConfig("heros"):GetHerosArtById(monster.HeorId)
-                Widget:loadTexture(ha.headIcon)
+                -- print("·a··",index, heroid, ismaster)
+                if heroid and heroid > 0 then
+                    local ha =  config:getConfig("heros"):GetHerosArtById(heroid)
+                    Widget:loadTexture(ha.headIcon)
+                    Widget:setVisible(true)
+                else
+                    Widget:setVisible(false)
+                end
             end)
         else
-            count = count+1
+            count = count +1
             self:getWidgetByName("Image_hero"..count,function(Widget)
-                Widget:setVisible(true)
-                local ha =  config:getConfig("heros"):GetHerosArtById(monster.HeorId)
-                Widget:loadTexture(ha.headIcon)
+                -- print("·b··",index, heroid, ismaster)
+                if heroid and heroid > 0 then
+                    local ha =  config:getConfig("heros"):GetHerosArtById(heroid)
+                    Widget:loadTexture(ha.headIcon)
+                    Widget:setVisible(true)
+                else
+                     Widget:setVisible(false)
+                end
             end)
         end
+    end )
+
+    local item_operator = require("app.mediator.item.item_operator")
+    -- 掉落
+    for i=1,4 do
+        self:getWidgetByName("Image_drop"..i,function(Widget)
+            if data.di and data.di[i] then
+                Widget:setVisible(true)
+                local icon = item_operator:get_conf_mgr(data.di[i]):get_icon(data.di[i])
+                Widget:loadTexture(icon)
+            else
+                Widget:setVisible(false)
+            end
+        end)
     end
-
-    -- -- 掉落
-    -- self:getWidgetByName("Image_drop1",function(Widget)
-    --     -- Widget:setVisible(true)
-    --     -- Widget:loadTexture(ha.headIcon)
-    -- end)
-
 end
 ------------------------------------------------------------------------------
 return UIStages

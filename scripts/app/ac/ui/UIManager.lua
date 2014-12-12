@@ -11,9 +11,12 @@ end)
 ------------------------------------------------------------------------------
 function M:ctor(parent)
     self:setNodeEventEnabled(true)
+
     self:createTouchLayer(parent)
     parent:addChild(self)
-    self.uiLayers_={}
+    self.uiLayers_={}          -- 当前场景所有窗口
+    self.uiLayersByClass_={} -- 存放模态类型窗口
+    self.uiLayersByClass_["mode"]={}
 end
 ------------------------------------------------------------------------------
 -- 退出
@@ -35,19 +38,13 @@ function M:getUiLayers()
     return self.uiLayers_
 end
 ----------------------------------------------------------------
-function M:setTouchLayerEnabled(layer,touchEnabled,touchSwallowEnabled)
-    if touchSwallowEnabled == nil then touchSwallowEnabled = true end
-    layer:setTouchEnabled(touchEnabled)
-    layer:setTouchSwallowEnabled(touchSwallowEnabled)
-end
-----------------------------------------------------------------
 -- 触摸层
 function M:createTouchLayer(parent)
 
     self.touchLayer_ = display.newColorLayer(ccc4(0, 0, 0,0)):addTo(self,10000)
     -- parent:addChild(self,10000)
     -- 启用触摸
-    self:setTouchLayerEnabled(self:getTouchLayer(),false,false)
+    -- self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
     --触摸事件
     -- self:getTouchLayer():addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
     --     -- print(event.name)
@@ -57,6 +54,13 @@ function M:createTouchLayer(parent)
     --     end
     --     return true
     -- end)
+end
+----------------------------------------------------------------
+function M:setTouchLayerEnabled(layer,touchEnabled,touchSwallowEnabled)
+
+    if touchSwallowEnabled == nil then touchSwallowEnabled = true end
+    layer:setTouchEnabled(touchEnabled)
+    layer:setTouchSwallowEnabled(touchSwallowEnabled)
 end
 ------------------------------------------------------------------------------
 --[[
@@ -84,7 +88,7 @@ end
 --     self:close()
 -- end
 function M:openUI(params)
-    self:open(self:create(params))
+    return self:open(self:create(params))
 end
 
 ------------------------------------------------------------------------------
@@ -107,7 +111,12 @@ function M:create(params)
         ly = require(params.scriptFile).new(self)
     end
     assert(not self:isExist(ly.DialogID),string.format("DialogID = %d,is exist", ly.DialogID))
-    self:getTouchLayer():addChild(ly)
+    if params.is_no_modle then
+        self:addChild(ly,params.zorder or 0)
+    else
+        self:getTouchLayer():addChild(ly)
+    end
+
     ly:init(params or {})
 
     self:registerUI(ly)
@@ -121,7 +130,7 @@ end
 ------------------------------------------------------------------------------
 function M:open(uiLayer)
 
-    if not self:canDo(uiLayer) then return false end
+    if not self:canDo(uiLayer) then return nil end
 
     if uiLayer.open_close_effect == true then
         -- 特效
@@ -134,26 +143,45 @@ function M:open(uiLayer)
                 self.openstate = true
                 -- 暂停触摸
                 self:setTouchLayerEnabled(self:getTouchLayer(),false)
-                -- self:getTouchLayer():setOpacity(200)
+                self:getTouchLayer():setOpacity(200)
             end,
             onComplete = function()
                 -- 恢复触摸
                 self:setTouchLayerEnabled(self:getTouchLayer(),true)
-                uiLayer:setTouchLayerEnabled(true,false)
+                -- uiLayer:setTouchLayerEnabled(true,false)
                 self.openstate = false
             end,
         })
     else
-        self:getTouchLayer():setOpacity(200)
-        self:setTouchLayerEnabled(self:getTouchLayer(),true)
-        uiLayer:setTouchLayerEnabled(true,false)
+        -- 是否非模态
+        if not uiLayer.is_no_modle then
+            self:getTouchLayer():setOpacity(200)
+            -- 设置uimanager层
+            -- self:setTouchLayerEnabled(self:getTouchLayer(),true) -- 触碰吞噬
+            --  self:setTouchEnabled(true)
+            -- self:setTouchSwallowEnabled(true)
+            -- 设置ui层
+            -- uiLayer:setTouchEnabled(true)
+            -- uiLayer:setTouchSwallowEnabled(false)
+            -- uiLayer:setTouchLayerEnabled(true,false)
+
+            -- self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
+            -- self:setTouchLayerEnabled(self,true,false)
+        else
+            -- uiLayer:setTouchEnabled(true)
+            -- self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
+            --  uiLayer:setTouchLayerEnabled(true,false)
+
+        end
+
         self.openstate = false
     end
+    return uiLayer
 end
 ------------------------------------------------------------------------------
 --关闭相关
 function M:closeTopUI(pos)
-    local uiLayer = self:getTopUI()
+    local uiLayer = self:getTopModeUI()
     if not uiLayer then return false end
     if pos then
         -- 判断是否点击到界面
@@ -183,7 +211,7 @@ function M:close(uiLayer)
                 -- 关闭UI
                 self:clearByID(uiLayer.DialogID)
                 self:setTouchLayerEnabled(self:getTouchLayer(),true)
-                if self:getUIAmount()==0 then
+                if self:getUIAmount("mode")==0 then
                     -- 恢复触摸
                     self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
                     self:getTouchLayer():setOpacity(0)
@@ -195,7 +223,7 @@ function M:close(uiLayer)
       -- 关闭UI
         self:clearByID(uiLayer.DialogID)
         -- self:setTouchLayerEnabled(self:getTouchLayer(),true)
-        if self:getUIAmount()==0 then
+        if self:getUIAmount("mode")==0 then
             -- 恢复触摸
             self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
             self:getTouchLayer():setOpacity(0)
@@ -205,27 +233,26 @@ function M:close(uiLayer)
 end
 ------------------------------------------------------------------------------
 --
-function M:getTopUI()
-    if #self.uiLayers_==0 then
+function M:getTopModeUI()
+    local amount=#self.uiLayersByClass_["mode"]
+    if amount == 0 then
         return nil
     end
-    return self.uiLayers_[#self.uiLayers_]
+    return self.uiLayersByClass_["mode"][amount]
 end
 ------------------------------------------------------------------------------
 --
 function M:getUI(dialogID)
-    for i=1,#self.uiLayers_ do
-        local ly = self.uiLayers_[i]
-        if ly and ly.DialogID==dialogID then
-            return ly
-        end
-    end
-    return nil
+    return self.uiLayers_[dialogID]
 end
 ------------------------------------------------------------------------------
 --
-function M:getUIAmount()
-    return #self.uiLayers_
+function M:getUIAmount(typename)
+    if typename == "mode" then
+        return #self.uiLayersByClass_[typename]
+    else
+        return #self.uiLayers_
+    end
 end
 ------------------------------------------------------------------------------
 --
@@ -247,31 +274,36 @@ end
 ------------------------------------------------------------------------------
 --
 function M:registerUI(uiLayer)
-    --self.uiLayers_[uiLayer.DialogID]=uiLayer
-    table.insert(self.uiLayers_,uiLayer)
+    if not uiLayer.is_no_modle then
+        table.insert(self.uiLayersByClass_["mode"],uiLayer)
+    end
+    assert(self.uiLayers_[uiLayer.DialogID]==nil,"registerUI() - failed : ui is exist! id = "..uiLayer.DialogID)
+    self.uiLayers_[uiLayer.DialogID]=uiLayer
 end
 
 ------------------------------------------------------------------------------
 --清理相关
 function M:clearTopUI()
-    local  ly = self:getTopUI()
+    local  ly = self:getTopModeUI()
     if ly then
         self:clearByID(ly.DialogID)
     end
 end
 --
 function M:clearByID(dialogID)
-    for i=1,#self.uiLayers_ do
-        local ly = self.uiLayers_[i]
-        if ly and ly.DialogID==dialogID then
-            ly:removeFromParent()
-            self.uiLayers_[i]=nil
+    -- self.uiLayersByClass["mode"]
+    for i=1,#self.uiLayersByClass_["mode"] do
+        local dlg = self.uiLayersByClass_["mode"][i]
+        if dlg and dlg.DialogID == dialogID then
             if DEBUG_BATTLE.showUILayerInfo then
-                printf("close uiLayer dialogID = %d ", ly.DialogID)
+                printf("close uiLayer dialogID = %d ", dlg.DialogID)
             end
+            dlg:removeFromParent()
+            self.uiLayersByClass_["mode"][i]=nil
             break
         end
     end
+    self.uiLayers_[dialogID]=nil
 end
 --
 function M:clear()

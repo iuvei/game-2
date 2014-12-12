@@ -17,10 +17,10 @@ return function ( player, args )
 		return
 	end
 
-	item_operator:update( player, args.result_item)
+	item_operator:update(args.result_item)
 	for k,v in ipairs(args.stuff) do
 		-- print(k,v)
-		item_operator:update( player, v)
+		item_operator:update(v)
 	end
 	ui_helper:dispatch_event({msg_type="SC_Compound",args=args})
 end

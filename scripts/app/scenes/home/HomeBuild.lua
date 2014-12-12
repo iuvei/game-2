@@ -17,6 +17,7 @@ function HomeBuild:ctor(buildId,scene)
     self.name_=buildData.name
     -- self.resTitleId_=
     self.datas_=configMgr:getConfig("home"):getHomeRes(buildId)
+    self.info_=buildData
 end
 function HomeBuild:contains(worldPos)
     if self.rect_:containsPoint(worldPos) then

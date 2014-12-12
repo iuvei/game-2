@@ -19,7 +19,8 @@ function geme_attr.gen_attr( data )
 		Evd			= data.Evd or 0,	-- 闪避率
 		Crt			= data.Crt or 0,	-- 暴击率
 		Crtdef		= data.Crtdef or 0,	-- 抗暴击率
-		Block		= data.Block or 0,	-- 格挡率
+		DecDef		= data.DecDef or 0, -- 破防伤害
+		DecDefRed	= data.DecDefRed or 0, -- 破防伤害减免
 
 		MaxRage		= data.MaxRage or 0,	-- 最大怒气
 		MaxHP		= data.MaxHP or 0,	-- 最大hp
@@ -59,14 +60,16 @@ function geme_attr.gen_hero_attr( data )
 		Speed	= data.Speed or 0,	-- 攻击速度
 		SpeedInc	= data.SpeedInc or 0,
 		-- 二级属性
-		MaxRage		= data.MaxRage or 0,	-- 最大怒气
-		MaxHP		= data.MaxHP or 0,	-- 最大hp
-		MaxMP		= data.MaxMP or 0,	-- 最大mp
 		Hit			= data.Hit or 0,	-- 命中率
 		Evd			= data.Evd or 0,	-- 闪避率
 		Crt			= data.Crt or 0,	-- 暴击率
 		Crtdef		= data.Crtdef or 0,	-- 抗暴击率
-		Block		= data.Block or 0,	-- 格挡率
+		DecDef		= data.DecDef or 0, -- 破防伤害
+		DecDefRed	= data.DecDefRed or 0, -- 破防伤害减免
+
+		MaxRage		= data.MaxRage or 0,	-- 最大怒气
+		MaxHP		= data.MaxHP or 0,	-- 最大hp
+		MaxMP		= data.MaxMP or 0,	-- 最大mp
 		PhysicsAtk	= data.PhysicsAtk or 0,	-- 物理攻击力
 		PhysicsDef	= data.PhysicsDef or 0,	-- 物理防御力
 		MagicAtk	= data.MagicAtk or 0,	-- 魔法攻击力

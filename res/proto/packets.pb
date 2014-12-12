@@ -1,5 +1,5 @@
 
-Ñ
+ù
 packets.protomessage.packets"#
 Packet
 cmd (
@@ -9,13 +9,13 @@
 servertime ("$
 CS_Login
 uid (
-acc (	"›
+acc (	"ß
 SC_Login
 success (
 playerid (6
 content (2%.message.packets.SC_Login.contentData
 errCode (
-errMsg (	‘
+errMsg (	û
 contentData
 aid (
 sid (
@@ -25,28 +25,24 @@ servertime ("$
 RMB (
 money (
 
-createTime (	
-lastLoginTime	 (	
-lastLogoutTime
- (	
+max_vigour (
+vigour	 (
+rvt
+ ("
 
-max_vigour (
-vigour ("
-	CS_Logout"-
-	SC_Logout
-success (
-errCode ("8
+CS_AskInfo
+type ("
+
+CS_Command
+content (	"8
 SC_MSG
 errCode (
 msg (	
-showtype ("@
-S2C_BroadCast
+showtype ("?
+SC_BroadCast
 type (
 times (:3
-content (	"4
-CS_AskCreateHero
-playerid (
-heroid ("L
+content (	"L
 
 SC_NewHero
 result (.
@@ -66,42 +62,31 @@ SC_NewHero
 	skillinfo
 
 templateId (
-level ("
-CS_AskHeros
-playerid ("\
+level ("J
 SC_AskHeros
-result (
-playerid (+
-heros (2.message.packets.SC_HeroInfo"$
-CS_AskFormations
-playerid ("1
+result (+
+heros (2.message.packets.SC_HeroInfo"1
 SC_FormationInfo
 index (
 dataId ("I
 SC_AskFormations5
 
-formations (2!.message.packets.SC_FormationInfo"i
-CS_UpdateFormation
-playerid (
-pos (4
-	formation (2!.message.packets.SC_FormationInfo"\
+formations (2!.message.packets.SC_FormationInfo"W
+CS_UpdateFormation
+pos (4
+	formation (2!.message.packets.SC_FormationInfo"\
 SC_FormationResult
 errocode (4
-	formation (2!.message.packets.SC_FormationInfo"!
-CS_AskItemBag
-playerid ("¨
+	formation (2!.message.packets.SC_FormationInfo" 
 SC_AskItemBag
-result (
-playerid (5
-items (2&.message.packets.SC_AskItemBag.ItemBag¡
+result (5
+items (2&.message.packets.SC_AskItemBag.ItemBagÒ
 ItemBag,
 equips (2.message.packets.SC_ItemInfo.
-comitems (2.message.packets.SC_ItemInfo*
-gems (2.message.packets.SC_ItemInfo,
-debris (2.message.packets.SC_ItemInfo"4
-CS_AskCreateItem
-playerid (
-dataid ("H
+comitems (2.message.packets.SC_ItemInfo.
+material (2.message.packets.SC_ItemInfo*
+gems (2.message.packets.SC_ItemInfo,
+debris (2.message.packets.SC_ItemInfo"H
 
 SC_NewItem
 result (*
@@ -126,14 +111,35 @@ SC_UseItem
 SC_Compound
 result (1
 result_item (2.message.packets.SC_ItemInfo+
-stuff (2.message.packets.SC_ItemInfo"5
+stuff (2.message.packets.SC_ItemInfo"8
+CS_EquipEnhance
+	hero_guid (
+
+equip_guid ("!
+SC_EquipEnhance
+result ("T
+SC_UpdateHeroEquip
+	hero_guid (+
+equip (2.message.packets.SC_ItemInfo"Ç
+SC_UpdateKeys
+	hero_guid (5
+kvs (2(.message.packets.SC_UpdateKeys.key_value'
+	key_value
+key (	
+value ("=
+SC_AskStages-
+stages (2.message.packets.SC_StageInfo"8
+SC_StageInfo
+
+Id (
+count (
+stars ("5
 CS_FightBegin
 stageId (
-client_time ("4
+client_time ("0
 SC_FightBegin
-stageId (
-
-begin_time ("á
+stageId (
+result ("á
 CS_FightEnd
 stageId (
 win (

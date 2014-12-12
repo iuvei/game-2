@@ -41,7 +41,6 @@ function HeroView:ctor(model,params)
         :addEventListener(cls.BEFORE_EVENT, handler(self, self.onBefore_))
         :addEventListener(cls.BEATTACK_EVENT, handler(self, self.onBeAttack_))
         -- :addEventListener(cls.BEATTACK_OVER_EVENT, handler(self, self.onBeAttackOver_))
-
     -- 图片资源
     params.img = "#"..configMgr:getConfig("heros"):GetArmArtById(model:getArmId(),"idle",model:isEnemy())
     -- 父类
@@ -91,7 +90,6 @@ end
 ------------------------------------------------------------------------------
 -- 退出
 function HeroView:onExit()
-
     local headIcon = configMgr:getConfig("heros"):GetHerosArt(self:GetModel():getArtId()).headIcon
     display.removeSpriteFrameByImageName(headIcon)
     -- 最后删除

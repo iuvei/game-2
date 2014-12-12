@@ -56,12 +56,20 @@ function player:init_basedata(basedata)
 end
 ----------------------------------------
 function player:get_basedata()
+	if not self.m_properties then
+		return nil
+	end
 	return self.m_properties:get_info()
 end
 ----------------------------------------
 -- 玩家编号
 function player:get_playerid()
 	return self.m_properties:get_playerid()
+end
+----------------------------------------
+function player:set_basedata( key, value )
+	self.m_properties:setkey(key,value)
+	-- dump(self.m_properties)
 end
 ----------------------------------------
 -- 得到服务器的时间

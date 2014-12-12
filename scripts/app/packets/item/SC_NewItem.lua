@@ -13,6 +13,6 @@ return function ( player, args )
 		return
 	end
 
-	item_operator:update( player, args.info)
+	item_operator:update(args.info)
 	printInfo("SC_NewItem update dataId:%d guid:%d num:%d",args.info.dataId,args.info.GUID,args.info.num)
 end

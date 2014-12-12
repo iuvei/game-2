@@ -104,6 +104,9 @@ function Map:createView(parent)
     display.addSpriteFramesWithFile(Res.plstun , Res.imgstun)
     display.addSpriteFramesWithFile(Res.pltrap , Res.imgtrap)
     display.addSpriteFramesWithFile("effect/shield.plist" , "effect/shield.png")
+    display.addSpriteFramesWithFile("common/num_red.plist" , "common/num_red.png")
+    display.addSpriteFramesWithFile("common/num_green.plist" , "common/num_green.png")
+    display.addSpriteFramesWithFile("common/num_orange.plist" , "common/num_orange.png")
 
     -- 背景
     self.bgLayer_ = require("app.scenes.battle.bgLayer").new(self:getId()):addTo(parent)
@@ -277,7 +280,7 @@ function Map:spawnEnemy(parent)
     local config = configMgr:getConfig("stages")
     local mapMonster = config:getMonstersByStageId(self:getId())
 
-    local fid = mapMonster[1].Fid
+    local fid = mapMonster.Fid
     -- local fid = math.random(1,10)
 
     local count = 0
@@ -287,9 +290,10 @@ function Map:spawnEnemy(parent)
         if not param then return end
 
         count = count + 1
-        local monster = mapMonster[count]
+        local monsterid = mapMonster["heroId"..count]
+        -- print("···",monsterid,index)
         -- 没有配置
-        if monster == nil then return end
+        if monsterid == nil or monsterid == -1 then return end
 
         -- 得到坐标
         local pos = Formation:indexToPos( index, {
@@ -299,7 +303,7 @@ function Map:spawnEnemy(parent)
         })
 
         -- 创建武将，数据从表里面生成
-        local data = configMgr:getConfig("heros"):GetHeroDataById(monster.HeorId)
+        local data = configMgr:getConfig("heros"):GetHeroDataById(monsterid)
         data.campId = MapConstants.ENEMY_CAMP
         self.ObjectManager_:newObject( parent, "hero", data,{
             x = pos.x,

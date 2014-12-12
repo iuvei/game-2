@@ -6,9 +6,10 @@ local comitem_art = {
 	[1000]={icon="item/s_16002.png"},
 	[1001]={icon="item/s_16022.png"},
 	[1002]={icon="item/silver.png"},
-	[1003]={icon="item/s_16018.png"},
-	[1004]={icon="item/s_16018.png"},
+	[1003]={icon="item/s_16016.png"},
+	[1004]={icon="item/s_16001.png"},
 	[1005]={icon="item/s_16018.png"},
+	[1006]={icon="item/s_16009.png"},
 }
 return comitem_art
 

@@ -15,11 +15,11 @@ return function ( player, args )
 		return
 	end
 
-	item_operator:update( player, args.item)
+	item_operator:update(args.item)
 	printInfo("SC_UseItem update item dataId:%d guid:%d num:%d",args.item.dataId,args.item.GUID,args.item.num)
 
-	if args.hero.GUID > 0 then
-		player:get_mgr("heros"):update(args.hero)
-	end
+	-- if args.hero.GUID > 0 then
+	-- 	player:get_mgr("heros"):update(args.hero)
+	-- end
 	ui_helper:dispatch_event({msg_type="SC_UseItem",args=args})
 end

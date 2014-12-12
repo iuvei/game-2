@@ -13,6 +13,8 @@ return {
 	{name="formations", file=".formation.formation_mgr"},
 	{name="equip", 		file=".item.equip_mgr"},
 	{name="comitem", 	file=".item.comitem_mgr"},
+	{name="material", 	file=".item.material_mgr"},
 	{name="gem", 		file=".item.gem_mgr"},
 	{name="debris", 	file=".item.debris_mgr"},
+	{name="stage", 		file=".stage.stage_mgr"},
 }

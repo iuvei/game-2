@@ -86,7 +86,7 @@ function HeroOperateCommand:clearExpireObj()
         end
     end
     for i,v in ipairs(delObjLst) do
-        self.map_:removeObject(v)
+         self.map_:removeObject(v)
     end
 end
 --------------------------------------------------------

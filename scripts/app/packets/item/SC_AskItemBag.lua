@@ -12,7 +12,7 @@ return function ( player, args )
 		player:get_mgr("comitem"):set_data(args.items.comitems)
 		player:get_mgr("gem"):set_data(args.items.gems)
 		player:get_mgr("debris"):set_data(args.items.debris)
-
+		player:get_mgr("material"):set_data(args.items.material)
 	-- end
 
 	-------------------------------

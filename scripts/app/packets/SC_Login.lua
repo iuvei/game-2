@@ -16,24 +16,42 @@ return function ( player, args )
 		-------------------------------
 		-- 请求得到英雄数据
 		printInfo("ask heros")
-        player:send("CS_AskHeros",{
-        	playerid = player:get_playerid()
-        })
+        player:send("CS_AskInfo",{ type = 1 })
         -------------------------------
         --请求得到背包
         printInfo("ask itembag")
-        player:send("CS_AskItemBag",{
-            playerid = player:get_playerid()
-        })
+        player:send("CS_AskInfo",{ type = 2 })
         -------------------------------
         --请求得到阵形数据
         printInfo("ask formation")
-        player:send("CS_AskFormations",{
-        	playerid = player:get_playerid()
-        })
+        player:send("CS_AskInfo",{ type = 3 })
         -------------------------------
-        --
+        -- 关卡数据
+        printInfo("ask stage")
+        player:send("CS_AskInfo",{ type = 4 })
 
+        -------------------------------
+        -- test
+            PLAYER:send("CS_Command",{
+                content = "createhero 1001"
+            })
+            PLAYER:send("CS_Command",{
+                content = "createhero 2001"
+            })
+            PLAYER:send("CS_Command",{
+                content = "createhero 3001"
+            })
+            PLAYER:send("CS_Command",{
+                content = "createhero 4001"
+            })
+            PLAYER:send("CS_Command",{
+                content = "createhero 5001"
+            })
+            PLAYER:send("CS_Command",{
+                content = "createhero 6001"
+            })
+        -- test
+        -------------------------------
 
         -- -------------------------------
         -- -- 成功 进入主页

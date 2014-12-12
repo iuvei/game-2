@@ -209,7 +209,7 @@ function DestroyedBehavior:bindMethods(object)
             end
         end
         -- 飘血
-        EffectChangeHP:run(object.view_,increaseVal)
+        EffectChangeHP:run(object.view_,increaseVal,{zorder=MapConstants.MAP_Z_2_0})
     end
     self:bindMethod(object,"increaseHp", increaseHp)
     ----------------------------------------

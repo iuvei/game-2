@@ -256,6 +256,53 @@ function getImageNum( num , imagePath , params )
 
     return final_sprite , offset , height
 end
+-- 图片为不规则
+function getImageNum_( num , frist_name , params )
+	if type(params) ~= "table" then params = {} end
+	local decimals = params.decimals and true or false
+	if not decimals then
+		num = math.round( num )
+	end
+	local count_str=""
+	if num < 0 then
+		count_str = "-"..tostring( math.abs(num) )
+	else
+		count_str = "+"..tostring( math.abs(num) )
+	end
+
+	-- 创建图片
+	local width=0
+	local height=0
+	local len = string.len( count_str )
+	local frames = {}
+	for i = 1 , len do
+		local label = ( string.sub( count_str , i , i ) == "." ) and 10 or ( string.sub( count_str , i , i ) )
+        local sprite = display.newSprite("#"..frist_name..tostring(label)..".png")
+        assert(sprite ~= nil,"getImageNum_() failed !")
+		frames[#frames+1]=sprite
+		width = width + sprite:getContentSize().width
+		height=sprite:getContentSize().height
+	end
+	-- local sprite = display.newSprite("#"..frist_name.."0.png")
+
+    local skewing =  params.offset or 0
+    local offset = 0
+    -- 位置调整
+    local render = CCRenderTexture:create( width ,height )
+	render:begin()
+    for i = 1 , #frames do
+        local sprite =frames[i]
+        display.align(sprite, display.LEFT_BOTTOM , offset , 0)
+        offset = offset + sprite:getContentSize().width + skewing
+        sprite:visit()
+    end
+    render:endToLua()
+
+    local final_sprite = CCSprite:createWithTexture( render:getSprite():getTexture() )
+    final_sprite:setFlipY(true)
+
+    return final_sprite , offset , height
+end
 -- -- 获取CID对应的类型
 -- function getCidType( _cid )
 --     return DATA_IDTYPE:getType( _cid )

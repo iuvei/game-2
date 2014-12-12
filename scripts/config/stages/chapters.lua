@@ -4,28 +4,16 @@
 
 local chapters = {
 	[1]={
-		{MapName="黄金势力",StagesTypeId=1,ChapterResId=1001},
-		{MapName="黄金势力（精英）",StagesTypeId=2,ChapterResId=1002},
+		{MapName="黄金势力",StagesTypeId=1},
+		{MapName="黄金势力（精英）",StagesTypeId=2},
 	},
 	[2]={
-		{MapName="董卓之乱",StagesTypeId=3,ChapterResId=2001},
-		{MapName="董卓之乱精英",StagesTypeId=4,ChapterResId=2002},
+		{MapName="董卓之乱",StagesTypeId=3},
+		{MapName="董卓之乱精英",StagesTypeId=4},
 	},
 	[3]={
-		{MapName="新野",StagesTypeId=5,ChapterResId=3001},
+		{MapName="新野",StagesTypeId=5},
 	},
 }
-
-local pairs = pairs
-for i,v in pairs(chapters) do
-	local item = v
-	for j=1, #item do
-		item[j].__index = item[j]
-		if j < #item then
-			setmetatable(item[j+1], item[j])
-		end
-	end
-end
-
 return chapters
 

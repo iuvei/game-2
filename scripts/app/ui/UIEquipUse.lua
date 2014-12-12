@@ -70,6 +70,7 @@ end
 
 function UIEquipUse:show_info(state,equip_info)
     -- 显示物品信息
+
     local info_ = item_operator:get_equip_info( equip_info )
     self._info = info_
     local w=UIHelper:seekWidgetByName(self._root_info,"info")
@@ -83,6 +84,8 @@ function UIEquipUse:show_info(state,equip_info)
 
     w=UIHelper:seekWidgetByName(self._root_info,"ItemNum")
     w:setEnabled(false)
+    local need_condition=UIHelper:seekWidgetByName(self._root_info,"LabelCondition")
+    need_condition:setEnabled(false)
     -- 穿上的不显示数量
     if state ~= 2 and info_.num and info_.num > 0 then
         w:setEnabled(true)
@@ -107,10 +110,10 @@ function UIEquipUse:show_info(state,equip_info)
         elseif self._parmas.state == 0 then -- 没有装备
             local conf_output = configMgr:getConfig("equip"):get_output(self._info.dataId)
             conf_compound = configMgr:getConfig("compound"):get_next_info(self._info.dataId)
-            if conf_compound then
-                self._op_state = 2
-            elseif conf_output then
+            if conf_output then
                  self._op_state = 1
+            elseif conf_compound then
+                self._op_state = 2
             end
         end
         self._conf_compound = conf_compound
@@ -120,6 +123,12 @@ function UIEquipUse:show_info(state,equip_info)
         elseif self._op_state == 2 then
             --todo
             self._btn:setTitleText(StringData[100000038])
+            -- stre need level
+            if conf_compound.elevel > self._info.elevel then
+                 need_condition:setColor(display.COLOR_RED)
+            end
+            need_condition:setEnabled(true)
+            need_condition:setText(string.format(StringData[100000045],conf_compound.elevel))
         else
             self._btn:setTitleText(StringData[890000001])
         end
@@ -144,7 +153,7 @@ function UIEquipUse:ListenGetWay()
                                                 self:ChangSubDlg("compound")
                                             end
                                         elseif self._content_up:isEnabled() then
-                                            item_operator:compound( PLAYER, self._conf_compound.dataId ,self._parmas.hero_guid)
+                                            item_operator:compound(self._parmas.hero_guid,self._conf_compound.dataId)
                                         end
                                     end
                                 end)
@@ -253,15 +262,9 @@ function UIEquipUse:InitialUp()
             local sub_id = self._conf_compound.stuff_id[i]
             if sub_id > 0 then
                 -- 拥有的合成材料个数
-                local datas=item_operator:get_mgr(PLAYER,sub_id):get_data()
+                local datas=item_operator:get_mgr(sub_id):get_data()
                 local need_num = self._conf_compound.stuff_num[i]
-                local sub_num = 0
-
-                for k,v in pairs(datas) do
-                     if v:get_info().dataId == sub_id then
-                         sub_num = sub_num +1
-                     end
-                end
+                local sub_num = item_operator:get_num_by_dataId(sub_id)
                 -- 创建子物品
                 local item_sub =self._item_main:clone()
                 local x,y=UIHelper:seekWidgetByName(self._content_up,"ImagePos"..i):getPosition()
@@ -296,6 +299,7 @@ function UIEquipUse:InitialUp()
         ctrl_name:setText(self._conf_compound.money)
         self.is_init_up=true
         self:ListenCompound()
+
     end
 end
 function UIEquipUse:UpdataCompound()
@@ -316,6 +320,8 @@ function UIEquipUse:ProcessNetResult(params)
         else
             --todo
         end
+    elseif params.msg_type == "SC_NewHero" then
+
     end
 end
 ------------------------------------------------------------------------------

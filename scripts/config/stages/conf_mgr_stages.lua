@@ -41,6 +41,7 @@ function conf_mgr_stages:getStage( Id )
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getStageRes( Id )
+     -- package.loaded["config.stages.stageRes"] = nil
     return require("config.stages.stageRes")[math.floor(Id/100)][Id%100]
 end
 ------------------------------------------------------------------------------
@@ -55,37 +56,36 @@ end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getMonstersByStageId( Id )
     local stage = self:getStage(Id)
-    return self:getMonsters(stage.monstersTypeId)
+    return self:getMonsters(stage.mId)
 end
 ------------------------------------------------------------------------------
-function conf_mgr_stages:getMonsters( typeId )
-    return require("config.stages.monsters")[typeId]
+function conf_mgr_stages:getMonsters( id )
+    return require("config.stages.monsters")[id]
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getMasterByStageId( Id )
     local stage = self:getStage(Id)
-    local ms = self:getMonsters(stage.monstersTypeId)
-    for i=1,#ms do
-        if ms[i].isMaster == 1 then
-            return ms[i].HeorId
-        end
+    local ms = self:getMonsters(stage.mId)
+    return ms["heroId"..ms.master_pos]
+end
+------------------------------------------------------------------------------
+function conf_mgr_stages:getMonster_walk( Id,callback )
+    local stage = self:getStage(Id)
+    local ms = self:getMonsters(stage.mId)
+    for i=1,5 do
+        callback(i, ms["heroId"..i], (ms.master_pos == i))
     end
-    return 0
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getFormationByStageId( Id )
     local stage = self:getStage(Id)
-    local ms = self:getMonsters(stage.monstersTypeId)
-    return ms[1].Fid
-end
-------------------------------------------------------------------------------
-function conf_mgr_stages:getDepletes( Id )
-    return require("config.stages.depletes")[Id]
+    local ms = self:getMonsters(stage.mId)
+    return ms.Fid
 end
 ------------------------------------------------------------------------------
 function conf_mgr_stages:getDepleteByStageId( stageId )
     local stage = self:getStage(stageId)
-    return self:getDepletes(stage.DepleteId)
+    return stage.d_vigour
 end
 ------------------------------------------------------------------------------
 return conf_mgr_stages

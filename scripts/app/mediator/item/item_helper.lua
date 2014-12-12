@@ -60,4 +60,8 @@ end
 function item_helper.get_serial_index(serial)
 	return  math.floor(serial%1000)
 end
+
+function item_helper.gen_serial(class,quality,type,index)
+	return class*10000000+quality*100000+type*1000+index
+end
 return item_helper

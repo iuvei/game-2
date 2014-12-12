@@ -104,6 +104,7 @@ end
 -- item 相关
 function UIListView:InitialItem()
     self.lstCtrlItem = UIHelper:seekWidgetByName(self.scrollView_, "PanelItem")
+    self.lstCtrlItem:setEnabled(false)
 end
 function UIListView:SetItemTemp(tempItem)
     self.lstCtrlItem = tempItem

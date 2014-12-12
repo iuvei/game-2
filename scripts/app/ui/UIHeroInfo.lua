@@ -292,6 +292,17 @@ function UIHeroInfo:ListenEquip()
                                     end
                                 end)
     end
+    local btn = self.rootHeroEquip:getChildByName("BtnStre")
+    btn:addTouchEventListener(function(sender, eventType)
+                                    if eventType == self.ccs.TouchEventType.ended then
+                                            self:openUI({
+                                                        uiScript=require("app.ui.UIEquipMake"),
+                                                        ccsFileName="UI/equip_make.json",
+                                                        params={hero_info=self.heroinfo}
+                                                    })
+
+                                    end
+                                end)
 end
 function UIHeroInfo:UpdataHeroEquip()
 
@@ -308,12 +319,12 @@ function UIHeroInfo:UpdataHeroEquip()
 
     for k,v in ipairs(self._equip_solts ) do
         v:getChildByName("sign"):setEnabled(false)
-
+        -- 0 ＝ 无可穿装备，1 ＝ 可穿装备，2 ＝ 已装备
+        local equip_info = get_equip( self.heroinfo.equips, k )
         if v.state == 0 or v.state == 1 then
-            local equip_info = get_equip( self.heroinfo.equips, k )
             if equip_info then -- 已有装备
                 equip_info = item_operator:get_equip_info( equip_info )
-                v.equip_info = {GUID = equip_info.GUID, dataId = equip_info.dataId, num = equip_info.num}--equip_info
+                v.equip_info = equip_info--equip_info
                 v.state = 2
                 self:createUINode("ImageView",{
                         name    = "EquipImg"..k,
@@ -323,7 +334,7 @@ function UIHeroInfo:UpdataHeroEquip()
                 -- 默认显示图片
                 local equip_id = hero_helper:getconf_require_equip( self.heroinfo.dataId )[k]
                 equip_info = item_operator:get_equip_info({dataId = equip_id,GUID = equip_id,num = 0})
-                v.equip_info = {GUID = equip_info.GUID, dataId = equip_info.dataId, num = equip_info.num}
+                v.equip_info = equip_info
                 v.state = 0
 
                self:createUINode("ImageView",{
@@ -334,13 +345,20 @@ function UIHeroInfo:UpdataHeroEquip()
                 -- 检测是否有可以穿戴的装备
                 equip_info = self:GetCanUseEquipByPos(v.equip_pos)
                 if equip_info then -- can use
-                    v.equip_info = {GUID = equip_info.GUID, dataId = equip_info.dataId, num = equip_info.num}
+                    v.equip_info = equip_info
                     v.state = 1
                     v:getChildByName("sign"):setEnabled(true)
                 end
 
                 -- 检测是否可合成则可穿戴
                 -- TODO
+            end
+        -- 如果已是装备状态就更新
+        elseif v.state == 2 then
+            local equip_img = v:getChildByName("EquipImg"..k)
+            if equip_img and equip_info then
+                equip_info = item_operator:get_equip_info( equip_info )
+                equip_img:loadTexture(equip_info.icon)
             end
         end
     end
@@ -359,8 +377,10 @@ end
 function UIHeroInfo:ProcessNetResult(params)
     if params.msg_type == "SC_UseItem"
         or params.msg_type == "SC_Compound"
+        or params.msg_type == "SC_EquipEnhance"
         then
         if params.args.result ~= 0 then
+            self:ListenEquip()
             self:UpdataHeroEquip()
         end
     end

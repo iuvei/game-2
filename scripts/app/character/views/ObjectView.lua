@@ -116,7 +116,7 @@ end
 ------------------------------------------------------------------------------
 --被攻击的效果特效
 function ObjectView:createImpactEffect(resEffectId,isRepeatPlay,effectPoint)
-    assert(resEffectId~=1)
+    -- assert(resEffectId~=1)
     local resEffectData = configMgr:getConfig("skills"):GetSkillEffectByEffectId(resEffectId)
     assert(resEffectData~=nil,string.format("createBuffEff() - resEffectData is nil,resEffectId = %d",resEffectId))
     if self.impactSprite_[resEffectId] then

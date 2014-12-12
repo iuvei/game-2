@@ -21,6 +21,8 @@ function config_mgr:getConfig(type)
         return require("config.equip.conf_mgr_equip")
     elseif type == "comitem" then
         return require("config.comitem.conf_mgr_comitem")
+    elseif type == "material" then
+        return require("config.material.conf_mgr_material")
     elseif type == "gem" then
         return require("config.gem.conf_mgr_gem")
     elseif type == "debris" then

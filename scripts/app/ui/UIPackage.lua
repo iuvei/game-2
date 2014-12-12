@@ -2,6 +2,7 @@
 -- Author: wangshaopei
 -- Date: 2014-10-22 16:44:53
 --
+-- kindId : 1=装备 2=消耗品 3=材料 4=碎片 5＝宝石
 local UIListView = require("app.ac.ui.UIListViewCtrl")
 local UIButtonCtrl = require("app.ac.ui.UIButtonCtrl")
 local UIUtil = require("app.ac.ui.UIUtil")
@@ -17,7 +18,7 @@ UIPackage.DialogID=uiLayerDef.ID_Package
 ------------------------------------------------------------------------------
 function UIPackage:ctor(UIManager)
     UIPackage.super.ctor(self,UIManager)
-    self._cur_options={}
+    self._cur_options={item_type=nil,info=nil}
 end
 ------------------------------------------------------------------------------
 -- 退出
@@ -28,7 +29,7 @@ function UIPackage:onEnter()
     UIPackage.super.onEnter(self)
 end
 function UIPackage:init( params )
-    --self.heroinfo = PLAYER:get_mgr_heros():get_hero_by_GUID(params.GUID)
+     -- self.heroinfo = PLAYER:get_mgr_heros():get_hero_by_GUID(params.GUID)
     UIPackage.super.init(self,params)
     self._channelBtns={
         UIButtonCtrl.new(self:getWidgetByName("all")),
@@ -76,24 +77,33 @@ function UIPackage:Listen()
     btn:addTouchEventListener(function(sender, eventType)
                                     local ccs = self.ccs
                                     if eventType == ccs.TouchEventType.ended then
-                                        self:PushBtn1(self._cur_options.item_type)
+                                        self:PushBtn1()
                                     end
                                 end)
+    -- local btn=UIHelper:seekWidgetByName(self._item_info_root, "ButtonUse")
+    -- btn:addTouchEventListener(function(sender, eventType)
+    --                                 local ccs = self.ccs
+    --                                 if eventType == ccs.TouchEventType.ended then
+    --                                     self:PushBtn1(self._cur_options.item_type)
+    --                                 end
+    --                             end)
 end
-function UIPackage:PushBtn1(item_type)
+function UIPackage:PushBtn1()
+    -- kindId : 1=装备 2=消耗品 3=材料 4=碎片 5＝宝石
     local options = self._cur_options
-    if item_type == 2 then -- 装备
+
+    if options.info.kindId == 1 then -- 装备
         -- PLAYER:send("CS_UseEquip",{
         --         op          = 0, -- 0:穿 1：卸下
         --         GUID        = options.GUID,
         --         HeroGUID    = 1,
         --     })
-    elseif item_type == 4 then -- 宝石
+    elseif options.info.kindId == 5 then -- 宝石
 
-    elseif item_type == 3 then -- 材料
-
-    elseif item_type == 5 then -- 消耗品
-
+    elseif options.info.kindId == 4 or options.info.kindId == 2 then -- 碎片 -- 消耗品
+        PLAYER:send("CS_UseItem",{
+                GUID        = options.info.GUID,
+            })
     else
 
     end
@@ -106,9 +116,9 @@ function UIPackage:UpdataList(options)
         self:GetItem(options.ItemType,data__)
     elseif options.ItemType == 4 then -- 宝石
         self:GetItem(options.ItemType,data__)
-    elseif options.ItemType == 3 then --材料 消耗品
+    elseif options.ItemType == 3 then --碎片
         self:GetItem(options.ItemType,data__)
-    elseif options.ItemType == 5 then
+    elseif options.ItemType == 5 then --消耗品
         self:GetItem(options.ItemType,data__)
     else
         self:GetItem(2,data__)
@@ -161,13 +171,18 @@ function UIPackage:UpdataItemInfo(options)
     end
     local ctrl_gem_inlay = UIHelper:seekWidgetByName(self._item_info_root,"PanelGemInlay")
     ctrl_gem_inlay:setEnabled(false)
+    local btn=UIHelper:seekWidgetByName(self._item_info_root, "btn1")
+    btn:setEnabled(false)
+
+    -- kindId : 1=装备 2=消耗品 3=材料 4=碎片 5＝宝石
     if options.kindId == 1 then -- 装备
         ctrl_gem_inlay:setEnabled(true)
         if info_ then
 
         end
-    else
-
+    elseif options.kindId == 2 then -- 消耗品
+        btn:setEnabled(true)
+        btn:setTitleText(StringData[100000046])
     end
 end
 function UIPackage:SetIcon(item,info)
@@ -250,7 +265,16 @@ function UIPackage:_AddItem(index,listCtrl,tplItem)
     end
     return item
 end
-
+function UIPackage:ProcessNetResult(params)
+    if params.msg_type == "SC_UseItem" then
+        if params.args.result ~= 0 then
+            print("···SC_UseItem ok")
+            -- =args.item.dataId
+            self:ChannelConvertion(self._cur_options.item_type)
+            self:ShowItemInfo(false)
+        end
+    end
+end
 
 ------------------------------------------------------------------------------
 return UIPackage

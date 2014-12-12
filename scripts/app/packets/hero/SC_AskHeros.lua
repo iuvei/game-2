@@ -5,7 +5,7 @@
 
 return function ( player, args )
 
-	-- print("SC_AskHeros playerid",args.playerid,args.result)
+	-- print("SC_AskHeros ",args.result)
 
 	if args.result == 1 then
 		-- 放到全局英雄数据

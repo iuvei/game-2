@@ -12,36 +12,20 @@ function M:ctor(UIManager)
     self.UIManager_ = UIManager
     self:setNodeEventEnabled(true)
     self.touchGroup_ = nil
-
+    self._root_widget=nil
     self:CCSDefine()
-end
-------------------------------------------------------------------------------
---
-function M:init( params )
-    if params.ccsFileName == nil or params.ccsFileName == "" then return false end
-
-    self.open_close_effect = params.open_close_effect -- 是否有开启关闭特效
-    if self.open_close_effect == nil then
-        self.open_close_effect = true
-    end
-
-    -- 阵形界面
-    self:setTouchGroup( TouchGroup:create():addTo(self) )
-    local widget = GUIReader:shareReader():widgetFromJsonFile(params.ccsFileName)
-    self:GetTouchGroup():addWidget(widget)
-    self:ListenClose()
 end
 ------------------------------------------------------------------------------
 -- 退出
 function M:onExit()
 end
 function M:onEnter()
-    self:setTouchEnabled(true)
     self:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
         -- print(event.name)
         -- 触摸事件处理
         if event.name == "began" then  self.BeganPos = {x=event.x,y=event.y}
         elseif event.name == "ended" then
+
             self:getUIManager():closeTopUI(ccp(self.BeganPos.x,self.BeganPos.y))
         end
         return true
@@ -49,8 +33,41 @@ function M:onEnter()
 
 end
 ------------------------------------------------------------------------------
+-- 先 onEnter 后 init
+function M:init( params )
+    -- if params.ccsFileName == nil or params.ccsFileName == "" then return false end
+
+    self.open_close_effect = params.open_close_effect -- 是否有开启关闭特效
+    if self.open_close_effect == nil then
+        self.open_close_effect = true
+    end
+    self.is_no_modle = params.is_no_modle
+    self:setTouchGroup( TouchGroup:create():addTo(self) )
+    -- 读取ui配置资源
+    if params.ccsFileName then
+
+        local widget = GUIReader:shareReader():widgetFromJsonFile(params.ccsFileName)
+        self:GetTouchGroup():addWidget(widget)
+        self._root_widget=widget
+    end
+    self:ListenClose()
+
+    -- 响应ui根节点的触摸
+    self:setTouchEnabled(true)
+    -- 响应ui子节点(touchGroup)的触摸
+    self:setTouchLayerEnabled(true,false)
+    if self.is_no_modle then
+        -- 非模态ui根节点不吞噬触摸
+        self:setTouchSwallowEnabled(false)
+        -- self:GetTouchGroup():setTouchSwallowEnabled(true)
+    else
+        -- 模态吞噬触摸
+        self:setTouchSwallowEnabled(true)
+    end
+end
+------------------------------------------------------------------------------
 function M:openUI(params)
-    self:getUIManager():openUI(params)
+    return self:getUIManager():openUI(params)
 end
 function M:getUIManager()
     return self.UIManager_
@@ -70,6 +87,10 @@ end
 ------------------------------------------------------------------------------
 function M:ListenClose()
     self:getWidgetByName("Panel_bg",function ( layout )
+        if not layout then
+           return
+        end
+
                     local wg = layout:getChildByName("close")
                         if wg then
                             wg:addTouchEventListener(function(sender, eventType)
@@ -94,6 +115,7 @@ function M:close(pos)
     --self:getUIManager():closeTopUI()
 end
 ------------------------------------------------------------------------------
+-- 处理网络数据
 function M:ProcessNetResult(params)
 end
 ------------------------------------------------------------------------------
@@ -194,6 +216,9 @@ function M:getWidgetByName(name, callback_)
     local widget = self:GetTouchGroup():getWidgetByName(name)
     if callback_ then callback_(widget) end
     return widget
+end
+function M:getWidgetByName_(root,name)
+    return UIHelper:seekWidgetByName(root,name)
 end
 ------------------------------------------------------------------------------
 function M:getWidgetByTag(tag, callback_ )

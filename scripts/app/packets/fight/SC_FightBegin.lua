@@ -4,7 +4,15 @@
 -- Filename: SC_FightBegin.lua
 --
 return function ( player, args )
-	print("···",args.stageId,args.begin_time)
-	player:set_fight_info(args.stageId,args.begin_time)
-	switchscene("battle",{ tempdata=args.stageId})
+	-- print("SC_FightBegin",args.stageId,args.result)
+	if args.result == 1 then
+		player:set_fight_info(args.stageId,0)
+		switchscene("battle",{ tempdata=args.stageId})
+	elseif args.result == 2 then
+		KNMsg:getInstance():flashShow("关卡未开启")
+	elseif args.result == 3 then
+		KNMsg:getInstance():flashShow("次数不足")
+	elseif args.result == 4 then
+		KNMsg:getInstance():flashShow("军令不足")
+	end
 end

@@ -80,7 +80,7 @@ end
 --英雄列表相关
 function M:sortList(type)
     local callback =nil
-    local item=tolua.cast(GUIReader:shareReader():widgetFromJsonFile("UI/hero_main_item.json"),"Layout")
+    -- local item=tolua.cast(GUIReader:shareReader():widgetFromJsonFile("UI/hero_main_item.json"),"Layout")
     if type =="fight" then
         function sortFightFun(arrInList)
             table.sort(arrInList,function (a,b)
@@ -234,8 +234,11 @@ function M:addReadyHero(data)
         end
         if data.slot then
             local heroinfo = PLAYER:get_mgr("heros"):get_hero_by_GUID(data.heroDt.GUID)
-            self:setFormationPosInfo({nickname=heroinfo.nickname,headImg=heroinfo.headIcon,isFlag=true},data.slot)
-            self:setSelectedFormationCell(data.fId,data.slotIndex,true)
+            if heroinfo then
+                self:setFormationPosInfo({nickname=heroinfo.nickname,headImg=heroinfo.headIcon,isFlag=true},data.slot)
+                self:setSelectedFormationCell(data.fId,data.slotIndex,true)
+            end
+
          end
     end
 end

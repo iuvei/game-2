@@ -27,6 +27,7 @@ function SLImpactsToTarget:activateOnce(rMe)
     local hits = {{},{}}
     for i=1,#target_views do
         local target_view = target_views[i]
+        -- issue:GetModel（）可能为空nil
         local target_obj = target_view:GetModel()
         local isCritcalHit = self:critcalHitThisTarget()
         local isHit = self:hitThisTarget(rMe,target_obj)

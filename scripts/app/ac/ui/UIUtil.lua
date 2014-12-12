@@ -5,6 +5,23 @@
 local StringData = require("config.zhString")
 local CommonUtil = require("app.ac.CommonUtil")
 local UIUtil = {}
+function UIUtil:ShowTip(is_open,parent,contents)
+    local root_tip=parent:getChildByName("Panel_Root_Tip")
+    if not root_tip then
+        if not is_open then
+            return nil
+        end
+        root_tip=tolua.cast(GUIReader:shareReader():widgetFromJsonFile("UI/item_tip.json"),"Layout")
+        parent:addChild(root_tip)
+    end
+    root_tip:getChildByName("Label"):setText(contents)
+    root_tip:setEnabled(false)
+    if is_open then
+        root_tip:setEnabled(true)
+        -- root_tip:setVisible(true)
+    end
+    return root_tip
+end
 function UIUtil:SetStars(wgStars,num)
     for i=1,5 do
         local star=wgStars:getChildByName("star_"..i)

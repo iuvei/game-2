@@ -3,8 +3,8 @@
 -- source file: F:\ProjectX\code\trunk\tools\xls2lua/xls_flies/item_compound.xls
 
 local item_compound = {
-	[10201000]={money=10,stuff_id1=10101000,stuff_num1=1,stuff_id2=10101001,stuff_num2=1,stuff_id3=10102000,stuff_num3=1,stuff_id4=0,stuff_num4=0,stuff_id5=0,stuff_num5=0},
-	[10202000]={money=0,stuff_id1=10102000,stuff_num1=1,stuff_id2=10101000,stuff_num2=1,stuff_id3=0,stuff_num3=0,stuff_id4=0,stuff_num4=0,stuff_id5=0,stuff_num5=0},
+	[10201000]={elevel=0,stuff_id1=10101000,stuff_num1=1,stuff_id2=10101001,stuff_num2=1,stuff_id3=10102000,stuff_num3=1},
+	[10202000]={elevel=1,stuff_id1=10102000,stuff_num1=1,stuff_id2=10101000,stuff_num2=1},
 }
 return item_compound
 

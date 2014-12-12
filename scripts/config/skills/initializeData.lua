@@ -3,24 +3,12 @@
 -- source file: /Users/wangshaopei/Documents/work_sanguo/code(trunk)/tools/xls2lua/xls_flies/skill.xls
 
 local initializeData = {
-	[1] = {
-		{ value=80 },
+	[1]={
+		{value=80},
 	},
-	[2] = {
-		{ value=100 },
+	[2]={
+		{value=100},
 	},
 }
-
-local pairs = pairs
-for i,v in pairs(initializeData) do
-	local item = v
-	for j=1, #item do
-		item[j].__index = item[j]
-		if j < #item then
-			setmetatable(item[j+1], item[j])
-		end
-	end
-end
-
 return initializeData
 

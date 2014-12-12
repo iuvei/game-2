@@ -5,21 +5,21 @@
 --
 -- count = 1
 return function ( player, args )
-	-- local award = {}
-	-- print(count,"..begin - >",args.stageId,args.stars)
-	-- for i=1,#args.award do
-	-- 	print(args.award[i].dataId)
-	-- 	-- award[i] = {dataId=args.award[i].dataId}
-	-- end
-	-- print("<- end..")
+	local award = {}
+	print("..begin - >",args.stageId,args.stars)
+	for i=1,#args.award do
+		print(args.award[i].dataId,args.award[i].num)
+		-- award[i] = {dataId=args.award[i].dataId}
+	end
+	print("<- end..")
 	-- count = count+1
 	-- if count>10 then
 	-- 	count =1
 	-- end
 
-	-- dump(award)
+	-- dump(args.award)
 
-	-- local run_scene = display.getRunningScene()
+	local run_scene = display.getRunningScene()
 
 	-- local sprite
 	-- if args.stars > 0 then
@@ -36,4 +36,10 @@ return function ( player, args )
  --        CCFadeIn:create(0.5),
  --    })
  --    transition.execute(sprite,sequence)
+    if run_scene then
+        if run_scene.UIlayer == nil then
+            return
+        end
+        local layers=run_scene.UIlayer:createBattleResult(args)
+    end
 end

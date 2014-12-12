@@ -9,10 +9,16 @@ function ui_helper:dispatch_event(params)
 	-- 发送到所有开着的窗口
 	local run_scene = display.getRunningScene()
 	if run_scene then
-		local layers=run_scene.UIlayer:getUiLayers()
-		for i=1,#layers do
-			layers[i]:ProcessNetResult(params)
+		if run_scene.UIlayer == nil then
+			return
 		end
+		local layers=run_scene.UIlayer:getUiLayers()
+        for k,v in pairs(layers) do
+            v:ProcessNetResult(params)
+        end
+		-- for i=1,#layers do
+		-- 	layers[i]:ProcessNetResult(params)
+		-- end
 	end
 end
 

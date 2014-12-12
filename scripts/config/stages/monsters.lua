@@ -3,84 +3,16 @@
 -- source file: F:\ProjectX\code\trunk\tools\xls2lua/xls_flies/stages.xls
 
 local monsters = {
-	[1]={
-		{Fid=1,isMaster=1,HeorId=1001},
-	},
-	[2]={
-		{Fid=2,isMaster=0,HeorId=1001},
-		{isMaster=1,HeorId=6001},
-		{isMaster=0,HeorId=4001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[3]={
-		{Fid=3,isMaster=0,HeorId=1001},
-		{isMaster=0,HeorId=6001},
-		{isMaster=1,HeorId=2001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[4]={
-		{Fid=4,isMaster=1,HeorId=5001},
-		{isMaster=0,HeorId=6001},
-		{isMaster=0,HeorId=4001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[5]={
-		{Fid=5,isMaster=0,HeorId=5001},
-		{isMaster=1,HeorId=4001},
-		{isMaster=0,HeorId=4001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[6]={
-		{Fid=6,isMaster=1,HeorId=1001},
-		{isMaster=0,HeorId=6001},
-		{isMaster=0,HeorId=4001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[7]={
-		{Fid=7,isMaster=0,HeorId=6001},
-		{isMaster=0,HeorId=6001},
-		{isMaster=1,HeorId=4001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[8]={
-		{Fid=8,isMaster=1,HeorId=6001},
-		{isMaster=0,HeorId=6001},
-		{isMaster=0,HeorId=6001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[9]={
-		{Fid=9,isMaster=1,HeorId=1001},
-		{isMaster=0,HeorId=1001},
-		{isMaster=0,HeorId=1001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
-	[10]={
-		{Fid=10,isMaster=1,HeorId=2001},
-		{isMaster=0,HeorId=6001},
-		{isMaster=0,HeorId=3001},
-		{isMaster=0,HeorId=5001},
-		{isMaster=0,HeorId=2001},
-	},
+	[1]={Fid=1,master_pos=1,heroId1=1001},
+	[2]={Fid=2,master_pos=1,heroId1=1001},
+	[3]={Fid=3,master_pos=1,heroId1=1001},
+	[4]={Fid=4,master_pos=1,heroId1=5001},
+	[5]={Fid=5,master_pos=1,heroId1=5001},
+	[6]={Fid=6,master_pos=1,heroId1=1001},
+	[7]={Fid=7,master_pos=1,heroId1=6001},
+	[8]={Fid=8,master_pos=1,heroId1=6001},
+	[9]={Fid=9,master_pos=1,heroId1=1001},
+	[10]={Fid=10,master_pos=1,heroId1=2001},
 }
-
-local pairs = pairs
-for i,v in pairs(monsters) do
-	local item = v
-	for j=1, #item do
-		item[j].__index = item[j]
-		if j < #item then
-			setmetatable(item[j+1], item[j])
-		end
-	end
-end
-
 return monsters
 

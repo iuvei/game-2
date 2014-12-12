@@ -8,17 +8,5 @@ local mapRes = {
 		{mapResId=102,Bg="scene/battle/bbg_fall_fortoforc.jpg"},
 	},
 }
-
-local pairs = pairs
-for i,v in pairs(mapRes) do
-	local item = v
-	for j=1, #item do
-		item[j].__index = item[j]
-		if j < #item then
-			setmetatable(item[j+1], item[j])
-		end
-	end
-end
-
 return mapRes
 

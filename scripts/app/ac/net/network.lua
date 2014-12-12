@@ -128,7 +128,7 @@ function network:encode_send(cmdname,...)
 	local text = pf:packet_pack(cmdname,...)
 	if text then
 		-- 加密
-		-- text = crypt.desencode(self.secret, text)
+		text = crypt.desencode(self.secret, text)
 		return self:send( text )
 		-- print("----------------")
 		-- print("encode_text is:", cc.utils.ByteArray.toString(text, 16))
@@ -143,13 +143,13 @@ function network:decode_execute(session, text)
 	-- print("sceret is:", cc.utils.ByteArray.toString(self.secret, 16))
 	-- print("decode_text is:", cc.utils.ByteArray.toString(text, 16))
 
-	if text == nil or text == "" then
+	if text == nil or text == "" or self.secret == nil or self.secret == "" then
 		-- 服务端只要有请求，服务端必定会有回馈，
 		-- 如果服务端不处理，返回的text为空
 		return
 	end
 	-- 解密
-	-- text = crypt.desdecode(self.secret, text)
+	text = crypt.desdecode(self.secret, text)
 	return pf:execute_handle(player_instance,pf:packet_unpack(text))
 end
 ------------------------------------------------------------------------------

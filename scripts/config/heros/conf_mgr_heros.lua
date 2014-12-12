@@ -121,14 +121,15 @@ function conf_mgr_heros:GetArmFlie(id,state,isEnemy)
 
     if isEnemy then
         local prefix = ""
-        if armArt[i].enemyPrefix then
-            prefix = armArt[i].enemyPrefix
+        if armArt[1].epf then
+            prefix = armArt[1].epf
         end
 
         local suffix = ""
-        if armArt[i].enemySuffix then
-            suffix = armArt[i].enemySuffix
+        if armArt[1].esf then
+            suffix = armArt[1].esf
         end
+        -- print("···",prefix..armArt[i].file..suffix)
         return prefix..armArt[i].file..suffix
     else
         return armArt[i].file

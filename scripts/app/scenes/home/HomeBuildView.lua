@@ -5,7 +5,7 @@
 local MapConstants    = require("app.ac.MapConstants")
 local configMgr       = require("config.configMgr")         -- 配置
 ------------------------------------------------------------------------------
-local HomeBuildView = class("HomeBuildView", require("app.character.views..ObjectView"))
+local HomeBuildView = class("HomeBuildView", require("app.character.views.ObjectView"))
 HomeBuildView.ResType_MainImg=1
 HomeBuildView.ResType_TitleBg=2
 HomeBuildView.ResType_Title=3

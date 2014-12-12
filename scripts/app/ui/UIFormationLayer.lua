@@ -4,7 +4,7 @@
 --
 ------------------------------------------------------------------------------
 local configMgr = require("config.configMgr")
-local Formation = require("app.character.views..Formation")
+local Formation = require("app.character.views.Formation")
 ------------------------------------------------------------------------------
 local M  = class("UIFormationLayer", require("app.ac.ui.UIBase"))
 ------------------------------------------------------------------------------

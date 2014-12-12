@@ -15,6 +15,7 @@ function conf_mgr_item_compound:get_info(dataId)
     end
 	return {
         dataId = dataId,
+		elevel = conf.elevel,
     	money = conf.money,
     	stuff_id = {
 			conf.stuff_id1,

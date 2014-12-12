@@ -94,7 +94,6 @@ function formation_mgr:update_server_fomation( pos, herodata )
         -- dump(herodata)
 
         self.player:send("CS_UpdateFormation", {
-            playerid    = self.player:get_playerid(),
             pos         = pos,
             formation   = formation
         })

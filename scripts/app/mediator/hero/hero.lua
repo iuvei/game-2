@@ -2,6 +2,7 @@
 -- Author: Anthony
 -- Date: 2014-10-13 14:48:10
 -- hero数据
+local ipairs = ipairs
 local pairs = pairs
 ----------------------------------------------------------------
 local game_attr = require("app.ac.game_attr")
@@ -35,6 +36,7 @@ end
 ----------------------------------------
 function hero:setkey( key, data )
     self.__data[key] = data
+    -- dump(self.__data)
 end
 ----------------------------------------
 -- 转为新数据，来自己服务端
@@ -43,7 +45,7 @@ function hero:gen_new(olddata)
     -- 转出skill
     local skills = {}
     if olddata.skills then
-        for k,v in pairs(olddata.skills) do
+        for k,v in ipairs(olddata.skills) do
             skills[k] = { templateId = v.templateId ,level = v.level}
         end
     end
@@ -51,12 +53,13 @@ function hero:gen_new(olddata)
     --
     local equips = {}
     if olddata.equips then
-        for k,v in pairs(olddata.equips) do
+        for k,v in ipairs(olddata.equips) do
             -- equips[k] = { GUID = v.GUID}
             equips[k] =  {
                 GUID    = v.GUID,
                 dataId  = v.dataId,
-                num     = v.num
+                num     = v.num,
+                elevel  = v.elevel or 0,
             }
         end
     end
@@ -113,7 +116,7 @@ function hero:get_info()
         -- MovDis      = confHeroData.MovDis,
         campId      = self:get( "campId" ),
         quality     = self:get( "quality" ),    -- 品质
-        stars       = self:get( "stars" ),      -- 星级
+        stars       = self:get( "stars" ) or 0,      -- 星级
         artId       = confHeroData.artId,
         headIcon    = cfheroArt.headIcon,
         formationId = confHeroData.formationId,
@@ -136,14 +139,10 @@ function hero:flush_item_effect()
 
     local equip_info
     local value_
-    for k,v in pairs(equips) do
+    for k,v in ipairs(equips) do
         equip_info = item_operator:get_equip_info( v )
         for k,v in pairs(equip_info.attr) do
-            value_ = v
-            if value_ == -1 then
-                value_ = 0
-            end
-
+            value_ = item_operator:get_equip_attr(equip_info,k)
             self:calc_effect({attr_type=k,value=value_})
         end
     end

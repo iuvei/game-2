@@ -9,6 +9,7 @@ collectgarbage("setstepmul"  ,  5000)
 local MapConstants   = require("app.ac.MapConstants")
 local EffectChangeHP = require("common.effect.ChangeHP")
 local HeroBoutUseSkillCommand = require("app.character.controllers.commands.HeroBoutUseSkillCommand")
+local ui_manager = import(".battle_ui_manager")
 ------------------------------------------------------------------------------
 local battle_scene = class("battle_scene", function()
     return display.newScene("battle_scene")
@@ -31,6 +32,44 @@ function battle_scene:ctor(id_)
     self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.tick))
     self:scheduleUpdate_()
 
+    -- UI管理层
+    self.UIlayer = ui_manager.new(self)
+
+    self:test()
+end
+------------------------------------------------------------------------------
+function battle_scene:onExit()
+
+    if self.MapRuntime_ then
+        self.MapRuntime_:removeFromParentAndCleanup(true)
+        self.MapRuntime_ = nil
+    end
+
+    if self.mapLayer_ then
+        self.mapLayer_:removeFromParentAndCleanup(true)
+        self.mapLayer_ = nil
+    end
+
+
+    CCTextureCache:sharedTextureCache():removeAllTextures()
+end
+------------------------------------------------------------------------------
+function battle_scene:onEnter()
+    INIT_FUNCTION.AppExistsListener(self)
+
+end
+------------------------------------------------------------------------------
+-- 心跳
+function battle_scene:tick(dt)
+
+    if self.MapRuntime_ then
+        self.MapRuntime_:tick(dt)
+    end
+
+end
+------------------------------------------------------------------------------
+-- 测试相关
+function battle_scene:test()
     ------------------------------------------
     --测试按钮
     cc.ui.UIPushButton.new("actor/Button01.png", {scale9 = true})
@@ -110,37 +149,6 @@ function battle_scene:ctor(id_)
         -- :pos(display.right - 200, display.top - 15)
         -- :addTo(self)
     ------------------------------------------
-
-end
-------------------------------------------------------------------------------
-function battle_scene:onExit()
-
-    if self.MapRuntime_ then
-        self.MapRuntime_:removeFromParentAndCleanup(true)
-        self.MapRuntime_ = nil
-    end
-
-    if self.mapLayer_ then
-        self.mapLayer_:removeFromParentAndCleanup(true)
-        self.mapLayer_ = nil
-    end
-
-
-    CCTextureCache:sharedTextureCache():removeAllTextures()
-end
-------------------------------------------------------------------------------
-function battle_scene:onEnter()
-    INIT_FUNCTION.AppExistsListener(self)
-
-end
-------------------------------------------------------------------------------
--- 心跳
-function battle_scene:tick(dt)
-
-    if self.MapRuntime_ then
-        self.MapRuntime_:tick(dt)
-    end
-
 end
 ------------------------------------------------------------------------------
 return battle_scene

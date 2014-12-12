@@ -28,26 +28,27 @@ local function register_files(files)
 end
 register_files{"proto/packets.pb"}
 ------------------------------------------------------------------------------
-local G = proto.packets.package
+-- local G = proto.packets.package
 ------------------------------------------------------------------------------
 function packet_factory:init()
-	self.proto = {}
+	self.proto_id = {}
 	self.proto_name = {}
+	self.proto_handle = {}
 
 	local cmdInfo = require("app.packets.cmd")
 	-- 注册所有包
 	for k,v in ipairs(cmdInfo) do
-		local handle = nil
 		-- print(k,dump(v))
-		-- 过滤client才使用handle
-		if v.handlefile and v.handlefile ~= "" then
-			handle =  require("app.packets"..v.handlefile)
-		end
-		self.proto[v.name] = {id=v.id,handle=handle}
+		self.proto_id[v.name] = v.id
 		if self.proto_name[v.id] then
 			error("had "..v.id.." "..v.name.." msg!!")
 		end
 		self.proto_name[v.id] = v.name
+
+		-- 过滤client才使用handle
+		if v.handlefile and v.handlefile ~= "" then
+			self.proto_handle[v.id] =  require("app.packets"..v.handlefile)
+		end
 	end
 
 end
@@ -55,21 +56,21 @@ end
 ------------------------------------------------------------------------------
 -- 打包 逻辑消息包
 local function _pack(pbname, ... )
-	return protobuf.encode(G.."."..pbname, ... or {})
+	return protobuf.encode(proto.packets.package.."."..pbname, ... or {})
 end
 
 function packet_factory:packet_pack(cmdname,...)
-	local proto = self.proto[cmdname]
-	if proto == nil then
+	local id = self.proto_id[cmdname]
+	if id == nil then
 		printError("packet_pack cmdname:%s Unregistered!",cmdname)
-		return nil
+		return
 	end
-	return _pack("Packet", {cmd=proto.id, body=_pack(cmdname, ...)} )
+	return _pack("Packet", {cmd=id, body=_pack(cmdname, ...)} )
 end
 ------------------------------------------------------------------------------
 -- 解包 逻辑消息包
 local function _unpack(pbname, body )
-	return protobuf.decode(G.."."..pbname, body)
+	return protobuf.decode(proto.packets.package.."."..pbname, body)
 end
 
 function packet_factory:packet_unpack(text)
@@ -77,7 +78,7 @@ function packet_factory:packet_unpack(text)
 	local name = self.proto_name[packet.cmd]
 	if name == nil then
 		printError("packet_unpack cmdid:%d Unregistered!",packet.cmd)
-		return nil
+		return
 	end
 
 	return packet.cmd,_unpack(name,packet.body)
@@ -85,13 +86,17 @@ end
 ------------------------------------------------------------------------------
 -- handle execute
 function packet_factory:execute_handle(player_instance,cmdid,text)
-	local name = self.proto_name[cmdid]
-	if name == nil then
+	-- local name = self.proto_name[cmdid]
+	-- if name == nil then
+	-- 	printError("packet_execute cmdid:%d Unregistered!",cmdid)
+	-- 	return nil
+	-- end
+	if cmdid == nil then
 		printError("packet_execute cmdid:%d Unregistered!",cmdid)
-		return nil
+		return
 	end
 
-	return self.proto[name].handle(player_instance,text)
+	return self.proto_handle[cmdid](player_instance,text)
 end
 ------------------------------------------------------------------------------
 return packet_factory
