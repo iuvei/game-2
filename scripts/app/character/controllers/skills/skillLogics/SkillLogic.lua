@@ -47,7 +47,8 @@ function SkillLogic:activateOnce(rMe)
 
     end
     for k,rTarv in pairs(targets) do
-        local b = self:critcalHitThisTarget()
+        local tar_obj = rTarv:GetModel()
+        local b = self:critcalHitThisTarget(rMe,tar_obj)
         if self:hitThisTarget(rMe,rTarv:GetModel())==true then
            self:effectOnUnitOnce(rMe,rTarv:GetModel(),b)
         else
@@ -279,7 +280,16 @@ end
 -------------------------------------------------------------
 --命中相关
 function SkillLogic:critcalHitThisTarget(rMe,target)
-    return false
+    local skllinfo=rMe:getSkillInfo()
+    local myCombat = CombatCore.new()
+
+    local accuracy=myCombat:calcCrtRate(rMe:getAttr2(CommonDefine.RoleAttr_Crt),
+        skllinfo.crt_factor,
+        rMe:getAttr2(CommonDefine.RoleAttr_Crtdef),
+        skllinfo.crtdef_factor
+        ) * CommonDefine.RATE_LIMITE_100
+    local rand = math.random(1, CommonDefine.RATE_LIMITE_100)
+    return myCombat:isCrtHit(accuracy,rand)
 end
 function SkillLogic:hitThisTarget(rMe,target)
     if rMe:isFriend(target) then
@@ -295,10 +305,10 @@ end
 function SkillLogic:isHit(rMe,target,accuracy)
     local myCombat = CombatCore.new()
     if accuracy==CommonDefine.INVALID_ID then
-        accuracy=myCombat.calcHitRate(rMe:getHit(),target:getMiss())
+        accuracy=myCombat:calcHitRate(rMe:getHit(),target:getMiss()) * CommonDefine.RATE_LIMITE_100
     end
 
-    local rand = math.random(1, CommonDefine.RATE_LIMITE)
+    local rand = math.random(1, CommonDefine.RATE_LIMITE_100)
     return myCombat:isHit(accuracy,rand)
 
 end

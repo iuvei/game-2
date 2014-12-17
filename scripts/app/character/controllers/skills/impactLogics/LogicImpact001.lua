@@ -39,12 +39,12 @@ function LogicImpact001:onActive(rMe,ownImpact)
 
     local damage = self:getDamage(ownImpact)
     if damage~= CommonDefine.INVALID_ID then
-        rMe:onDamage(damage,ownImpact:getCasterObjId(),ownImpact:getSkillId())
+        rMe:onDamage(damage,ownImpact:getCasterObjId(),ownImpact:getSkillId(),ownImpact.is_crt)
     end
     damage = self:getDamageRate(ownImpact)
     if damage~= CommonDefine.INVALID_ID then
         damage = math.floor(rMe:getBaseMaxHp()*damage/CommonDefine.RATE_LIMITE)
-        rMe:onDamage(damage,ownImpact:getCasterObjId(),ownImpact:getSkillId())
+        rMe:onDamage(damage,ownImpact:getCasterObjId(),ownImpact:getSkillId(),ownImpact.is_crt)
     end
 
 end

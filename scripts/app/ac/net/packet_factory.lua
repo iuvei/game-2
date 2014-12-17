@@ -46,8 +46,8 @@ function packet_factory:init()
 		self.proto_name[v.id] = v.name
 
 		-- 过滤client才使用handle
-		if v.handlefile and v.handlefile ~= "" then
-			self.proto_handle[v.id] =  require("app.packets"..v.handlefile)
+		if v.file and v.file ~= "" then
+			self.proto_handle[v.id] =  require("app.packets."..v.file)
 		end
 	end
 

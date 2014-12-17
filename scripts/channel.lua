@@ -1,8 +1,8 @@
 
-CHANNEL_ID = "test"
-CHANNEL_GROUP = "test"
--- CHANNEL_ID = "testnet"
--- CHANNEL_GROUP = "testnet"
+-- CHANNEL_ID = "test"
+-- CHANNEL_GROUP = "test"
+CHANNEL_ID = "testnet"
+CHANNEL_GROUP = "testnet"
 
 -- 手机平台
 -- if device.platform ~= "windows" and device.platform ~= "mac" then

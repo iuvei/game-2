@@ -97,7 +97,7 @@ end
 --计算装备强化附加值
 function item_operator:calc_equip_enhance(attr_val,percent1)
 	if attr_val == -1 then attr_val=0 end
-	return math.floor(attr_val*percent1/CommonDefine.RATE_LIMITE)
+	return math.floor(attr_val*percent1/CommonDefine.RATE_LIMITE_100)
 end
 
 function item_operator:get_conf_mgr(dataId)

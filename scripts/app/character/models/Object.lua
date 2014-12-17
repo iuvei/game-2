@@ -99,6 +99,14 @@ function Object:getBaseAttackTactics()
     return self.attr_.TacticsAtk
 end
 ------------------------------------------------------------------------------
+-- 命中值
+function Object:getHit()
+    return 1 -- 默认命中值为1
+end
+function Object:getMiss()
+    return 0
+end
+------------------------------------------------------------------------------
 -- 基本物理防御
 function Object:getBaseDefensePhysics()
     return self.attr_.PhysicsDef

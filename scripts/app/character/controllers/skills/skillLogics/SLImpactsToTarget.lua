@@ -29,9 +29,9 @@ function SLImpactsToTarget:activateOnce(rMe)
         local target_view = target_views[i]
         -- issue:GetModel（）可能为空nil
         local target_obj = target_view:GetModel()
-        local isCritcalHit = self:critcalHitThisTarget()
+        local isCritcalHit = self:critcalHitThisTarget(rMe,target_obj)
         local isHit = self:hitThisTarget(rMe,target_obj)
-        if self:hitThisTarget(rMe,target_obj)==true then
+        if isHit==true then
            table.insert(hits[1],isHit)
            table.insert(hits[2],isCritcalHit)
         end
@@ -71,8 +71,8 @@ function SLImpactsToTarget:effectOnMultOnce(rMe,target_views,isHits,isCritcalHit
             if params[SkillDefine.SkillParamL_ImpToTar_Type]==SkillDefine.AppendSkillImpType_ToTar then
                 for i=1,#target_views do
                     -- 命中
+                    local target_obj_view = target_views[i]
                     if isHits[i] then
-                        local target_obj_view = target_views[i]
                         target_obj = target_obj_view:GetModel()
                         local ownImpact = OwnImpact.new()
                         -- 初始化效果数据
@@ -83,7 +83,7 @@ function SLImpactsToTarget:effectOnMultOnce(rMe,target_views,isHits,isCritcalHit
                             --计算基本属性值＋身上impact附加的属性值，如物理攻击
                             combat:getResultImpact(rMe, target_obj, ownImpact)
                         end
-                        self:registerImpactEvent(target_obj,rMe,ownImpact,false)
+                        self:registerImpactEvent(target_obj,rMe,ownImpact,isCritcalHits[i])
                     else
                         target_obj_view:createMiss()
                     end
@@ -104,7 +104,7 @@ function SLImpactsToTarget:effectOnMultOnce(rMe,target_views,isHits,isCritcalHit
                         --计算基本属性值＋身上impact附加的属性值，如物理攻击
                         combat:getResultImpact(rMe, target_obj, ownImpact)
                     end
-                    self:registerImpactEvent(target_obj,rMe,ownImpact,false)
+                    self:registerImpactEvent(target_obj,rMe,ownImpact,isCritcalHits[i])
                 end
             end
         end

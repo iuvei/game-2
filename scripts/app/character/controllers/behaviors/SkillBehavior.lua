@@ -73,7 +73,7 @@ function SkillBehavior:bindMethods(object)
     end
     self:bindMethod(object,"doAttack", doAttack)
     --受伤害无类型
-    local function onDamage(object,damageVal,attackerId,skillId)
+    local function onDamage(object,damageVal,attackerId,skillId,is_crt)
         local outData={damage=damageVal}
         local attackerObj =object:getMap():getObjectReal(attackerId)
         -- default min value is 1
@@ -85,11 +85,11 @@ function SkillBehavior:bindMethods(object)
             attackerObj:_Impact_OnDamageTarget(object,outData,skillId)
         end
 
-        object:increaseHp(-outData.damage)
+        object:increaseHp(-outData.damage,is_crt)
     end
     self:bindMethod(object,"onDamage", onDamage)
     --受伤害分类型
-    local function onDamages(object,damages,attackerId,skillId)
+    local function onDamages(object,damages,attackerId,skillId,is_crt)
         local outData={damages=damages,damage=0}
          local attackerView =object:getMap():getObject(attackerId)
          local attackerObj = nil
@@ -108,7 +108,7 @@ function SkillBehavior:bindMethods(object)
         end
         -- default min value is 1
         if outData.damage==0 then outData.damage=1 end
-        object:increaseHp(-outData.damage)
+        object:increaseHp(-math.floor(outData.damage) ,is_crt)
 
         -- local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
         if not object:isDestroyed() then
@@ -157,6 +157,7 @@ function SkillBehavior:bindMethods(object)
     --效果相关
     -- register impact
     local function Impact_RegisterImpact(object,ownImpact)
+
         object:_Impact_AddNewImpact(ownImpact)
         object:_Impact_OnImpactActived(ownImpact)
     end
@@ -176,6 +177,9 @@ function SkillBehavior:bindMethods(object)
             printf("object = %s impactId = %d is actived,", object:getId(),ownImpact:getImpactTypeId())
         end
         local logic =  Impact_GetLogic(object,ownImpact)
+        if ownImpact.is_crt then
+            logic:crtRefix(ownImpact)
+        end
         logic:onActive(object,ownImpact)
         --标记修改属性更新
         if logic:isOverTimed() then
@@ -305,15 +309,15 @@ function SkillBehavior:bindMethods(object)
     self:bindMethod(object,"getImpactByTypeId", getImpactByTypeId)
     ------------------------------------------------------------------------------
     -- 命中目标
-    local function isHit(object,enemy,_callback)
-        assert(not object:isDead(), string.format("Object %s:%s is dead, can't change Hp", object:getId(), object:getNickname()))
-        if math.random(1, 100) <= object:getHit() then
-            return true
-        else
-            return false
-        end
-    end
-    self:bindMethod(object,"isHit", isHit)
+    -- local function isHit(object,enemy,_callback)
+    --     assert(not object:isDead(), string.format("Object %s:%s is dead, can't change Hp", object:getId(), object:getNickname()))
+    --     if math.random(1, 100) <= object:getHit() then
+    --         return true
+    --     else
+    --         return false
+    --     end
+    -- end
+    -- self:bindMethod(object,"isHit", isHit)
     --------------------------------------------------------------------------
     local function getTargetAndDepleteParams(object)
         return object.targetAndDepleteParams_

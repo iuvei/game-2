@@ -138,19 +138,47 @@ end
 function CombatCore:isHit(hitRate,rand)
     if hitRate<0 then
         hitRate=0
-    elseif hitRate>CommonDefine.RATE_LIMITE then
-        hitRate=CommonDefine.RATE_LIMITE
+    elseif hitRate>CommonDefine.RATE_LIMITE_100 then
+        hitRate=CommonDefine.RATE_LIMITE_100
     end
     if hitRate>rand then
         return true
     end
     return false
 end
+-- 命中率
 function CombatCore:calcHitRate(hit,miss)
-    if hit+miss ==0 then
+    if hit + miss == 0 then
         return 0
     end
-    return math.floor(hit*CommonDefine.RATE_LIMITE/(hit+miss))
+    return math.floor(hit/(hit+miss))
+end
+--------------------------------------------------------------------
+-- 真实暴击率
+function CombatCore:calcCrtRate(crt,crt_factor,crtdef,crtdef_factor)
+    local crt_rate=self:_calcCrtRate(crt,crt_factor)
+    local crtdef_rate=self:calcCrtdef(crtdef,crtdef_factor)
+    local ret = crt_rate * ( 1 - crtdef_rate )
+    return ret
+end
+-- 暴击率
+function CombatCore:_calcCrtRate(crt,crt_factor)
+    return crt*(crt_factor/100)
+end
+-- 抗暴击率
+function CombatCore:calcCrtdef(crtdef,crtdef_factor)
+    return crtdef*(crtdef_factor/100)
+end
+function CombatCore:isCrtHit(hitRate,rand)
+    if hitRate<0 then
+        hitRate=0
+    elseif hitRate>CommonDefine.RATE_LIMITE_100 then
+        hitRate=CommonDefine.RATE_LIMITE_100
+    end
+    if hitRate>rand then
+        return true
+    end
+    return false
 end
 --------------------------------------------------------------------
 return CombatCore

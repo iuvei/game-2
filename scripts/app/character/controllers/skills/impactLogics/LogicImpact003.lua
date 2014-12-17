@@ -61,6 +61,13 @@ function ImpactLogic003:setDamageMagic(ownImpact,damageVal)
 end
 ---------------------------------------------------------------------------------
 --
+function ImpactLogic003:crtRefix(ownImpact)
+    self:setDamagePhy(ownImpact,self:getDamagePhy(ownImpact)*1.5)
+    self:setDamageMagic(ownImpact,self:getDamageMagic(ownImpact)*1.5)
+    self:setDamageTactics(ownImpact,self:getDamageTactics(ownImpact)*1.5)
+end
+---------------------------------------------------------------------------------
+--
 function ImpactLogic003:onActive(rMe,ownImpact)
     local damageArr ={nil,nil,nil}
     --计算伤害
@@ -87,7 +94,7 @@ function ImpactLogic003:onActive(rMe,ownImpact)
     --     damageArr[SkillDefine.ImpactParamL003_DamageZhanFa],damageArr[SkillDefine.ImpactParamL003_DamageZhanFaRate],
     --     damageArr[SkillDefine.ImpactParamL003_DamageJiCe],damageArr[SkillDefine.ImpactParamL003_DamageJiCeRate])
 
-    rMe:onDamages(damageArr,ownImpact:getCasterObjId(),ownImpact:getSkillId())
+    rMe:onDamages(damageArr,ownImpact:getCasterObjId(),ownImpact:getSkillId(),ownImpact.is_crt)
 end
 ---------------------------------------------------------------------------------
 return ImpactLogic003

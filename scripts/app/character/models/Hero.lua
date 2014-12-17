@@ -309,9 +309,12 @@ function Hero:getSkillRule()
     return self.SkillRule_
 end
 ------------------------------------------------------------------------------
--- 基础命中率
+-- 基础命中值
 function Hero:getHit()
-    return self.hit_
+    return self:getAttr2(CommonDefine.RoleAttr_Hit)
+end
+function Hero:getMiss()
+    return self:getAttr2(CommonDefine.RoleAttr_Evd)
 end
 ------------------------------------------------------------------------------
 --物品相关
@@ -385,9 +388,9 @@ function Hero:isFriend(objv)
 end
 ------------------------------------------------------------------------------
 -- 是否命中
-function Hero:hit(target,_callback)
-    return self:isHit(target,_callback)
-end
+-- function Hero:hit(target,_callback)
+--     return self:isHit(target,_callback)
+-- end
 ------------------------------------------------------------------------------
 --
 function Hero:tick(dt, map)

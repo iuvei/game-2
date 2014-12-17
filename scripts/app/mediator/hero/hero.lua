@@ -101,6 +101,12 @@ function hero:get_info()
     local armId_ = self:get( "armId" ) or confHeroData.ArmId
     local arm_ =confHeros:GetArmsData(armId_)
 
+    local skills_ = nil
+    if DEBUG_BATTLE.useLocalSkill then
+        skills_      = confHeroData.skills
+    else
+        skills_      = self:get( "skills" )
+    end
     --新数据
     return {
         dataId      = self:get( "dataId" ),
@@ -122,7 +128,8 @@ function hero:get_info()
         formationId = confHeroData.formationId,
         ArmId       = armId_,
         SkillRule   = confHeroData.SkillRule,
-        skills      = self:get( "skills" ),
+        skills      = skills_,
+
         countryInfo = countryInfo,
 
         arm         = arm_,

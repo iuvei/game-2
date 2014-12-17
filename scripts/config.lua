@@ -40,6 +40,7 @@ DEBUG_BATTLE = { showRect = false,  -- 显示tilemap方块
                  showDMapInfo=false,-- 显示生成的动态地图坐标信息
                  showCommandList=false,--显示命令列表信息
                  showFSMLog = false,  -- 是否显示状态机相关log
-                 showSkillInfo=true,  -- 显示技能信息
+                 showSkillInfo=false,  -- 显示技能信息
                  showUILayerInfo=false,--现实界面信息
+                 useLocalSkill=false,-- 是否使用本地技能
 }

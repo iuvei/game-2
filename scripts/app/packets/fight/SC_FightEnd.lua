@@ -5,13 +5,15 @@
 --
 -- count = 1
 return function ( player, args )
-	local award = {}
-	print("..begin - >",args.stageId,args.stars)
-	for i=1,#args.award do
-		print(args.award[i].dataId,args.award[i].num)
-		-- award[i] = {dataId=args.award[i].dataId}
-	end
-	print("<- end..")
+
+	-- local award = {}
+	-- print("..begin - >",args.stageId,args.stars)
+	-- for i=1,#args.award do
+	-- 	print(args.award[i].dataId,args.award[i].num)
+	-- 	-- award[i] = {dataId=args.award[i].dataId}
+	-- end
+	-- print("<- end..")
+
 	-- count = count+1
 	-- if count>10 then
 	-- 	count =1

@@ -57,14 +57,6 @@ function DestroyedBehavior:bindMethods(object)
         object.rage_      = configMgr:getConfig("skills"):GetInitDataByType(CommonDefine.InitRageValType)--object.maxRage_
     end
     self:bindMethod(object,"initDestroyedBeh", initDestroyedBeh)
-    function getHit(object)
-        return CommonDefine.RATE_LIMITE
-    end
-    self:bindMethod(object,"getHit", getHit)
-    function getMiss(object)
-        return 0
-    end
-    self:bindMethod(object,"getMiss", getMiss)
     ----------------------------------------
     --
     local function isUnbreakable(object)
@@ -164,7 +156,7 @@ function DestroyedBehavior:bindMethods(object)
     self:bindMethod(object,"increaseRage", increaseRage)
     ----------------------------------------
     --
-    local function increaseHp(object, increaseVal)
+    local function increaseHp(object, increaseVal,is_crt)
         amount = checknumber(increaseVal)
         assert(not object:isDead(), string.format("Object %s:%s is dead, can't change Hp", object:getId(), object:getNickname()))
 
@@ -209,7 +201,7 @@ function DestroyedBehavior:bindMethods(object)
             end
         end
         -- 飘血
-        EffectChangeHP:run(object.view_,increaseVal,{zorder=MapConstants.MAP_Z_2_0})
+        EffectChangeHP:run(object.view_,increaseVal,{zorder=MapConstants.MAP_Z_2_0,is_crt=is_crt})
     end
     self:bindMethod(object,"increaseHp", increaseHp)
     ----------------------------------------
@@ -310,8 +302,6 @@ function DestroyedBehavior:unbindMethods(object)
     self:unbindMethod(object,"updateView")
     self:unbindMethod(object,"fastUpdateView")
     self:unbindMethod(object,"isUnbreakable")
-    self:unbindMethod(object,"getHit")
-    self:unbindMethod(object,"getMiss")
     -- self:unbindMethods(object,"getMaxRageRefix")
     -- self:unbindMethods(object,"getMaxHpRefix")
 end

@@ -13,6 +13,9 @@ end
 function ImpactLogic:refixSkill(ownImp,skillInfo)
 
 end
+function ImpactLogic:crtRefix(ownImp)
+
+end
 function ImpactLogic:updata(rMe,ownImp)
     local bContinue = true
     if self:specialCDCheck(rMe,ownImp) == false then
