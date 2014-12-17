@@ -21,6 +21,7 @@ function AICharacterBehavior:bind(object)
     self:bindMethods(object)
 
     self:reset(object)
+    -- object:ResetAI()
 end
 ------------------------------------------------------------------------------
 function AICharacterBehavior:unbind(object)
@@ -33,7 +34,93 @@ end
 ------------------------------------------------------------------------------
 function AICharacterBehavior:bindMethods(object)
     ----------------------------------------
-    --AI移动逻辑
+    local function ResetAI()
+        object._target_view = nil
+        object._cur_select_skill = nil
+        object._atk_distance = nil
+        object._action_point={move = 1,attack=1}
+    end
+    self:bindMethod(object,"ResetAI", ResetAI)
+    ----------------------------------------
+    -- 强攻阵 : 寻找最近的敌人进行攻击
+    local function AI(object,map_event)
+        if object._target_view == nil then
+        -- if object._action_point.move + object._action_point.attack >= 2 then
+            for k,v in pairs(object:getMap():getAllObjects())  do
+                v:updataCellPos()
+            end
+            object._target_view = object:findNearestEnemy(map_event,false)
+            object._cur_select_skill = object:getSelectSkill()
+            object._atk_distance = object:GetAtkDistance()
+            object._action_point={move = 1,attack=1}
+        end
+        if object._target_view then
+            local dirs = nil
+            if  object:getDir() == MapConstants.DIR_L then
+                dirs=MapConstants.AKT_DIRCTIONS_L
+            else
+                dirs=MapConstants.AKT_DIRCTIONS_R
+            end
+            local target_obj_views =object:getAktDirObjsByDisAndCamp(dirs,object._atk_distance,true)
+
+            local isInRange = #target_obj_views > 0
+            -- for i=1,#target_obj_views do
+            --     if target_obj_views[i]:GetModel():getId() == object._target_view:GetModel():getId()  then
+            --         isInRange = true
+            --     end
+            -- end
+
+            if object._action_point.attack > 0 and isInRange and not object:isState("attacking") then
+
+                HeroOperateManager:destroyCommandByType(CommandType.HeroMove)
+                if not object:UseSkill(object._cur_select_skill.id) then
+                    assert(false,"888"..object:getNickname())
+                end
+                object:doStopEvent()
+                object._action_point.attack = object._action_point.attack - 1
+                object._action_point.move = object._action_point.move - 1
+            elseif object._action_point.move > 0 and not isInRange and not object:isState("moving") then
+                object:UpdataMove(map_event)
+                object._action_point.move = object._action_point.move - 1
+            end
+        end
+    end
+    self:bindMethod(object,"AI", AI)
+    local function GetAtkDistance(object)
+        local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(object._cur_select_skill.id)
+        return skillIns.atkDistance
+    end
+    self:bindMethod(object,"GetAtkDistance", GetAtkDistance)
+    local function UpdataMove(object,map_event)
+        local cell_pos_begin = object:getView():getCellPos()
+        local cell_pos_end = object._target_view:getCellPos()
+        local shortestSteps= AStarUtil:findPath(cell_pos_begin ,cell_pos_end,map_event,object:getView())
+        if not shortestSteps then
+            return false
+        end
+        local target_position_datas = {}
+        for i=1,object:getMoveDistance() do
+            if table.nums(shortestSteps)>=i then
+                local cellPosPre = cell_pos_begin
+                local preStep = shortestSteps[i-1]
+                if preStep then
+                    cellPosPre=preStep.pos
+                end
+                local cellPos= shortestSteps[i].pos
+                local dir= object:calcDir(cellPosPre,cellPos)
+
+                -- local targetPosWorld = mapEvent:getMap():getDMap():cellPosToWorldPos(cellPos)
+                -- HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,targetPosWorld,dir))
+                target_position_datas[#target_position_datas+1]={target_cell_position=cellPos,dir=dir}
+             end
+        end
+        for i=1,#target_position_datas do
+            local t = {target_position_datas[i]}
+            HeroOperateManager:addCommand(HeroMoveCommand.new(object:getView(),mapEvent,t))
+        end
+
+    end
+    self:bindMethod(object,"UpdataMove", UpdataMove)
     local function AILogicMove(object,mapEvent)
         local object = object:getView()
         if object:GetModel():isMoving() then
@@ -57,6 +144,7 @@ function AICharacterBehavior:bindMethods(object)
         if not shortestSteps then
             return false
         end
+        local target_position_datas = {}
         for i=1,object:GetModel():getMoveDistance() do
             if table.nums(shortestSteps)>=i then
                 local cellPosPre = cellPosSelf
@@ -67,10 +155,12 @@ function AICharacterBehavior:bindMethods(object)
                 local cellPos= shortestSteps[i].pos
                 local dir= object:GetModel():calcDir(cellPosPre,cellPos)
 
-                local targetPosWorld = mapEvent:getMap():getDMap():cellPosToWorldPos(cellPos)
-                HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,targetPosWorld,dir))
+                -- local targetPosWorld = mapEvent:getMap():getDMap():cellPosToWorldPos(cellPos)
+                -- HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,targetPosWorld,dir))
+                target_position_datas[#target_position_datas+1]={target_cell_position=cellPos,dir=dir}
              end
         end
+        HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,target_position_datas))
         return true
     end
     self:bindMethod(object,"AILogicMove", AILogicMove)
@@ -78,9 +168,9 @@ function AICharacterBehavior:bindMethods(object)
     -- AI攻击逻辑
     local function AILogicAkt(object,mapEvent)
         local ov = object:getView()
-        if object:isState("moving") then
-            return false
-        end
+        -- if object:isState("moving") then
+        --     return false
+        -- ends
         if object:isState("attacking") then
             return false
         end
@@ -109,42 +199,59 @@ function AICharacterBehavior:bindMethods(object)
         return true
     end
     self:bindMethod(object,"AILogicAkt", AILogicAkt)
+    local function SelectTargetObjs(object,target_views)
+        local ownSkill = object:getSelectSkill()
+        if ownSkill == nil then return false end
+       if not object.skillCore_:preocessSkillRequest(object,ownSkill.skillId) then
+            object:getTargetAndDepleteParams():init()
+            return false
+        end
+        target_views=object:getTargetAndDepleteParams().targets
+        return true
+    end
+    self:bindMethod(object,"SelectTargetObjs", SelectTargetObjs)
     ----------------------------------------
     --找最近的敌人
     local function findNearestEnemy(object,mapEvent,isPriSelectRow)
-        local object = object:getView()
-        local camp = object:GetModel():getCampId()
+        local object_view = object:getView()
+
+        local camp = object:getCampId()
         if camp == MapConstants.PLAYER_CAMP then
             camp = MapConstants.ENEMY_CAMP
         elseif camp == MapConstants.ENEMY_CAMP then
             camp = MapConstants.PLAYER_CAMP
         end
 
-        local mx,my = object:getPosition()
-        local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(mx,my))
+        -- local mx,my = object:getPosition()
+        local cellPosSelf = object_view:getCellPos() -- local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(mx,my))
 
         local disInfo={}
-        for id, object in pairs(mapEvent.map_:getAllCampObjects(camp)) do
-            if object and not object:GetModel():isDead() then
-                local dis = math.floor(math2d.dist(mx, my, object:getPositionX(), object:getPositionY()))
-                    table.insert(disInfo,{dis_=dis,enemyObj=object})
+        for id, object_view_ in pairs(mapEvent.map_:getAllCampObjects(camp)) do
+            if object_view_ and not object_view_:GetModel():isDead() then
+                local dis = math2d.dist(cellPosSelf.x, cellPosSelf.y, object_view_:getCellPos().x, object_view_:getCellPos().y)
+                  -- print("···ppppp",object:getId(),dis,cellPosSelf.x,cellPosSelf.y,object_view_:getCellPos().x,object_view_:getCellPos().y)
+                    table.insert(disInfo,{dis_=dis,enemy_obj_view=object_view_})
             end
         end
 
         if table.nums(disInfo)>0 then
             table.sort(disInfo,function(a, b) return a.dis_ < b.dis_ end)
+            -- for i=1,#disInfo do
+            --     print("···",object:getId(),disInfo[i].dis_)
+            -- end
             --是否优先选择同一行的敌人
             if isPriSelectRow then
                 for i,target in ipairs(disInfo) do
-                    local tx,ty = target.enemyObj:getPosition()
-                    local cellPosEnemy = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(tx,ty))
+                    -- local tx,ty = target.enemyObj:getPosition()
+                    -- local cellPosEnemy = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(tx,ty))
+                    local cellPosEnemy = target.enemy_obj_view:getCellPos()
                     --TODO 找到同一线上的，需改成按规则查找
                     if cellPosEnemy.y == cellPosSelf.y then
-                        return target.enemyObj
+                        return target.enemy_obj_view
                     end
                 end
             end
-            return disInfo[1].enemyObj
+            return disInfo[1].enemy_obj_view
         end
         return nil
     end
@@ -172,7 +279,7 @@ function AICharacterBehavior:bindMethods(object)
     local function getAktDirObjsByDis(object,aktDirs,dis)
         local targets = {}
         local ov = object:getView()
-        local sCellPos = ov:getPositionCell()
+        local sCellPos = ov:getCellPos()
         for i=1, #aktDirs do
             local offset =aktDirs[i]
             for j=1,dis do

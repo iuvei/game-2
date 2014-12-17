@@ -206,9 +206,9 @@ function StateMachineBehavior:bindMethods(object)
     self:bindMethod(object,"doBeKillEvent", doBeKillEvent)
     ----------------------------------------
     -- 移动事件
-    local function doMoveEvent(object,time)
+    local function doMoveEvent(object,options)
         if object:canDoEvent("move") then
-            object.fsm__:doEvent("move",time)
+            object.fsm__:doEvent("move",options)
         end
     end
     self:bindMethod(object,"doMoveEvent", doMoveEvent)
@@ -263,7 +263,7 @@ end
 function StateMachineBehavior:onMove_(event)
     local object  = self.object__
     self:log("StateMachineBehavior %s:%s Move", object:getId(), object.nickname_)
-    object:dispatchEvent({name = object.MOVE_EVENT})
+    object:dispatchEvent({name = object.MOVE_EVENT,options=event.args[1]})
 end
 ------------------------------------------------------------------------------
 function StateMachineBehavior:onStop_(event)

@@ -22,8 +22,7 @@ end
 
 ------------------------------------------------------------------------------
 function MovableBehavior:bind(object)
-    self.targetPos = nil
-
+    self._target_postions = {}
     self:bindMethods(object)
 
     self:reset(object)
@@ -58,32 +57,48 @@ function MovableBehavior:bindMethods(object)
     self:bindMethod(object, "setSpeed", setSpeed)
     ----------------------------------------
     --_callback 为移动结束时回调函数
-    local function startMoving(object,objectView,moveX,moveY, _callback)
+    -- local function startMoving(object,objectView,moveX,moveY, _callback)
 
+    --     if object.movingState_ == MovableBehavior.MOVING_STATE_STOPPED
+    --             or object.movingState_ == MovableBehavior.MOVING_STATE_SPEEDDOWN then
+
+    --         local state = object.movingState_
+    --         if state == MovableBehavior.MOVING_STATE_STOPPED then
+    --             self.targetPos = { x = math.floor(moveX) , y = math.floor(moveY), callback = _callback }
+    --         end
+
+    --         object.movingState_ = MovableBehavior.MOVING_STATE_SPEEDUP
+
+    --         -- 执行Move事件
+    --         object:doMoveEvent(0,options)
+    --         -- self:setNextPosition(object,objectView)
+    --     end
+    -- end
+    self:bindMethod(object, "startMoving", startMoving)
+    local function moveToPositions(object,target_position_infos)
         if object.movingState_ == MovableBehavior.MOVING_STATE_STOPPED
-                or object.movingState_ == MovableBehavior.MOVING_STATE_SPEEDDOWN then
+            or object.movingState_ == MovableBehavior.MOVING_STATE_SPEEDDOWN then
 
             local state = object.movingState_
             if state == MovableBehavior.MOVING_STATE_STOPPED then
-                self.targetPos = { x = math.floor(moveX) , y = math.floor(moveY), callback = _callback }
+                self._target_postions={}
+                -- 保存为世界坐标
+                local dmap=object:getView():getMap():getDMap()
+                local count = #target_position_infos
+                for i=1,count do
+                    self._target_postions[#self._target_postions+1] = dmap:cellPosToWorldPos(target_position_infos[i].target_cell_position)
+                    -- table.insert(self._target_postions, dmap:cellPosToWorldPos(target_position_infos[i].target_cell_position))
+                end
             end
 
             object.movingState_ = MovableBehavior.MOVING_STATE_SPEEDUP
 
             -- 执行Move事件
-            object:doMoveEvent(0)
+            object:doMoveEvent(options)
             -- self:setNextPosition(object,objectView)
         end
     end
-    self:bindMethod(object, "startMoving", startMoving)
-    -- ----------------------------------------
-    -- --
-    local function stopMovingNow(object)
-        object.movingState_ = MovableBehavior.MOVING_STATE_STOPPED
-        object.currentSpeed_ = 0
-        self.targetPos = nil
-    end
-    self:bindMethod(object, "stopMovingNow", stopMovingNow)
+    self:bindMethod(object, "moveToPositions", moveToPositions)
     ----------------------------------------
     --
     -- local function isMoving(object)
@@ -97,7 +112,9 @@ function MovableBehavior:bindMethods(object)
         local state = object.movingState_
         if state == MovableBehavior.MOVING_STATE_STOPPED then return end
 
-        if self.targetPos == nil then
+        local target_pos = self._target_postions[1]
+        if target_pos == nil then
+
             return
         end
 
@@ -113,30 +130,30 @@ function MovableBehavior:bindMethods(object)
         y = math.floor(y)
 
         -- 处理x轴
-        if x < self.targetPos.x then
+        if x < target_pos.x then
             x = x + moveDis
             -- print("···1",x,y,dt,moveDis)
-            if x > self.targetPos.x then
-                x = self.targetPos.x
+            if x > target_pos.x then
+                x = target_pos.x
             end
-        elseif x > self.targetPos.x then
+        elseif x > target_pos.x then
             x = x - moveDis
            -- print("···2",x,y,dt,moveDis)
-            if x < self.targetPos.x then
-                x = self.targetPos.x
+            if x < target_pos.x then
+                x = target_pos.x
             end
         end
 
         -- 处理y轴
-        if y < self.targetPos.y then
+        if y < target_pos.y then
             y = y + moveDis
-            if y > self.targetPos.y then
-                y = self.targetPos.y
+            if y > target_pos.y then
+                y = target_pos.y
             end
-        elseif y > self.targetPos.y then
+        elseif y > target_pos.y then
             y = y - moveDis
-            if y < self.targetPos.y then
-                y = self.targetPos.y
+            if y < target_pos.y then
+                y = target_pos.y
             end
         end
 
@@ -153,8 +170,8 @@ function MovableBehavior:bindMethods(object)
         object.view_:setPosition(x,y)
 
         -- 到达目标，停止
-        if x == self.targetPos.x and y == self.targetPos.y then
-            object:doStopEvent()
+        if x == target_pos.x and y == target_pos.y then
+            -- object:doStopEvent()
             -- print("end",object:getId(),object:getNickname())
             -- 设置为停止状态
             object:stopMovingNow()
@@ -163,7 +180,24 @@ function MovableBehavior:bindMethods(object)
 
     end
     self:bindMethod(object, "tick", tick)
+    ----------------------------------------
+    --
+    local function stopMovingNow(object)
+        -- 更新人物地图格子位置
+        object:getView():updataCellPos()
 
+        -- table.remove(self._target_postions,1)
+        -- if object:isState("idle") then
+        --     print("···2222")
+        --     self._target_postions={}
+        -- end
+        -- if #self._target_postions == 0 then
+            object.movingState_ = MovableBehavior.MOVING_STATE_STOPPED
+            object.currentSpeed_ = 0
+            object:doStopEvent()
+        -- end
+    end
+    self:bindMethod(object, "stopMovingNow", stopMovingNow)
 end
 ------------------------------------------------------------------------------
 -- 卸载绑定的函数

@@ -200,6 +200,29 @@ function Map:getDMap()
     return self.dMap_
 end
 ------------------------------------------------------------------------------
+-- <<<<<<< HEAD
+-- =======
+--
+-- function Map:getHeroByCellPos(cellPos,target_type)
+--     local objects = self:getAllObjects()
+--     target_type = target_type or "all"
+--     if target_type == "player" then -- 目标为自己阵营
+--         objects = self:getAllCampObjects(MapConstants.PLAYER_CAMP)
+--     elseif target_type == "enemy" then -- 目标为敌方阵营
+--         objects = self:getAllCampObjects(MapConstants.ENEMY_CAMP)
+--     end
+--     for id, object in pairs(objects) do
+--         if object and object:GetModel():getClassId() == "hero" and not object:GetModel():isDead() then
+--                 local pos = object:getCellPos()
+--                 if pos.x==cellPos.x and pos.y==cellPos.y then
+--                     return object
+--                 end
+--         end
+--     end
+--     return nil
+-- end
+------------------------------------------------------------------------------
+-- >>>>>>> game_fight_ai
 -- 根据阵型生成
 function Map:spawnWithFormation(parent)
     self:spawnSelf(parent)
