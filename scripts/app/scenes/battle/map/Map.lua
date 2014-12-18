@@ -261,6 +261,13 @@ function Map:registerImpactEvent(rReceiver,rSender,ownImpact,isCritcalHit)
                 rReceiver:Impact_RegisterImpact(ownImpact)
             end
         end
+        -- 更新保存的目标,挂掉的要清理
+        if rSender and rReceiver:isDestroyed() then
+            for i,v in ipairs(rSender.targetAndDepleteParams_.targets) do
+                 v:GetModel():isDestroyed()
+                 rSender.targetAndDepleteParams_.targets[i]=nil
+             end
+        end
     end
 end
 ------------------------------------------------------------------------------

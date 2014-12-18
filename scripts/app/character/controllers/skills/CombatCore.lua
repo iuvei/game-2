@@ -27,13 +27,13 @@ function CombatCore:getResultImpact(rAttacker,rDefender,ownImpact)
     self._add_atk_tactics = impLogic:getDamageTactics(ownImpact)
     -- 物理伤害
     local damage=self:CalcPhyDamage(rAttacker, rDefender, self._add_atk_phy, self._add_def_phy)
-    impLogic:setDamagePhy(ownImpact, damage)
+    impLogic:setDamagePhy(ownImpact, math.round(damage))
     -- 战法伤害
     local damage=self:CalcMagicDamage(rAttacker, rDefender, self._add_atk_magic, self._add_def_magic)
-    impLogic:setDamageMagic(ownImpact, damage)
+    impLogic:setDamageMagic(ownImpact, math.round(damage))
     -- 计策伤害
     local damage=self:CalcTacticsDamage(rAttacker, rDefender, self._add_atk_tactics,self._add_def_tactics)
-    impLogic:setDamageTactics(ownImpact, damage)
+    impLogic:setDamageTactics(ownImpact, math.round(damage))
 
     return damage
 end

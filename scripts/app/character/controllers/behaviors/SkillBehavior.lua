@@ -45,8 +45,8 @@ end
 ------------------------------------------------------------------------------
 function SkillBehavior:bindMethods(object)
 
-    local function UseSkill(object,skillId)
-        if not object.skillCore_:preocessSkillRequest(object,skillId) then
+    local function UseSkill(object,skillId,target_views)
+        if not object.skillCore_:preocessSkillRequest(object,skillId,target_views) then
             object:getTargetAndDepleteParams():init()
             return false
         end
@@ -76,15 +76,15 @@ function SkillBehavior:bindMethods(object)
     local function onDamage(object,damageVal,attackerId,skillId,is_crt)
         local outData={damage=damageVal}
         local attackerObj =object:getMap():getObjectReal(attackerId)
-        -- default min value is 1
-        if outData.damage<=0 then outData.damage=1 end
+
         -- 被攻击方受伤害时执行的效果
         object:_Impact_OnDamage(attackerObj,outData,skillId)
         -- 攻击方攻击后执行的效果
         if attackerObj~=nil then
             attackerObj:_Impact_OnDamageTarget(object,outData,skillId)
         end
-
+        -- default min value is 1
+        if outData.damage<=0 then outData.damage=1 end
         object:increaseHp(-outData.damage,is_crt)
     end
     self:bindMethod(object,"onDamage", onDamage)
@@ -108,7 +108,7 @@ function SkillBehavior:bindMethods(object)
         end
         -- default min value is 1
         if outData.damage==0 then outData.damage=1 end
-        object:increaseHp(-math.floor(outData.damage) ,is_crt)
+        object:increaseHp(-outData.damage ,is_crt)
 
         -- local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
         if not object:isDestroyed() then

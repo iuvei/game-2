@@ -29,7 +29,12 @@ function HeroInSceneCommand:execute()
                                 and object:checkCondition(v.id)
                                 and object:isInSceneSkill(v.id)
                             then
-                                object:UseSkill(v.id)
+                                local skill_logic = Skill_GetLogic(object,Skill_GetLogicId(v.id))
+                                local out_target_views = {}
+                                -- 技能作用距离内,满足目标逻辑的对象
+                                if skill_logic:calcSkillTargets(object,v.id,out_target_views) then
+                                     object:UseSkill(v.id,out_target_views)
+                                end
                             end
                         end
                     end

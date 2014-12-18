@@ -83,37 +83,38 @@ function SkillLogic:registerImpactEvent(rReceiver,rSender,ownImpact,bCritical)
     end
     rSender:getMap():registerImpactEvent(rReceiver, rSender, ownImpact, bCritical)
 end
-function SkillLogic:calcTargets(rMe,skillId,targetViews)
+-- 技能效果范围内的对象
+function SkillLogic:calcSkillEffectTargets(rMe,skillId,targetViews)
     --数据
     local params = rMe:getTargetAndDepleteParams()
-    local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(skillId)
+    -- local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(skillId)
     local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
-    local attackDis = skillIns.atkDistance
-    local target_logic = skillTemp.useTarget_type
+    -- local attackDis = skillIns.atkDistance
+    -- local target_logic = skillTemp.useTarget_type
     local isChaos = rMe:isChaos()
     -- if rMe:isChaos() then
     --     -- target_type=self:_toInverseTargetLogic(target_type)
     --     target_type=SkillDefine.TargetLogic_All
     -- end
-    -- 根据目标逻辑计算攻击目标
-    local out_target_views = {}
-    self:getTarsByTarLogic(rMe,target_logic,attackDis,out_target_views)
-    if #out_target_views<=0 then return false end
-    -- 选择全体不需要在计算技能范围
-    if target_logic == SkillDefine.TargetLogic_All or
-        target_logic == SkillDefine.TargetLogic_AllEnemy or
-        target_logic == SkillDefine.TargetLogic_AllTeam
-        then
-        targetViews = out_target_views
-        return true
-    end
-    -- 混乱
-    if isChaos then
-        local rand = math.random(1,#out_target_views)
-        table.insert(targetViews, out_target_views[rand])
-    else
-        table.insert(targetViews, out_target_views[1])
-    end
+    -- -- 根据目标逻辑计算攻击目标
+    -- local out_target_views = {}
+    -- self:getTarsByTarLogic(rMe,target_logic,attackDis,out_target_views)
+    -- if #out_target_views<=0 then return false end
+    -- -- 选择全体不需要在计算技能范围
+    -- if target_logic == SkillDefine.TargetLogic_All or
+    --     target_logic == SkillDefine.TargetLogic_AllEnemy or
+    --     target_logic == SkillDefine.TargetLogic_AllTeam
+    --     then
+    --     targetViews = out_target_views
+    --     return true
+    -- end
+    -- -- 混乱
+    -- if isChaos then
+    --     local rand = math.random(1,#out_target_views)
+    --     table.insert(targetViews, out_target_views[rand])
+    -- else
+    --     table.insert(targetViews, out_target_views[1])
+    -- end
 
     -- 更新人物攻击方向
     local fristObjv = targetViews[1]
@@ -140,6 +141,35 @@ function SkillLogic:calcTargets(rMe,skillId,targetViews)
     end
 
     return true
+end
+-- 技能作用距离内,满足目标逻辑的对象
+function SkillLogic:calcSkillTargets(rMe,skillId,out_target_views)
+    local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(skillId)
+    local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(skillId)
+    local attackDis = skillIns.atkDistance
+    local target_logic = skillTemp.useTarget_type
+
+    local isChaos = rMe:isChaos()
+    -- 根据目标逻辑计算攻击目标
+    local out_target_views_ = {}
+    self:getTarsByTarLogic(rMe,target_logic,attackDis,out_target_views_)
+    if #out_target_views_<=0 then return false end
+    -- 选择全体不需要在计算技能范围
+    if target_logic == SkillDefine.TargetLogic_All or
+        target_logic == SkillDefine.TargetLogic_AllEnemy or
+        target_logic == SkillDefine.TargetLogic_AllTeam
+        then
+        out_target_views = out_target_views_
+        return true
+    end
+    -- 混乱
+    if isChaos then
+        local rand = math.random(1,#out_target_views_)
+        table.insert(out_target_views, out_target_views_[rand])
+    else
+        table.insert(out_target_views, out_target_views_[1])
+    end
+    return #out_target_views_>0
 end
 -- 转换逻辑目标为对立
 function SkillLogic:_toInverseTargetLogic(target_logic)
@@ -174,7 +204,7 @@ function SkillLogic:getTarsByTarLogic(rMe,tarLogicType,attackDis,targetViews)
     end
     -- 检测攻击距离，－1时设为0，可能目标为自己
     if attackDis < 0 then attackDis = 0 end
-    local cell_pos = rMe:getView():getPositionCell()
+    local cell_pos = rMe:getView():getCellPos()
     for i=1, #dirs do
         local offset =dirs[i]
         for j=1,attackDis do

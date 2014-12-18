@@ -64,7 +64,12 @@ function HeroAtkCommand:execute()
             if self._times_count < self._times_atk then
                 self:setOpState(HeroOpState.None)
                  FuncAktCmdAgain = function ()
-                    self:setOpState(HeroOpState.Start)
+                    if #self._rMe.targetAndDepleteParams_.targets > 0 then
+                        self:setOpState(HeroOpState.Start)
+                    else
+                        self:setOpState(HeroOpState.End)
+                    end
+
                 end
             end
             --加入攻击效果

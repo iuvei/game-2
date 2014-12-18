@@ -27,7 +27,7 @@ function SLImpactsToTarget:activateOnce(rMe)
     local hits = {{},{}}
     for i=1,#target_views do
         local target_view = target_views[i]
-        -- issue:GetModel（）可能为空nil
+        -- issue:当2次攻击时target_view为空nil
         local target_obj = target_view:GetModel()
         local isCritcalHit = self:critcalHitThisTarget(rMe,target_obj)
         local isHit = self:hitThisTarget(rMe,target_obj)
@@ -86,6 +86,7 @@ function SLImpactsToTarget:effectOnMultOnce(rMe,target_views,isHits,isCritcalHit
                         self:registerImpactEvent(target_obj,rMe,ownImpact,isCritcalHits[i])
                     else
                         target_obj_view:createMiss()
+                        print("···createMiss")
                     end
                 end
             -- 自己定义的目标逻辑

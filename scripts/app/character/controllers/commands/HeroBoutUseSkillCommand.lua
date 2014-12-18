@@ -22,7 +22,12 @@ function HeroBoutUseSkillCommand:execute()
             if object:getClassId() == "hero" then
                 local cmd = HeroOperateManager:getFrontCommand(HeroOperateManager.CmdSequence)
                 if HeroOperateManager:isEmpty()  then
-                    object:UseSkill(self._use_skill_id)
+                    local skill_logic = Skill_GetLogic(object,Skill_GetLogicId(self._use_skill_id))
+                    local out_target_views = {}
+                    -- 技能作用距离内,满足目标逻辑的对象
+                    if skill_logic:calcSkillTargets(object,self._use_skill_id,out_target_views) then
+                         object:UseSkill(self._use_skill_id,out_target_views)
+                     end
                 end
                 --执行列表的命令
                 HeroOperateManager:updata()

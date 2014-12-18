@@ -55,31 +55,25 @@ function AICharacterBehavior:bindMethods(object)
             object._action_point={move = 1,attack=1}
         end
         if object._target_view then
-            local dirs = nil
-            if  object:getDir() == MapConstants.DIR_L then
-                dirs=MapConstants.AKT_DIRCTIONS_L
-            else
-                dirs=MapConstants.AKT_DIRCTIONS_R
-            end
-            local target_obj_views =object:getAktDirObjsByDisAndCamp(dirs,object._atk_distance,true)
 
-            local isInRange = #target_obj_views > 0
-            -- for i=1,#target_obj_views do
-            --     if target_obj_views[i]:GetModel():getId() == object._target_view:GetModel():getId()  then
-            --         isInRange = true
-            --     end
-            -- end
+            --攻击范围内目标
+            local skill_logic = Skill_GetLogic(object,Skill_GetLogicId(object._cur_select_skill.id))
+            local out_target_views = {}
+            -- 技能作用距离内,满足目标逻辑的对象
+            skill_logic:calcSkillTargets(object,object._cur_select_skill.id,out_target_views)
 
-            if object._action_point.attack > 0 and isInRange and not object:isState("attacking") then
+            local isInRange = #out_target_views > 0
+
+            if object._action_point.attack > 0 and isInRange and not object:isState("attacking") and object:canAttack() then
 
                 HeroOperateManager:destroyCommandByType(CommandType.HeroMove)
-                if not object:UseSkill(object._cur_select_skill.id) then
+                if not object:UseSkill(object._cur_select_skill.id,out_target_views) then
                     assert(false,"888"..object:getNickname())
                 end
                 object:doStopEvent()
                 object._action_point.attack = object._action_point.attack - 1
                 object._action_point.move = object._action_point.move - 1
-            elseif object._action_point.move > 0 and not isInRange and not object:isState("moving") then
+            elseif object._action_point.move > 0 and not isInRange and not object:isState("moving") and object:canMove() then
                 object:UpdataMove(map_event)
                 object._action_point.move = object._action_point.move - 1
             end
@@ -121,95 +115,95 @@ function AICharacterBehavior:bindMethods(object)
 
     end
     self:bindMethod(object,"UpdataMove", UpdataMove)
-    local function AILogicMove(object,mapEvent)
-        local object = object:getView()
-        if object:GetModel():isMoving() then
-            return false
-        end
-        if not object:GetModel():canMove() then
-            return false
-        end
+    -- local function AILogicMove(object,mapEvent)
+    --     local object = object:getView()
+    --     if object:GetModel():isMoving() then
+    --         return false
+    --     end
+    --     if not object:GetModel():canMove() then
+    --         return false
+    --     end
 
-        local tx, ty = object:getPosition()
-        local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(tx,ty))
-        local cellPosEnemy=nil
-        -- if object:GetModel():getType()=="gongbing" then
-        if math.floor(object:GetModel():getArmId() / 1000) == 3 then
-            cellPosEnemy=object:GetModel():getMovePosWayFindNearEnemy(mapEvent,false)
-        else
-            cellPosEnemy=object:GetModel():getMovePosWayForRow(mapEvent)
-        end
-        if not cellPosEnemy then return false end
-        local shortestSteps= AStarUtil:findPath(cellPosSelf ,cellPosEnemy,mapEvent,object)
-        if not shortestSteps then
-            return false
-        end
-        local target_position_datas = {}
-        for i=1,object:GetModel():getMoveDistance() do
-            if table.nums(shortestSteps)>=i then
-                local cellPosPre = cellPosSelf
-                local preStep = shortestSteps[i-1]
-                if preStep then
-                    cellPosPre=preStep.pos
-                end
-                local cellPos= shortestSteps[i].pos
-                local dir= object:GetModel():calcDir(cellPosPre,cellPos)
+    --     local tx, ty = object:getPosition()
+    --     local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(tx,ty))
+    --     local cellPosEnemy=nil
+    --     -- if object:GetModel():getType()=="gongbing" then
+    --     if math.floor(object:GetModel():getArmId() / 1000) == 3 then
+    --         cellPosEnemy=object:GetModel():getMovePosWayFindNearEnemy(mapEvent,false)
+    --     else
+    --         cellPosEnemy=object:GetModel():getMovePosWayForRow(mapEvent)
+    --     end
+    --     if not cellPosEnemy then return false end
+    --     local shortestSteps= AStarUtil:findPath(cellPosSelf ,cellPosEnemy,mapEvent,object)
+    --     if not shortestSteps then
+    --         return false
+    --     end
+    --     local target_position_datas = {}
+    --     for i=1,object:GetModel():getMoveDistance() do
+    --         if table.nums(shortestSteps)>=i then
+    --             local cellPosPre = cellPosSelf
+    --             local preStep = shortestSteps[i-1]
+    --             if preStep then
+    --                 cellPosPre=preStep.pos
+    --             end
+    --             local cellPos= shortestSteps[i].pos
+    --             local dir= object:GetModel():calcDir(cellPosPre,cellPos)
 
-                -- local targetPosWorld = mapEvent:getMap():getDMap():cellPosToWorldPos(cellPos)
-                -- HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,targetPosWorld,dir))
-                target_position_datas[#target_position_datas+1]={target_cell_position=cellPos,dir=dir}
-             end
-        end
-        HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,target_position_datas))
-        return true
-    end
-    self:bindMethod(object,"AILogicMove", AILogicMove)
+    --             -- local targetPosWorld = mapEvent:getMap():getDMap():cellPosToWorldPos(cellPos)
+    --             -- HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,targetPosWorld,dir))
+    --             target_position_datas[#target_position_datas+1]={target_cell_position=cellPos,dir=dir}
+    --          end
+    --     end
+    --     HeroOperateManager:addCommand(HeroMoveCommand.new(object,mapEvent,target_position_datas))
+    --     return true
+    -- end
+    -- self:bindMethod(object,"AILogicMove", AILogicMove)
     ----------------------------------------
     -- AI攻击逻辑
-    local function AILogicAkt(object,mapEvent)
-        local ov = object:getView()
-        -- if object:isState("moving") then
-        --     return false
-        -- ends
-        if object:isState("attacking") then
-            return false
-        end
-        if not object:canAttack() then
-            return false
-        end
-        --判断人物当前是否可使用技能
+    -- local function AILogicAkt(object,mapEvent)
+    --     local ov = object:getView()
+    --     -- if object:isState("moving") then
+    --     --     return false
+    --     -- ends
+    --     if object:isState("attacking") then
+    --         return false
+    --     end
+    --     if not object:canAttack() then
+    --         return false
+    --     end
+    --     --判断人物当前是否可使用技能
 
-        --取得人物要使用的技能
-         --local ownSkill = object:getSkills()[1]
-        local ownSkill = object:getSelectSkill()
-        if ownSkill == nil then return false end
+    --     --取得人物要使用的技能
+    --      --local ownSkill = object:getSkills()[1]
+    --     local ownSkill = object:getSelectSkill()
+    --     if ownSkill == nil then return false end
 
-        if DEBUG_BATTLE.showSkillInfo then
-            -- print("SelectSkill:")
-            -- showTableInfo(ownSkill)
-            -- print("----------------------")
-        end
+    --     if DEBUG_BATTLE.showSkillInfo then
+    --         -- print("SelectSkill:")
+    --         -- showTableInfo(ownSkill)
+    --         -- print("----------------------")
+    --     end
 
-        --执行技能
-        if not object:UseSkill(ownSkill.id) then
-            return false
-        end
-        --local dis = math.floor(math2d.dist(selfPos.x, selfPos.y, targetPos.x, targetPos.y))
+    --     --执行技能
+    --     if not object:UseSkill(ownSkill.id) then
+    --         return false
+    --     end
+    --     --local dis = math.floor(math2d.dist(selfPos.x, selfPos.y, targetPos.x, targetPos.y))
 
-        return true
-    end
-    self:bindMethod(object,"AILogicAkt", AILogicAkt)
-    local function SelectTargetObjs(object,target_views)
-        local ownSkill = object:getSelectSkill()
-        if ownSkill == nil then return false end
-       if not object.skillCore_:preocessSkillRequest(object,ownSkill.skillId) then
-            object:getTargetAndDepleteParams():init()
-            return false
-        end
-        target_views=object:getTargetAndDepleteParams().targets
-        return true
-    end
-    self:bindMethod(object,"SelectTargetObjs", SelectTargetObjs)
+    --     return true
+    -- end
+    -- self:bindMethod(object,"AILogicAkt", AILogicAkt)
+    -- local function SelectTargetObjs(object,target_views)
+    --     local ownSkill = object:getSelectSkill()
+    --     if ownSkill == nil then return false end
+    --    if not object.skillCore_:preocessSkillRequest(object,ownSkill.skillId) then
+    --         object:getTargetAndDepleteParams():init()
+    --         return false
+    --     end
+    --     target_views=object:getTargetAndDepleteParams().targets
+    --     return true
+    -- end
+    -- self:bindMethod(object,"SelectTargetObjs", SelectTargetObjs)
     ----------------------------------------
     --找最近的敌人
     local function findNearestEnemy(object,mapEvent,isPriSelectRow)
@@ -227,7 +221,7 @@ function AICharacterBehavior:bindMethods(object)
 
         local disInfo={}
         for id, object_view_ in pairs(mapEvent.map_:getAllCampObjects(camp)) do
-            if object_view_ and not object_view_:GetModel():isDead() then
+            if object_view_ and object_view_:GetModel():getClassId() == "hero" and not object_view_:GetModel():isDead() then
                 local dis = math2d.dist(cellPosSelf.x, cellPosSelf.y, object_view_:getCellPos().x, object_view_:getCellPos().y)
                   -- print("···ppppp",object:getId(),dis,cellPosSelf.x,cellPosSelf.y,object_view_:getCellPos().x,object_view_:getCellPos().y)
                     table.insert(disInfo,{dis_=dis,enemy_obj_view=object_view_})
@@ -256,26 +250,6 @@ function AICharacterBehavior:bindMethods(object)
         return nil
     end
     self:bindMethod(object,"findNearestEnemy", findNearestEnemy)
-    ----------------------------------------
-    --
-    local function getAktDirObjsByDisAndCamp(object,aktDirs,dis,isEnemy)
-        local vobjs = object:getAktDirObjsByDis(aktDirs,dis)
-        local vtargets={}
-        for i=1, #vobjs do
-            local t = vobjs[i]
-            if isEnemy == true then
-                if object:isEnemyByObj(t:GetModel()) then
-                    table.insert(vtargets,t)
-                end
-            else
-                if not object:isEnemyByObj(t:GetModel()) then
-                    table.insert(vtargets,t)
-                end
-            end
-        end
-        return vtargets
-    end
-    self:bindMethod(object,"getAktDirObjsByDisAndCamp", getAktDirObjsByDisAndCamp)
     local function getAktDirObjsByDis(object,aktDirs,dis)
         local targets = {}
         local ov = object:getView()
@@ -343,8 +317,8 @@ end
 ------------------------------------------------------------------------------
 -- 卸载绑定的函数
 function AICharacterBehavior:unbindMethods(object)
-    self:unbindMethod(object,"AILogicMove")
-    self:unbindMethod(object,"AILogicAkt")
+    -- self:unbindMethod(object,"AILogicMove")
+    -- self:unbindMethod(object,"AILogicAkt")
     self:unbindMethod(object,"findNearestEnemy")
     self:unbindMethod(object,"calcMoveDir")
     self:unbindMethod(object,"getMovePosWayFindNearEnemy")

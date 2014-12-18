@@ -9,7 +9,7 @@ end
 function TargetAndDepleteParams:init()
     self.skillId=0
     self.skillLev=0
-    self.target=nil
+    self.targets={}
     self.targetId=0
     self.flip=false
     self.nextHitTime=-1                         --特效下次的击中时间

@@ -18,7 +18,8 @@ function Skill_GetLogic(obj,logicId)
     return skillLogic
 end
 ---------------------------------------------------------
-function SkillCore:preocessSkillRequest(rMe,skillId)
+--
+function SkillCore:preocessSkillRequest(rMe,skillId,target_views)
     local rMeView =rMe:getView()
     local params = rMe:getTargetAndDepleteParams()
     params:init()
@@ -27,14 +28,12 @@ function SkillCore:preocessSkillRequest(rMe,skillId)
     local skillEffData = configMgr:getConfig("skills"):GetSkillEffect(skillId)
     local rTarView=nil
     assert(skillId,string.format("[preocessSkillRequest]: skillTemp is nil , invalid skillId %d", skillId))
-    assert(skillTemp,string.format("[preocessSkillRequest]: skillTemp is nil , invalid skillId %d", skillId))
+    -- assert(skillTemp,string.format("[preocessSkillRequest]: skillTemp is nil , invalid skillId %d", skillId))
     assert(skillIns~=0,string.format("[preocessSkillRequest]: skillTemp is nil , invalid skillId %d", skillId))
-
-    --攻击范围内目标
-    local targets = {}
-    local logic = Skill_GetLogic(rMe,Skill_GetLogicId(skillId))
-    if logic:calcTargets(rMe,skillId,targets) == false then
-         return
+    local skill_logic = Skill_GetLogic(rMe,Skill_GetLogicId(skillId))
+    -- 技能效果范围内的对象
+    if not skill_logic:calcSkillEffectTargets(rMe,skillId,target_views) then
+         return false
      end
     -- print("------------------skillIns for info:")
     --     table.walk(skillIns, function( v,k)
@@ -43,16 +42,10 @@ function SkillCore:preocessSkillRequest(rMe,skillId)
     params.skillId = skillIns.id
 
     --设置参数
-    params.targets=targets
+    params.targets=target_views
     params.target_type=skillTemp.useTarget_type
     params.skillLev=skillIns.lev
-   -- params.atkDir=dir
-    --params.flip=flip
-    -- print("···00000000",rMe:getState())
-    -- if rMe:isState("moving") then
-    --     print("···44444")
-    --     rMe:doStopEvent()
-    -- end
+
     return  true
 end
 ---------------------------------------------------------

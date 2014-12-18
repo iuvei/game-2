@@ -128,12 +128,7 @@ function hero:get_info()
         formationId = confHeroData.formationId,
         ArmId       = armId_,
         SkillRule   = confHeroData.SkillRule,
-<<<<<<< HEAD:scripts/app/mediator/hero/hero.lua
         skills      = skills_,
-
-=======
-        skills      = self:get( "skills" ) or confHeroData.skills,
->>>>>>> game_fight_ai:scripts/app/mediator/hero/client_hero.lua
         countryInfo = countryInfo,
 
         arm         = arm_,

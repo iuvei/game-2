@@ -123,6 +123,8 @@ function HeroOperateCommand:doDone(rMe)
         self:setDone(true)
         self._isDoDoneBefore = false
         self._isDoingBefore = false
+        -- 触发陷阱效果
+        self.map_:updataTrigger(rMe)
         HeroOperateManager:destroyAllCommands()
         if rMe then
             rMe:ResetAI()

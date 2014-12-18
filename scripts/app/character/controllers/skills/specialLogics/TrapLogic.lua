@@ -50,15 +50,16 @@ function TrapLogic:_Activate(special_obj)
             end
         end
     else
-        for i,v in ipairs(options.out_targets) do
+        -- issue : 会执行到这里？
+        for i,v in ipairs(options.out_target_views) do
             self:_EffectOnChar(special_obj,v:GetModel())
         end
     end
 end
 function TrapLogic:_EffectOnChar(special_obj,target_obj)
     local data = special_obj._conf_data
-    -- local impact_id = data.param1
-    local impact_id=310001
+    local impact_id = data.param1
+    -- local impact_id=310001
     ImpactCore:sendImpactToUnit_(target_obj, impact_id, special_obj._owner_obj, false)
 end
 -------------------------------------------------------------------------

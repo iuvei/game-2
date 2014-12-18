@@ -62,9 +62,9 @@ end
 ---------------------------------------------------------------------------------
 --
 function ImpactLogic003:crtRefix(ownImpact)
-    self:setDamagePhy(ownImpact,self:getDamagePhy(ownImpact)*1.5)
-    self:setDamageMagic(ownImpact,self:getDamageMagic(ownImpact)*1.5)
-    self:setDamageTactics(ownImpact,self:getDamageTactics(ownImpact)*1.5)
+    self:setDamagePhy(ownImpact,math.round(self:getDamagePhy(ownImpact)*1.5))
+    self:setDamageMagic(ownImpact,math.round(self:getDamageMagic(ownImpact)*1.5))
+    self:setDamageTactics(ownImpact,math.round(self:getDamageTactics(ownImpact)*1.5))
 end
 ---------------------------------------------------------------------------------
 --
