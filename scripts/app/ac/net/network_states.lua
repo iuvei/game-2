@@ -230,13 +230,11 @@ function network_states:change_state(network,state,params)
 	end
 end
 ------------------------------------------------------------------------------
-local socket = require "socket"
 function network_states:new_heartbeat(network)
 
 	-- network:encode_send("CSC_SysHeartBeat")
 	-- 每5秒发一次心跳
 	heartbeat_timeid = timer:start(function( dt, data, timerId)
-		network.pingstartvalue = socket.gettime()
 		network:encode_send("CSC_SysHeartBeat")
 	end, 5)
 end

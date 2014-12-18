@@ -15,10 +15,10 @@ function geme_attr.gen_attr( data )
 		Cha			= data.Cha or 0,	-- 魅力
 		Speed	= data.Speed or 0,	-- 攻击速度
 		-- 二级属性
-		Hit			= data.Hit or 0,	-- 命中值
-		Evd			= data.Evd or 0,	-- 闪避值
-		Crt			= data.Crt or 0,	-- 暴击值
-		Crtdef		= data.Crtdef or 0,	-- 抗暴击值
+		Hit			= data.Hit or 0,	-- 命中率
+		Evd			= data.Evd or 0,	-- 闪避率
+		Crt			= data.Crt or 0,	-- 暴击率
+		Crtdef		= data.Crtdef or 0,	-- 抗暴击率
 		DecDef		= data.DecDef or 0, -- 破防伤害
 		DecDefRed	= data.DecDefRed or 0, -- 破防伤害减免
 
@@ -60,10 +60,10 @@ function geme_attr.gen_hero_attr( data )
 		Speed	= data.Speed or 0,	-- 攻击速度
 		SpeedInc	= data.SpeedInc or 0,
 		-- 二级属性
-		Hit			= data.Hit or 0,	-- 命中值
-		Evd			= data.Evd or 0,	-- 闪避值
-		Crt			= data.Crt or 0,	-- 暴击值
-		Crtdef		= data.Crtdef or 0,	-- 抗暴击值
+		Hit			= data.Hit or 0,	-- 命中率
+		Evd			= data.Evd or 0,	-- 闪避率
+		Crt			= data.Crt or 0,	-- 暴击率
+		Crtdef		= data.Crtdef or 0,	-- 抗暴击率
 		DecDef		= data.DecDef or 0, -- 破防伤害
 		DecDefRed	= data.DecDefRed or 0, -- 破防伤害减免
 

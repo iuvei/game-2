@@ -21,7 +21,6 @@ function OwnImpact:reset()
     self.cdInterval_=Cooldown.new(0,0)      --buff驻留CD
     self.isFadeOut_=false
     self.logicId = 0                        -- 逻辑ID
-    self.is_crt = false -- 是否暴击
 end
 function OwnImpact:setImpactTypeId(typeId)
     self.typeId_=typeId

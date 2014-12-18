@@ -30,7 +30,7 @@ function player:init()
 	local mediator_mgrs = require("app.mediator.mediator_mgrs")
 	self.mgrs = {}
 	for k,v in pairs(mediator_mgrs) do
-		self.mgrs[v.name] = require("app.mediator."..v.file).new(self)
+		self.mgrs[v.name] = require("app.mediator"..v.file).new(self)
 	end
 end
 ----------------------------------------

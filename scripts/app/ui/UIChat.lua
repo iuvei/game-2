@@ -58,17 +58,13 @@ function UIChat:Listen()
                                             local arr = string.split(s," ")
 
                                             if arr[1] == "cmd" then
-                                                -- if arr[2] == "createitem" then
-                                                --     for i=3,#arr do
-                                                --         PLAYER:send("CS_Command",{
-                                                --             content = "createitem "..arr[i]
-                                                --         })
-                                                --     end
-                                                -- end
-                                                -- print("···",arr[1],arr[2],arr[3])
-                                                PLAYER:send("CS_Command",{
-                                                     content = arr[2].." "..arr[3]
-                                                })
+                                                if arr[2] == "createitem" then
+                                                    for i=3,#arr do
+                                                        PLAYER:send("CS_Command",{
+                                                            content = "createitem "..arr[i]
+                                                        })
+                                                    end
+                                                end
                                             end
                                     end
                                 end)

@@ -58,8 +58,7 @@ function SkillInfo:setAccuracyRate(accuracyRate)
     self.accuracyRate_=accuracyRate
 end
 function SkillInfo:getAccuracy()
-    return -1
-    -- return self.accuracyRate_
+    return self.accuracyRate_
 end
 -----------------------------------------------------
 return SkillInfo

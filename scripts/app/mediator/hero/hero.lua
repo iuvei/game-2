@@ -101,12 +101,6 @@ function hero:get_info()
     local armId_ = self:get( "armId" ) or confHeroData.ArmId
     local arm_ =confHeros:GetArmsData(armId_)
 
-    local skills_ = nil
-    if DEBUG_BATTLE.useLocalSkill then
-        skills_      = confHeroData.skills
-    else
-        skills_      = self:get( "skills" )
-    end
     --新数据
     return {
         dataId      = self:get( "dataId" ),
@@ -128,12 +122,7 @@ function hero:get_info()
         formationId = confHeroData.formationId,
         ArmId       = armId_,
         SkillRule   = confHeroData.SkillRule,
-<<<<<<< HEAD:scripts/app/mediator/hero/hero.lua
-        skills      = skills_,
-
-=======
         skills      = self:get( "skills" ) or confHeroData.skills,
->>>>>>> game_fight_ai:scripts/app/mediator/hero/client_hero.lua
         countryInfo = countryInfo,
 
         arm         = arm_,

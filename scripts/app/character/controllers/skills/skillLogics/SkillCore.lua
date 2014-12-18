@@ -57,17 +57,11 @@ function SkillCore:preocessSkillRequest(rMe,skillId)
 end
 ---------------------------------------------------------
 function SkillCore:activeSkillNew(rMe)
-    local conf_skills = configMgr:getConfig("skills")
     local params = rMe:getTargetAndDepleteParams()
-    local skillTemp = conf_skills:GetSkillTemplate(params.skillId)
-    local skillIns = conf_skills:GetSkillInstanceBySkillId(params.skillId)
+    local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(params.skillId)
+    local skillIns = configMgr:getConfig("skills"):GetSkillInstanceBySkillId(params.skillId)
     local skillInfo = rMe:getSkillInfo()
     skillInfo:init()
-    -- 暴击系数
-    skillInfo.crt_factor = conf_skills:GetInitDataByType(3)
-    -- 抗暴击系数
-    skillInfo.crtdef_factor = conf_skills:GetInitDataByType(4)
-
     if self:instanceSkill(skillInfo,rMe) then
      end
      rMe:refixSkill(skillInfo)

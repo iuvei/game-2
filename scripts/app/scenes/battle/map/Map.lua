@@ -241,11 +241,7 @@ function Map:getAktBuildByCamp(camp)
 end
 ------------------------------------------------------------------------------
 --
-function Map:registerImpactEvent(rReceiver,rSender,ownImpact,isCritcalHit)
-    -- 设置暴击
-    if isCritcalHit then
-        ownImpact.is_crt = isCritcalHit
-    end
+function Map:registerImpactEvent(rReceiver,rSender,ownImpact)
     if rSender~=nil then
         ownImpact:setCasterObjId(rSender:getId())
     end
