@@ -48,7 +48,11 @@ function SkillCore:preocessSkillRequest(rMe,skillId)
     params.skillLev=skillIns.lev
    -- params.atkDir=dir
     --params.flip=flip
-
+    -- print("···00000000",rMe:getState())
+    -- if rMe:isState("moving") then
+    --     print("···44444")
+    --     rMe:doStopEvent()
+    -- end
     return  true
 end
 ---------------------------------------------------------

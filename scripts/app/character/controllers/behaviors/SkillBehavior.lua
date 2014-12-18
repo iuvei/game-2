@@ -50,7 +50,7 @@ function SkillBehavior:bindMethods(object)
             object:getTargetAndDepleteParams():init()
             return false
         end
-        HeroOperateManager:destroyCommandByType(CommandType.HeroMove)
+        -- HeroOperateManager:destroyCommandByType(CommandType.HeroMove)
         --加入命令
         --加入战前CG
         local skillTemp = configMgr:getConfig("skills"):GetSkillTemplate(skillId)

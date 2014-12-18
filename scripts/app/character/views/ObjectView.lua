@@ -19,6 +19,7 @@ function ObjectView:ctor(model,params)
     self.model_     = model
     self.sprite_    = nil
     self.impactSprite_={}               --保存效果显示的精灵用来删除
+    self._pos_cell = nil
 end
 ------------------------------------------------------------------------------
 function ObjectView:init(model,params)
@@ -32,6 +33,7 @@ function ObjectView:init(model,params)
     if params.flipx ~= nil then self:flipX(params.flipx) end
     -- 设置坐标
     self:setPosition(ccp(params.x,params.y))
+    self:updataCellPos()
 end
 ------------------------------------------------------------------------------
 -- 退出
@@ -153,8 +155,17 @@ function ObjectView:createImpactEffect(resEffectId,isRepeatPlay,effectPoint)
     end
 end
 ------------------------------------------------------------------------------
---取得自己的格子坐标
 function ObjectView:getCellPos()
+    return self._pos_cell
+end
+------------------------------------------------------------------------------
+--
+function ObjectView:updataCellPos()
+    self._pos_cell = self:_getCellPos()
+end
+------------------------------------------------------------------------------
+--取得自己的格子坐标
+function ObjectView:_getCellPos()
     local x,y = self:getPosition()
     return self:getMap():getDMap():worldPosToCellPos(ccp(x,y))
 end

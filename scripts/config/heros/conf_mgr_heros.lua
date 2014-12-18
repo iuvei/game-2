@@ -50,6 +50,7 @@ function conf_mgr_heros:GetHeroData(typeId,quality)
         country     = hero.country,
         Desc        = hero.Desc,
         arm         = arm_,
+        skills      = skills,
         attr         = game_attr.gen_hero_attr(hero),
         skills      = skills,
         require_equip  = conf_mgr_heros:get_equip_rule(hero.equip_rule), --初始绑定装备

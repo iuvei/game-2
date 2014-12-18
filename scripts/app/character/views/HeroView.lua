@@ -34,9 +34,9 @@ function HeroView:ctor(model,params)
         :addEventListener(cls.BEKILL_EVENT, handler(self, self.onBeKill_))
         :addEventListener(cls.HP_CHANGED_EVENT, handler(self, self.updateHP_))
         :addEventListener(cls.STOP_EVENT, handler(self,self.onStop_))
-        -- :addEventListener(cls.READY_EVENT, handler(self,self.onReady_))
+        :addEventListener(cls.READY_EVENT, handler(self,self.onMove_))
         -- :addEventListener(cls.ENTER_ATTACKING, handler(self, self.onEnterAttacking_))
-        :addEventListener(cls.ATTACK_EVENT, handler(self, self.onAttack_))
+        -- :addEventListener(cls.ATTACK_EVENT, handler(self, self.onAttack_))
         -- :addEventListener(cls.FINISH_EVENT, handler(self, self.onAtkFinish_))
         :addEventListener(cls.BEFORE_EVENT, handler(self, self.onBefore_))
         :addEventListener(cls.BEATTACK_EVENT, handler(self, self.onBeAttack_))
@@ -83,8 +83,9 @@ function HeroView:init(model,params)
     -- 血条
     self:GetModel():createView(self:GetBatch())
     self:updateView()
+    --
+    self:_updateSprite(self:GetModel():getState())
     -- 更新hp
-    self:updateSprite_(self:GetModel():getState())
     self:updateHP_()
 end
 ------------------------------------------------------------------------------
@@ -137,13 +138,6 @@ function HeroView:flipX(flip)
     end})
     return self
 end
-
-------------------------------------------------------------------------------
---
-function HeroView:getPositionCell()
-    local x,y = self:getPosition()
-    return self:getMap():getDMap():worldPosToCellPos(ccp(x,y))
-end
 ------------------------------------------------------------------------------
 -- 监听事件
 ------------------------------------------------------------------------------
@@ -153,7 +147,23 @@ function HeroView:onBefore_(event)
 end
 ------------------------------------------------------------------------------
 function HeroView:onStateChange_(event)
+-- <<<<<<< HEAD
     self:_updataState(self:GetModel():getState(),event)
+-- =======
+    -- self:_updateSprite(self:GetModel():getState())
+-- end
+------------------------------------------------------------------------------
+-- function HeroView:_updateSprite(state)
+--     if      state == "idle"          then
+--         self:createIdleAction()
+--     elseif  state == "attacking"     then
+--         self:createAttackAction()
+--     elseif  state == "moving"        then
+--         self:createWalkAction()
+--     elseif  state == "beattacking"   then
+--         self:createBeAttackAction()
+--     end
+-- >>>>>>> game_fight_ai
 end
 ------------------------------------------------------------------------------
 function HeroView:onBeKill_(event)
@@ -177,7 +187,9 @@ function HeroView:onStop_(event)
     -- self:GetModel():stop()
 end
 ------------------------------------------------------------------------------
-function HeroView:onReady_(event)
+function HeroView:onMove_(event)
+    -- 移动到指定位置，默认为格子位置
+    -- self.model_:moveToPositions(self,event.options)
 end
 -- function HeroView:onAtkFinish_( event )
 --     self:GetModel():stop()
@@ -187,10 +199,16 @@ end
 -- end
 ------------------------------------------------------------------------------
 --
+-- <<<<<<< HEAD
 function HeroView:onAttack_(event)
     local options = event.options
     self:createAttackAction(options.cooldown)
 end
+-- =======
+-- function HeroView:onAttack_()
+--     self:createAttackAction()
+-- end
+-- >>>>>>> game_fight_ai
 ------------------------------------------------------------------------------
 function HeroView:updateHP_()
     self:GetModel():updateView(self)
@@ -202,6 +220,7 @@ function HeroView:updateHP_()
             self:createDeadActionOne( _sprite, _callback)
     end})
 end
+-- <<<<<<< HEAD
 
 ------------------------------------------------------------------------------
 function HeroView:updateSprite_(state,event)
@@ -228,6 +247,8 @@ function HeroView:_updataState(state,event)
         -- end
     end
 end
+-- =======
+-- >>>>>>> game_fight_ai
 ------------------------------------------------------------------------------
 function HeroView:createIdleAction()
     local frameName =configMgr:getConfig("heros")
