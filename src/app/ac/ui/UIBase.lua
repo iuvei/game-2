@@ -46,7 +46,7 @@ function M:init( params )
     -- 读取ui配置资源
 
     if params.ccsFileName then
-        local widget = GUIReader:shareReader():widgetFromJsonFile(params.ccsFileName)
+        local widget = ccs.GUIReader:getInstance():widgetFromJsonFile(params.ccsFileName)
         self:GetTouchGroup():addChild(widget)
         -- local widget=self:loadCCSJsonFile(self:GetTouchGroup(),params.ccsFileName)
         self._root_widget=widget

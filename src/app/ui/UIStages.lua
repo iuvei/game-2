@@ -23,9 +23,9 @@ end
 function UIStages:init( params )
     UIStages.super.init(self,params)
 
-    -- self:CreateSgateSelectBtn()
+    self:CreateSgateSelectBtn()
 
-    -- self:updateHeroPanel(1)
+    self:updateHeroPanel(1)
 end
 ------------------------------------------------------------------------------
 function UIStages:CreateSgateSelectBtn()
@@ -69,7 +69,7 @@ function UIStages:CreateSgateSelectBtn()
                     self:updateHeroPanel(tonumber(Type[2]))
                 end
             end
-            Widget:addEventListenerCheckBox(selectedEvent)
+            Widget:addEventListener(selectedEvent)
 
             lastbtn = Widget
         end
@@ -115,7 +115,7 @@ function UIStages:addPage(pageView,pIdx, iIdx, bClone,callback_)
     if callback_  and callback_(newPage,pIdx,iIdx) then
 
         -- 先设置为可用
-        newPage:setEnabled(true)
+        newPage:setVisible(true)
         -- 插入
         pageView:insertPage(newPage, iIdx)
 
@@ -135,7 +135,7 @@ function UIStages:addPage(pageView,pIdx, iIdx, bClone,callback_)
     else
         -- 如果为clone的则删除，没有则设置为不可见
         if bClone then newPage:removeSelf()
-        else newPage:setEnabled(false)
+        else newPage:setVisible(false)
         end
     end
 end
@@ -365,17 +365,16 @@ function UIStages:showHide(isShow)
     -- 隐藏控件
     self:getWidgetByName("Panel_Title",function( Widget )
         if Widget == nil then return end
-        Widget:setEnabled(isShow)
+        Widget:setVisible(isShow)
     end)
     self:getWidgetByName("stageselect_chapter1",function( Widget )
         if Widget == nil then return end
-        Widget:setEnabled(isShow)
+        Widget:setVisible(isShow)
     end)
 
     self:getWidgetByName("Panel_startBg",function( Widget )
         if Widget == nil then return end
-        print("···33",not isShow)
-        Widget:setEnabled(not isShow)
+        Widget:setVisible(not isShow)
     end)
 end
 ------------------------------------------------------------------------------

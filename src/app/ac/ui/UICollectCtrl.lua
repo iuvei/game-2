@@ -3,11 +3,11 @@
 -- Date: 2014-12-08 18:06:29
 --
 local UICollectCtrl = class("UICollectCtrl")
-function UICollectCtrl:ctor(fold_ctrl)
+function UICollectCtrl:ctor(fold_ctrl,state)
     self._items={}
     self._items_by_class={}
     self._size={width=0,height=0}
-    self._state = "fold"
+    self._state = state or "fold"
     --
     self._fold=fold_ctrl
 end
@@ -20,7 +20,7 @@ function UICollectCtrl:AddItem(item,typename)
      end
      table.insert(self._items_by_class[typename],item)
      -- self:addChild(item)
-     item:setEnabled(false)
+     item:setVisible(false)
 end
 function UICollectCtrl:Activate()
     if self._state == "fold" then -- 折叠
@@ -42,7 +42,8 @@ function UICollectCtrl:Fold()
                     -- delay = 1.0,
                     -- easing = "backout",
                     onComplete = function()
-                        v_:setEnabled(false)
+                        -- v_:setEnabled(false)
+                        v_:setVisible(false)
                     end,
                 })
         end
@@ -69,7 +70,7 @@ function UICollectCtrl:Unfold()
                     end,
                 })
                 -- v_:setPositionY(dis)
-                v_:setEnabled(true)
+                v_:setVisible(true)
             end
         elseif k == "down" then
 
