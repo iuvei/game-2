@@ -323,8 +323,8 @@ function M:SetALLChildrenTouchState( wigt, TouchEnabled,SwallowEnabled )
 
     local children = wigt:getChildren()
     local cnt = children:count()
-    for i=0,cnt-1 do
-        local c = children:objectAtIndex(i)
+    for i=1,cnt do
+        local c = children[i]
         if c:getChildren():count() > 0 then
             self:SetALLChildrenTouchState( c,TouchEnabled,SwallowEnabled )
         end

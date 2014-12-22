@@ -108,13 +108,13 @@ function UpdateScene:checkUpdate()
         CCRepeatForever:create( CCRotateBy:create(0.5 , 180) )
         )
 
-    local label = ui.newTTFLabel({
+    local label = cc.ui.UILabel.newTTFLabel_({
         text = "正在检查新版本,请稍候..." ,
         font = "Thonburi",
         size = 20,
         -- x = INIT_FUNCTION.cx - 65,
         -- y = 85,
-        align = ui.TEXT_ALIGN_CENTER
+        align = cc.ui.TEXT_ALIGN_CENTER
     }):addTo(self.viewLayer)
     INIT_FUNCTION.setAnchPos( label , INIT_FUNCTION.cx - 65 , 85 )
     label:setHorizontalAlignment(0)
@@ -212,7 +212,7 @@ function UpdateScene:onEnterFrame(dt)
             self.updateProgress = self:newProgressTimer(IMG_PROGRESS_BAR1,IMG_PROGRESS_BAR0):addTo(self.viewLayer)
             INIT_FUNCTION.setAnchPos(self.updateProgress , INIT_FUNCTION.cx, 136 , 0.5 , 0)
 
-            self.progressLabel = ui.newTTFLabel({
+            self.progressLabel = cc.ui.UILabel.newTTFLabel_({
                 text = "更新..." ,
                 font = "Thonburi",
                 size = 20,
@@ -224,7 +224,7 @@ function UpdateScene:onEnterFrame(dt)
             INIT_FUNCTION.setAnchPos( self.progressLabel ,  410 , 93 , 1 , 0 )
             self.progressLabel:setColor( ccc3( 0x2c , 0x00 , 0x00 ) )
 
-            local update_filename = ui.newTTFLabel({
+            local update_filename = cc.ui.UILabel.newTTFLabel_({
                 text = self.fileCount ,
                 font = "Thonburi",
                 size = 20,

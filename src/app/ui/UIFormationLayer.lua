@@ -170,7 +170,7 @@ function M:FlashFormationCell( )
     local notBright = {}
 
     local shangzhenPanel = self:getWidgetByName("Panel_shangzhen")
-    local cnt = shangzhenPanel:getChildren():count()
+    local cnt = #shangzhenPanel:getChildren()
     -- 先遍历出不可用位置
     for i=1,cnt do
         self:getWidgetByName("CheckBox_"..i,function( usedSlot_wigt )

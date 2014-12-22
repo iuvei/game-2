@@ -94,8 +94,8 @@ function MapEventHandler:showFindPathInfo(selfobj,targetPos)
     local  pChildrenArray = self.map_:getChildren()
     local len = pChildrenArray:count()
     local  arrDel ={}
-    for i = 0, len-1 do
-        local n= tolua.cast(pChildrenArray:objectAtIndex(i), "CCNode")
+    for i = 1, len do
+        local n= tolua.cast(pChildrenArray[i], "CCNode")
         if n and n:getTag()==10 then
             table.insert(arrDel,n)
         end

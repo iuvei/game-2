@@ -99,8 +99,8 @@ function getAllSprites( root )
 		if childs_num == 0 then return end
 
 		local childs = _root:getChildren()
-		for i = 0 , childs_num - 1 do
-			local child = tolua.cast( childs:objectAtIndex(i) , "CCNode")
+		for i = 1 , childs_num do
+			local child = tolua.cast( childs[i] , "CCNode")
 
 			if child:getTag() == 102 then
 				sprites[#sprites + 1] = tolua.cast( child , "CCSprite")

@@ -113,7 +113,7 @@ function UIHeroInfo:ShowDlg(type,isFade)
     -- self.rootHeroSkill:setEnabled(false)
     -- self.rootHeroArr:setEnabled(false)
     --位置
-    local origin = ccp(self.rootHero:getBoundingBox():getMinX(),self.rootHero:getBoundingBox():getMaxY())
+    local origin = ccp(cc.rectGetMinX(self.rootHero:getBoundingBox()),cc.rectGetMinY(self.rootHero:getBoundingBox()))
     -- self.rootHeroSkill:setPosition(origin)
     -- self.rootHeroArr:setPosition(origin)
     local curDlg = self._cur_show_dlg

@@ -23,9 +23,9 @@ end
 function UIStages:init( params )
     UIStages.super.init(self,params)
 
-    self:CreateSgateSelectBtn()
+    -- self:CreateSgateSelectBtn()
 
-    self:updateHeroPanel(1)
+    -- self:updateHeroPanel(1)
 end
 ------------------------------------------------------------------------------
 function UIStages:CreateSgateSelectBtn()
@@ -150,8 +150,8 @@ function UIStages:updateHeroPanel(stageType)
     --PageView
     local pvWnd = self:getWidgetByName("PageView",function( Widget )
         --删除原来的页面(第一页保留用于clone)
-        for i = Widget:getPages():count() - 1, 1, -1 do
-            Widget:removePageAtIndex(i)
+        for i = #Widget:getPages(), 1, -1 do
+            Widget:removePageAtIndex(i-1)
         end
 
         -- 监听事件
@@ -160,7 +160,7 @@ function UIStages:updateHeroPanel(stageType)
                 self:setSelected( Widget:getCurPageIndex()+1 )
             end
         end
-        Widget:addEventListenerPageView(pageViewEvent)
+        Widget:addEventListener(pageViewEvent)
     end)
 
     -- 删除页点
@@ -374,6 +374,7 @@ function UIStages:showHide(isShow)
 
     self:getWidgetByName("Panel_startBg",function( Widget )
         if Widget == nil then return end
+        print("···33",not isShow)
         Widget:setEnabled(not isShow)
     end)
 end

@@ -67,12 +67,15 @@ end
 ------------------------------------------------------------------------------
 function UILogin:init( ccsFileName, params )
     UILogin.super.init(self,ccsFileName)
-
+print("···3")
 	self:getWidgetByName("Button_login",function(wd)
+		print("···8",wd)
 		if wd then
 			wd:addTouchEventListener(function(sender, eventType)
+				print("···1")
 	            local ccs = self.ccs
 	            if eventType == ccs.TouchEventType.ended then
+	            print("···9")
 	            	local acc = ""
 	            	self:getWidgetByName("TextField_acc",function(textwd)
 	            		acc = textwd:getStringValue()

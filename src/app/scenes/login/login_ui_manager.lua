@@ -99,30 +99,30 @@ end
 -- 登入按钮
 function login_ui_manager:createLoginBtn()
 
-    self.loginBtn = KNBtn:new(IMG_PATH, {IMG_SELECT_BTN , IMG_SELECT_BTN_PRE} , display.cx - 100 , 100 , {
-        front = IMG_FONT_LOGIN,
-        callback = function()
-            self.loginBtn:removeFromParentAndCleanup( true )
-            self.loginBtn = nil
-            --
-        	if CHANNEL_ID == "test" then self:test_login() return
-        	else self:testnet_login() return end
+    -- self.loginBtn = KNBtn:new(IMG_PATH, {IMG_SELECT_BTN , IMG_SELECT_BTN_PRE} , display.cx - 100 , 100 , {
+    --     front = IMG_FONT_LOGIN,
+    --     callback = function()
+    --         self.loginBtn:removeFromParentAndCleanup( true )
+    --         self.loginBtn = nil
+    --         --
+    --     	if CHANNEL_ID == "test" then self:test_login() return
+    --     	else self:testnet_login() return end
 
-        end
-    }):getLayer()
-    self:addChild(self.loginBtn)
-    -- local btn1_img = {
-    --     normal  = IMG_PATH..IMG_SELECT_BTN,
-    --     pressed = IMG_PATH..IMG_SELECT_BTN_PRE,
-    -- }
-    -- self.selectBtn = cc.ui.UIPushButton.new(btn1_img,{scale9 = false})
-    -- -- :setButtonSize(455,67)
-    -- :onButtonClicked(function()
-    --     if CHANNEL_ID == "test" then self:test_login() return
-    --      else self:testnet_login() return end
-    -- end)
-    -- :pos(display.cx - 100, 100)
-    -- :addTo(self)
+    --     end
+    -- }):getLayer()
+    -- self:addChild(self.loginBtn)
+    local btn1_img = {
+        normal  = IMG_PATH..IMG_SELECT_BTN,
+        pressed = IMG_PATH..IMG_SELECT_BTN_PRE,
+    }
+    self.selectBtn = cc.ui.UIPushButton.new(btn1_img,{scale9 = false})
+    -- :setButtonSize(455,67)
+    :onButtonClicked(function()
+        if CHANNEL_ID == "test" then self:test_login() return
+         else self:testnet_login() return end
+    end)
+    :pos(display.cx - 100, 100)
+    :addTo(self)
 end
 ----------------------------------------------------------------
 -- 服务列表按钮

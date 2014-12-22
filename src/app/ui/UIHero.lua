@@ -29,7 +29,8 @@ function M:init( params )
     --self:showFormation(wgFormationMain,false)
     self:initTouchSelFormation()
 
-     local lstItem = tolua.cast(self:getWidgetByName("ScrollView"),"ScrollView")
+     local lstItem = self:getWidgetByName("ScrollView")
+     print("···",lstItem)
      self._lstItem =UIListView.new(lstItem)
      self._tplItem = tolua.cast(GUIReader:shareReader():widgetFromJsonFile("UI/hero_main_item.json"),"Layout")
 
@@ -116,7 +117,7 @@ function M:addItem(heroDt)
     w=UIHelper:seekWidgetByName(widgetItem, "country")
     w:setText(heroinfo.countryInfo.name)
     --头像
-    w = tolua.cast(UIHelper:seekWidgetByName(widgetItem, "Image_head"),"ImageView")
+    w = tolua.cast(UIHelper:seekWidgetByName(widgetItem, "Image_head"),"ccui.ImageView")
     w:loadTexture(heroinfo.headIcon)
     --星级数量
     self:updataStars(UIHelper:seekWidgetByName(widgetItem, "Panel_31"),heroinfo.stars)
@@ -137,7 +138,7 @@ function M:addItem(heroDt)
                 end
                 if self.drag.isClickDown and not self.drag.isMove then
 
-                    self._lstItem:getScrollView():setDirection(SCROLLVIEW_DIR_NONE)
+                    self._lstItem:getScrollView():setDirection(ccui.ScrollViewDir.none)
                     -----------------------------------------
                     -- 添加widget到self用来拖动，当到达对应区域时删除
                     self.newCell = self:createUINode("ImageView",{
@@ -146,17 +147,17 @@ function M:addItem(heroDt)
                         pos     = ccp(0,0),
                     }):addTo(self,2)
                     self.newCell.data = { GUID = heroDt.GUID, Index = heroDt.index }
-                    self.newCell:setPosition(sender:getTouchStartPos())
+                    self.newCell:setPosition(sender:getTouchBeganPosition())
                 end
                 self.drag.isMove=true
-                self.newCell:setPosition( sender:getTouchMovePos())
+                self.newCell:setPosition( sender:getTouchMovePosition())
             else
-                self._lstItem:getScrollView():setDirection(SCROLLVIEW_DIR_VERTICAL)
+                self._lstItem:getScrollView():setDirection(ccui.ScrollViewDir.vertical)
                 --UIHelper:seekWidgetByName(widgetItem, "name")
                 --拖动后弹起处理
                 if self.drag.isClickDown and self.drag.isMove then
                     self:getWidgetByName("formation_pos_bg",function ( PanelPos )
-                            for i = 1,PanelPos:getChildren():count() do
+                            for i = 1,#PanelPos:getChildren() do
                                 if self.newCell then
                                     local wg_slot = PanelPos:getChildByName("PanelPos_"..i)
                                     if wg_slot:hitTest(ccp(self.newCell:getPosition())) then
@@ -168,7 +169,6 @@ function M:addItem(heroDt)
                                             slot=wg_slot
                                         }
                                         self:addReadyHero(data)
-
                                         PLAYER:get_mgr("formations"):update(self:indexToPos(self.wg_sel_formation.formationType,i),heroDt)
                                         -- 更新服务端数据
                                         self:update2server(data.slotIndex, data.heroDt)
@@ -185,14 +185,14 @@ function M:addItem(heroDt)
                 end
                 --点击弹起处理
                 if self.drag.isClickDown and not self.drag.isMove then
-                    self:getUIManager():openUI({uiScript=require("app.ui.UIHeroInfo"),ccsFileName="UI/hero_info.json",
-                                                params={GUID=heroDt.GUID}})
+                    -- self:getUIManager():openUI({uiScript=require("app.ui.UIHeroInfo"),ccsFileName="UI/hero_info.json",
+                    --                             params={GUID=heroDt.GUID}})
                 end
             end
         end)
 
     --信息
-    w = tolua.cast(UIHelper:seekWidgetByName(widgetItem, "info"),"Label")
+    w = UIHelper:seekWidgetByName(widgetItem, "info")
     w:setText(string.format("等级:%d 战斗力:%d",heroinfo.level,heroinfo.attr.PhysicsAtk+heroinfo.attr.PhysicsDef))
     widgetItem.data={level=heroinfo.level,isFlag=false,
                     fight=heroinfo.attr.PhysicsAtk+heroinfo.attr.PhysicsDef,country=heroinfo.countryInfo.id,
@@ -213,7 +213,7 @@ function M:updataStars(wgStars,num)
 end
 --
 function M:getHeroItemById(GUID)
-    for i=0,self._lstItem:getCount()-1 do
+    for i=1,self._lstItem:getCount() do
         local item=self._lstItem:getItemByIndex(i)
         if item.data.heroDt.GUID==GUID then
             return item
@@ -287,7 +287,7 @@ function M:initTouchSelFormation()
     self.markCreateFormationItems=false
     --显示阵型界面
     self:showFormation(false)
-    self.wg_sel_formation = tolua.cast(self:getWidgetByName("img_sel_formation"),"ImageView")
+    self.wg_sel_formation = self:getWidgetByName("img_sel_formation")
     self.wg_sel_formation:addTouchEventListener(function(weight, eventType)
             local ccs = self.ccs
             if eventType == ccs.TouchEventType.ended then
@@ -356,7 +356,7 @@ function M:addItemFormation(index,tplItem)
     --阵型信息
     w = RichLabelCtrl.new(UIHelper:seekWidgetByName(widgetItem, "formationInfo"),{text = StringData[100000002]})
     --阵型图片
-    w = tolua.cast(UIHelper:seekWidgetByName(widgetItem, "formation"),"ImageView")
+    w = tolua.cast(UIHelper:seekWidgetByName(widgetItem, "formation"),"ccui.ImageView")
     self:setSelFormation(w,index)
 
     w.formationType=index
@@ -436,7 +436,7 @@ function M:initFmtSlots()
     local newCell = nil
     self:getWidgetByName("formation_pos_bg",
     function ( PanelPos )
-        for i = 1,PanelPos:getChildren():count() do
+        for i = 1,#PanelPos:getChildren() do
             local wg_slot = PanelPos:getChildByName("PanelPos_"..i)
             local wg_slot_img = wg_slot:getChildByName("pos_head")
             local function touchSlot(widget, eventType)
@@ -456,10 +456,10 @@ function M:initFmtSlots()
                         -- 添加widget到self用来拖动，当到达对应区域时删除
                         newCell = wg_slot_img:clone()
                         self:addChild(newCell,2)
-                        newCell:setPosition(widget:getTouchStartPos())
+                        newCell:setPosition(widget:getTouchBeganPosition())
                     end
                     self.drag.isMove=true
-                    newCell:setPosition( widget:getTouchMovePos())
+                    newCell:setPosition( widget:getTouchMovePosition())
                 else
                     --UIHelper:seekWidgetByName(widgetItem, "name")
                     --拖动后弹起处理
@@ -516,7 +516,7 @@ end
 --
 function M:updataSelectedFmt()
     self:getWidgetByName("formation_pos_bg",function ( PanelPos )
-                            for i = 1,PanelPos:getChildren():count() do
+                            for i = 1,#PanelPos:getChildren() do
                                 local wg_slot = PanelPos:getChildByName("PanelPos_"..i)
                                 if wg_slot.isFlag then
                                     self:setSelectedFormationCell(self.wg_sel_formation.formationType,i,true)
@@ -531,7 +531,7 @@ function M:getSlotByIndex(index)
     local wg_slot=nil
     self:getWidgetByName("formation_pos_bg",
     function ( PanelPos )
-        for i = 1,PanelPos:getChildren():count() do
+        for i = 1,#PanelPos:getChildren() do
             if index==i then
                 wg_slot = PanelPos:getChildByName("PanelPos_"..i)
                 break

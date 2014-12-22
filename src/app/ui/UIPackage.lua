@@ -231,7 +231,7 @@ function UIPackage:GetItem(item_type,out_data)
 end
 function UIPackage:ClearItem(listCtrl)
     for i=1,listCtrl:getCount() do
-        local item = listCtrl:getItemByIndex(i-1)
+        local item = listCtrl:getItemByIndex(i)
         item:setEnabled(false)
         item:setVisible(false)
     end
@@ -239,14 +239,14 @@ end
 function UIPackage:AddItem(index,listCtrl,tplItem)
     if index==1 then
         for i=1,listCtrl:getCount() do
-            local item = listCtrl:getItemByIndex(i-1)
+            local item = listCtrl:getItemByIndex(i)
             item:setEnabled(false)
             item:setVisible(false)
         end
     end
     local item = nil
     if index <= listCtrl:getCount() then
-        item = listCtrl:getItemByIndex(index-1)
+        item = listCtrl:getItemByIndex(index)
         item:setEnabled(true)
         item:setVisible(true)
     else

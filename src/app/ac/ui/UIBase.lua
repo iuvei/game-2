@@ -44,12 +44,14 @@ function M:init( params )
     self.is_no_modle = params.is_no_modle
     self:setTouchGroup( display.newLayer():addTo(self) )
     -- 读取ui配置资源
-    if params.ccsFileName then
 
+    if params.ccsFileName then
         local widget = GUIReader:shareReader():widgetFromJsonFile(params.ccsFileName)
         self:GetTouchGroup():addChild(widget)
+        -- local widget=self:loadCCSJsonFile(self:GetTouchGroup(),params.ccsFileName)
         self._root_widget=widget
     end
+
     self:ListenClose()
 
     -- 响应ui根节点的触摸
@@ -76,13 +78,14 @@ end
 function M:loadCCSJsonFile(parent, jsonFile)
     local node, width, height = cc.uiloader:load(jsonFile)
     if node then
-        node:setPosition((display.width - width)/2, (display.height - height)/2)
+        -- node:setPosition((display.width - width)/2, (display.height - height)/2)
         -- node:setPosition(ccp(0, 0))
         parent:addChild(node)
 
         -- dumpUITree(node)
         -- drawUIRegion(node, scene, 6)
     end
+    return node
 end
 ------------------------------------------------------------------------------
 function M:ListenClose()
@@ -213,7 +216,9 @@ function M:setTouchLayerEnabled(touchEnabled,touchSwallowEnabled)
 end
 ------------------------------------------------------------------------------
 function M:getWidgetByName(name, callback_)
-    local widget = self:GetTouchGroup():getChildByName(name)
+    -- local widget = self:GetTouchGroup():getChildByName(name)
+    local widget = ccui.Helper:seekWidgetByName(self._root_widget,name)
+    -- local widget = cc.uiloader:seekNodeByName(self._root_widget,name)
     if callback_ then callback_(widget) end
     return widget
 end
@@ -315,7 +320,7 @@ function M:addImageWidget(options)
     if options == nil then options={} end
     -----------------------------------------
     -- 添加widget
-    local custom_widget = ImageView:create()
+    local custom_widget = ccui.ImageView:create()
     if options.texture then
         custom_widget:loadTexture(options.texture)
     end
@@ -359,7 +364,7 @@ end
 ------------------------------------------------------------------------------
 --Label
 function M:addLabelWidget(options)
-    local custom_widget = Label:create()
+    local custom_widget = ccui.Text:create()
     custom_widget:setText(options.text)
     custom_widget:setFontName(options.Font or self:getFont())
     custom_widget:setFontSize(options.FontSize or 30)

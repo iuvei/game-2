@@ -5,8 +5,8 @@
 local UIButtonCtrl = class("UIButtonCtrl")
 function UIButtonCtrl:ctor(btnCtrl,options)
     self.ctrl_=btnCtrl
-    if self:GetCtrl():getChildren():count()>0 then
-        self.lable=self:GetCtrl():getChildren():objectAtIndex(0)
+    if #self:GetCtrl():getChildren()>0 then
+        self.lable=self:GetCtrl():getChildren()[1]
         if self.lable then
             btnCtrl:setTitleText("")
         end

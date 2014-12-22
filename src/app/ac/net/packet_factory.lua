@@ -20,7 +20,7 @@ local function register_files(files)
         -- local addr = io.open(v, "rb")
         -- local buffer = addr:read"*a"
         -- addr:close()
-        local buffer = CCFileUtils:sharedFileUtils():getFileData(v)
+        local buffer = cc.FileUtils:getInstance():getStringFromFile(v)
         protobuf.register(buffer)
         local path,name,suffix = string.match(v, "(.*/)(%w+).(%w+)")
         proto[name] = protobuf.decode("google.protobuf.FileDescriptorSet", buffer).file[1]

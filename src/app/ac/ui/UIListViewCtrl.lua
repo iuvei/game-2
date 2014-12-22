@@ -43,7 +43,7 @@ function UIListView:getCount()
 end
 function UIListView:getItemByIndex(index)
     if self:getScrollView():getChildrenCount() > 0 then
-        return tolua.cast(self:getScrollView():getChildren()[index], "Layout")
+        return self:getScrollView():getChildren()[index]
     end
     return nil
 end
@@ -56,8 +56,8 @@ function UIListView:updataScrollArea(callback_)
     local arrTemp = {}
     -- 默认顺序
     local arr=self:getScrollView():getChildren()
-    for i=0,amount-1 do
-        local layout=tolua.cast(arr:objectAtIndex(i), "Layout")
+    for i=1,amount do
+        local layout=arr[i]
         table.insert(arrTemp,layout)
         if layout:isEnabled() then
             count = count +1
@@ -110,7 +110,7 @@ function UIListView:SetItemTemp(tempItem)
 end
 function UIListView:ClearItem()
     for i=1,self:getCount() do
-        local item = self:getItemByIndex(i-1)
+        local item = self:getItemByIndex(i)
         item:setEnabled(false)
         item:setVisible(false)
     end
@@ -119,14 +119,14 @@ function UIListView:AddItem(index)
     assert(self.lstCtrlItem ~= nil,"UIListView:AddItem()")
     if index==1 then
         for i=1,self:getCount() do
-            local item = self:getItemByIndex(i-1)
+            local item = self:getItemByIndex(i)
             item:setEnabled(false)
             item:setVisible(false)
         end
     end
     local item = nil
     if index <= self:getCount() then
-        item = self:getItemByIndex(index-1)
+        item = self:getItemByIndex(index)
         item:setEnabled(true)
         item:setVisible(true)
     else

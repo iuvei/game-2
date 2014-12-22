@@ -378,7 +378,8 @@ function KNBtn:setState(state)
 		if self.item[i] ~= "nil" then
 			if i == state then
 				done = true
-				self.item[i]:setVisible(true)
+				local item_=self.item[i]
+				item_:setVisible(true)
 
 				if self.item["front"] and type(self.item["front"]) == "table" then  --若按钮前景有设置普通与选中状态，则根据当前状态来设置前景状态
 					if i == NORMAL then
