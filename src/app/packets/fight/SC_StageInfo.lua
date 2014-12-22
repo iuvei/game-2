@@ -4,6 +4,5 @@
 -- Filename: SC_StageInfo.lua
 --
 return function ( player, args )
-
 	player:get_mgr( "stage" ):update(args)
 end

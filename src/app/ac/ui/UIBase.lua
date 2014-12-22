@@ -332,7 +332,7 @@ function M:addButtonWidget(options)
     if options == nil then options={} end
     -----------------------------------------
     -- 添加widget
-    local custom_widget = Button:create()
+    local custom_widget = ccui.Button:create()
     custom_widget:loadTextures( options.textures[1],
                                 options.textures[2],
                                 options.textures[3])

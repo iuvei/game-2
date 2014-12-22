@@ -106,6 +106,7 @@ end
 function UIStages:addPage(pageView,pIdx, iIdx, bClone,callback_)
 
     local newPage = pageView:getPage(0)
+
     -- 没有则退出
     if newPage == nil then return false end
     -- clone
@@ -113,7 +114,6 @@ function UIStages:addPage(pageView,pIdx, iIdx, bClone,callback_)
 
     -- 回调
     if callback_  and callback_(newPage,pIdx,iIdx) then
-
         -- 先设置为可用
         newPage:setVisible(true)
         -- 插入
@@ -150,7 +150,7 @@ function UIStages:updateHeroPanel(stageType)
     --PageView
     local pvWnd = self:getWidgetByName("PageView",function( Widget )
         --删除原来的页面(第一页保留用于clone)
-        for i = #Widget:getPages(), 1, -1 do
+        for i = #Widget:getPages(), 2, -1 do
             Widget:removePageAtIndex(i-1)
         end
 
@@ -214,7 +214,6 @@ function UIStages:updateHeroPanel(stageType)
 
         local data = chapters:getChapterData(pIdx,stageType)
         if data == nil then return false end
-
         -- 新的页面
         newPage:setName("Panel_Page"..pIdx)
         -- newPage:setBackGroundImage(data.chapterRes.Bg)
@@ -244,12 +243,14 @@ function UIStages:updateHeroPanel(stageType)
         for i = 1, #data.stages do
 
             local isshow = false
+
             if smgr:get_info(data.stages[i].StageId) then
                 isc = true
                 isshow = true
             end
 
             if not isc then --同章节的都显示
+
                 return
             end
 

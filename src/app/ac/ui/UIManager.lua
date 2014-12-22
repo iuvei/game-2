@@ -3,6 +3,7 @@
 -- Date: 2014-08-08 18:53:53
 --
 --[[
+UI层结构
     scene
       | - uimanager(layer)
               | - touchlayer(layer)
