@@ -44,7 +44,7 @@ function UpdateScene:ctor()
     bg:setScaleX(INIT_FUNCTION.width/mapcontent.width);
     bg:setScaleY(INIT_FUNCTION.height/mapcontent.height);
 
-    -- local label = ui.newTTFLabel({
+    -- local label = cc.ui.UILabel.newTTFLabel_({
     --     text = "Loading...",
     --     size = 64,
     --     x = display.cx,

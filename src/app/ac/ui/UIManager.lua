@@ -18,9 +18,12 @@ end)
 ------------------------------------------------------------------------------
 function M:ctor(parent)
     self:setNodeEventEnabled(true)
-
+    -- 默认关闭根结点触摸
+    self:setTouchEnabled(false)
+    --
     self:createTouchLayer(parent)
     parent:addChild(self)
+    --
     self.uiLayers_={}          -- 当前场景所有窗口
     self.uiLayersByClass_={} -- 存放模态类型窗口
     self.uiLayersByClass_["mode"]={}
@@ -48,7 +51,7 @@ end
 -- 触摸层
 function M:createTouchLayer(parent)
 
-    self.touchLayer_ = display.newColorLayer(ccc4(0, 0, 0,0)):addTo(self,10000)
+    self.touchLayer_ = display.newColorLayer(cc.c4b(0, 0, 0,0)):addTo(self,10000)
     self.touchLayer_:setTouchEnabled(false)
     -- parent:addChild(self,10000)
     -- 启用触摸
@@ -58,7 +61,7 @@ function M:createTouchLayer(parent)
     --     -- print(event.name)
     --     -- 触摸事件处理
     --     if event.name == "began" then     self.BeganPos = {x=event.x,y=event.y}
-    --     elseif event.name == "ended" then self:closeTopUI(ccp(self.BeganPos.x,self.BeganPos.y))
+    --     elseif event.name == "ended" then self:closeTopUI(cc.p(self.BeganPos.x,self.BeganPos.y))
     --     end
     --     return true
     -- end)
@@ -139,7 +142,6 @@ end
 function M:open(uiLayer)
 
     if not self:canDo(uiLayer) then return nil end
-
     if uiLayer.open_close_effect == true then
         -- 特效
         scaleEf:run( uiLayer,{
@@ -161,9 +163,11 @@ function M:open(uiLayer)
             end,
         })
     else
-        -- 是否非模态
+        -- 模态
         if not uiLayer.is_no_modle then
             self:getTouchLayer():setOpacity(200)
+
+            -- uiLayer:GetTouchGroup():setTouchEnabled(false)
             -- 设置uimanager层
             -- self:setTouchLayerEnabled(self:getTouchLayer(),true) -- 触碰吞噬
             --  self:setTouchEnabled(true)
@@ -175,6 +179,7 @@ function M:open(uiLayer)
 
             -- self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
             -- self:setTouchLayerEnabled(self,true,false)
+        -- 非模态
         else
             -- uiLayer:setTouchEnabled(true)
             -- self:setTouchLayerEnabled(self:getTouchLayer(),true,false)
@@ -326,7 +331,7 @@ function M:SetALLChildrenTouchState( wigt, TouchEnabled,SwallowEnabled )
     local cnt = children:count()
     for i=1,cnt do
         local c = children[i]
-        if c:getChildren():count() > 0 then
+        if #children > 0 then
             self:SetALLChildrenTouchState( c,TouchEnabled,SwallowEnabled )
         end
         self:setTouchLayerEnabled(c,TouchEnabled,SwallowEnabled)

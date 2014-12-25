@@ -19,13 +19,11 @@ function MapEventHandler:ctor(runtime,map)
     self.runtime_   = runtime
     self.map_       = map
     self.battle_    = CBattle.new(self)
-   -- self.moveQueue  = {}
 
 end
 ------------------------------------------------------------------------------
 function MapEventHandler:init()
     self.battle_:init_()
-    --self:updataQueue()
 
     if DEBUG_BATTLE.showShortestPath then
         self.map_:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
@@ -47,7 +45,7 @@ function MapEventHandler:onTouch(event, x, y)
         if o == nil then
             return false
         end
-        self:showFindPathInfo(o.obj,ccp(x,y))
+        self:showFindPathInfo(o.obj,cc.p(x,y))
     end
     return true
 end
@@ -108,10 +106,10 @@ function MapEventHandler:showFindPathInfo(selfobj,targetPos)
     local sx,sy = obj:getPosition()
     --local tx,ty = enemyQueue[1].obj:getPosition()
     local tx,ty =targetPos.x,targetPos.y
-    -- local shortestPathSteps = self:findPath(self:getMap():getDMap():worldPosToCellPos(ccp(sx, sy)),
-    --     self:getMap():getDMap():worldPosToCellPos(ccp(tx, ty)),obj)
-    local shortestPathSteps = AStarUtil:findPath(self:getMap():getDMap():worldPosToCellPos(ccp(sx, sy))
-        ,self:getMap():getDMap():worldPosToCellPos(ccp(tx, ty)),self,obj)
+    -- local shortestPathSteps = self:findPath(self:getMap():getDMap():worldPosToCellPos(cc.p(sx, sy)),
+    --     self:getMap():getDMap():worldPosToCellPos(cc.p(tx, ty)),obj)
+    local shortestPathSteps = AStarUtil:findPath(self:getMap():getDMap():worldPosToCellPos(cc.p(sx, sy))
+        ,self:getMap():getDMap():worldPosToCellPos(cc.p(tx, ty)),self,obj)
     if  shortestPathSteps then
         if DEBUG_BATTLE.showShortestPath then
             for i,v in ipairs(shortestPathSteps) do
@@ -121,24 +119,24 @@ function MapEventHandler:showFindPathInfo(selfobj,targetPos)
                 local rect = display.newRect(self:getMap():getDMap():getCellSize().width,
                     self:getMap():getDMap():getCellSize().height)
                 rect:setLineColor(ccc4f(1.0, 0.0, 0.0, 1.0))
-                rect:setPosition(ccp(cell.rect:getMidX(),cell.rect:getMidY()))
+                rect:setPosition(cc.p(cc.rectGetMidX(cell.rect),cc.rectGetMidY(cell.rect)))
                 rect:addTo(self.map_,1000,10)
 
-                self.idLabel_ = ui.newTTFLabel({
-                        text = v.pos.x.." , "..v.pos.y,
-                        size = 15,
-                        color = display.COLOR_GREEN,
-                    })
-                    :pos(rect:getPosition())
-                    :addTo(self.map_,1000,10)
-                    -- 显示tilemap坐标的真实坐标
-                    self.idLabel_ = ui.newTTFLabel({
-                        text = v.gScore..","..v.hScore..","..v.gScore+v.hScore,
-                        size = 15,
-                        color = display.COLOR_GREEN,
-                    })
-                    :pos(rect:getPositionX(),rect:getPositionY()+20)
-                    :addTo(self.map_,1000,10)
+                -- self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                --         text = v.pos.x.." , "..v.pos.y,
+                --         size = 15,
+                --         color = display.COLOR_GREEN,
+                --     })
+                --     :pos(rect:getPosition())
+                --     :addTo(self.map_,1000,10)
+                --     -- 显示tilemap坐标的真实坐标
+                --     self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                --         text = v.gScore..","..v.hScore..","..v.gScore+v.hScore,
+                --         size = 15,
+                --         color = display.COLOR_GREEN,
+                --     })
+                --     :pos(rect:getPositionX(),rect:getPositionY()+20)
+                --     :addTo(self.map_,1000,10)
             end
         end
         if DEBUG_BATTLE.showOpenPath then
@@ -149,24 +147,24 @@ function MapEventHandler:showFindPathInfo(selfobj,targetPos)
                 local rect = display.newRect(self:getMap():getDMap():getCellSize().width,
                     self:getMap():getDMap():getCellSize().height)
                 rect:setLineColor(ccc4f(1.0, 1.0, 1.0, 1.0))
-                rect:setPosition(ccp(cell.rect:getMidX(),cell.rect:getMidY()))
+                rect:setPosition(cc.p(cc.rectGetMidX(cell.rect),cc.rectGetMidY(cell.rect)))
                 rect:addTo(self.map_,1000,10)
 
-                self.idLabel_ = ui.newTTFLabel({
-                        text = v.pos.x.." , "..v.pos.y,
-                        size = 15,
-                        color = display.COLOR_GREEN,
-                    })
-                    :pos(rect:getPosition())
-                    :addTo(self.map_,1000,10)
-                    -- 显示tilemap坐标的真实坐标
-                    self.idLabel_ = ui.newTTFLabel({
-                        text = v.gScore..","..v.hScore..","..v.gScore+v.hScore,
-                        size = 15,
-                        color = display.COLOR_GREEN,
-                    })
-                    :pos(rect:getPositionX(),rect:getPositionY()+20)
-                    :addTo(self.map_,1000,10)
+                -- self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                --         text = v.pos.x.." , "..v.pos.y,
+                --         size = 15,
+                --         color = display.COLOR_GREEN,
+                --     })
+                --     :pos(rect:getPosition())
+                --     :addTo(self.map_,1000,10)
+                --     -- 显示tilemap坐标的真实坐标
+                --     self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                --         text = v.gScore..","..v.hScore..","..v.gScore+v.hScore,
+                --         size = 15,
+                --         color = display.COLOR_GREEN,
+                --     })
+                --     :pos(rect:getPositionX(),rect:getPositionY()+20)
+                --     :addTo(self.map_,1000,10)
             end
         end
     end

@@ -75,7 +75,7 @@ end
 --                 Font = layout:getFont(),
 --                 FontSize  = options.FontSize or 30,
 --                 color = options.color or ccc3(255, 255, 255),
---                 pos = ccp(0,30*i)
+--                 pos = cc.p(0,30*i)
 --             }):addTo(parent)
 --     end
 -- end

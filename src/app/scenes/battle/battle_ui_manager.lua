@@ -26,7 +26,7 @@ function battle_ui_manager:init()
     local ui_script=nil
     -- 战斗信息
     -- ui_script=self:openUI({uiScript=UIPlayerInfo, ccsFileName="UI/battle_info.json",open_close_effect=false,is_no_modle=true})
-    -- ui_script:setPosition(ccp(0,display.top - ui_script._root_widget:getSize().height))
+    -- ui_script:setPosition(cc.p(0,display.top - ui_script._root_widget:getSize().height))
 
 end
 ----------------------------------------------------------------

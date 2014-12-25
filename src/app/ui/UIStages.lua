@@ -40,7 +40,7 @@ function UIStages:CreateSgateSelectBtn()
                 Widget= lastbtn:clone()
                 Widget:setName("sgateselect_"..i)
                 local posX,posY = lastbtn:getPosition()
-                Widget:setPosition(ccp(posX+100,posY))
+                Widget:setPosition(cc.p(posX+100,posY))
                 lastbtn:getParent():addChild(Widget)
                 Widget:setSelectedState(false)
             end
@@ -128,7 +128,7 @@ function UIStages:addPage(pageView,pIdx, iIdx, bClone,callback_)
             local selclone = selectdot:clone()
             selclone:setName("stageselect_chapter"..pIdx)
             selclone:setScale(1)
-            selclone:setPosition(ccp(30,0))
+            selclone:setPosition(cc.p(30,0))
             selectdot:addChild(selclone)
             selclone:setSelectedState(false)
         end)
@@ -177,7 +177,7 @@ function UIStages:updateHeroPanel(stageType)
     if self.lastImage_bg == nil then self.lastImage_bg = 1 end
     self:getWidgetByName("Image_bg"..self.lastImage_bg,function( Image_bg )
         if Image_bg == nil then return end
-        pos = ccp(Image_bg:getPosition())
+        pos = cc.p(Image_bg:getPosition())
         --
         local sequence = transition.sequence({ CCFadeOut:create(0.2)})
         transition.execute( Image_bg,sequence,{
@@ -231,7 +231,7 @@ function UIStages:updateHeroPanel(stageType)
         -- bg1
         self:createUINode("ImageView",{
             name = "Image_Page"..pIdx,
-            achorpoint = ccp(0,0),
+            achorpoint = cc.p(0,0),
             -- texture = data.chapterRes.Bg1
             texture = "UI/UIstages_1/map_bg/map"..pIdx..".png",
         }):addTo(newPage)
@@ -264,7 +264,7 @@ function UIStages:updateHeroPanel(stageType)
             local ButtonUI = self:createUINode("Button",{
                 name        = "PButton"..pIdx,
                 tag         = data.stages[i].StageId,
-                pos         = ccp(res.pos[1],res.pos[2]),
+                pos         = cc.p(res.pos[1],res.pos[2]),
                 scale       = res.scale/100,
                 textures    = textures,
                 touchEnable = true,
@@ -404,6 +404,7 @@ function UIStages:openBattleWnd( stageType,stageId )
         Widget:addTouchEventListener(function( widget, eventType )
             if eventType == self.ccs.TouchEventType.ended then
                 -- switchscene("battle",{ tempdata=stageId})
+                print("···9",stageId,os.time())
                 PLAYER:send("CS_FightBegin",{
                     stageId     = stageId,
                     client_time = os.time()

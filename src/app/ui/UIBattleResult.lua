@@ -70,7 +70,7 @@ function UIBattleResult:UpdataData()
                 star_ = starTemp
             else
                 star_ = starTemp:clone()
-                star_:setPosition(ccp(starTemp:getPositionX()+(i-1)*starTemp:getSize().width,starTemp:getPositionY()))
+                star_:setPosition(cc.p(starTemp:getPositionX()+(i-1)*starTemp:getSize().width,starTemp:getPositionY()))
                 starTemp:getParent():addChild(star_)
             end
             star_:setEnabled(true)

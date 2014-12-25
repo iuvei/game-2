@@ -26,10 +26,10 @@ function HeroCGCommand:execute()
             tx,ty = sprite:getContentSize().width/2,display.cy
             sprite:setFlipX(true)
         end
-        sprite:setPosition(ccp(x,y))
+        sprite:setPosition(cc.p(x,y))
 
         local sequence = transition.sequence({
-            CCMoveTo:create(0.3, CCPoint(tx,ty)),
+            CCMoveTo:create(0.3, cc.p(tx,ty)),
             CCDelayTime:create(0.2),
             CCEaseExponentialIn:create(CCFadeOut:create(0.5)),
             CCDelayTime:create(0.5),

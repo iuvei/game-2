@@ -10,8 +10,8 @@ function M:run( restart )
     if restart then
         -- --延迟启动
         -- local handle
-        -- handle = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(function()
-        --     CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(handle)
+        -- handle = cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
+        --     cc.Director:getInstance():getScheduler():unscheduleScriptEntry(handle)
         --     handle = nil
 
             print("# ---------------------restart-------------------")

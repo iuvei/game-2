@@ -36,9 +36,9 @@ end
 function UICollectCtrl:Fold()
     for k,v in pairs(self._items_by_class) do
         for i,v_ in ipairs(v) do
-            -- v_:setPosition(ccp(0,0))
+            -- v_:setPosition(cc.p(0,0))
 
-            transition.execute(v_, CCMoveTo:create(0.1 / #v * i, CCPoint(0, 0)), {
+            transition.execute(v_, CCMoveTo:create(0.1 / #v * i, cc.p(0, 0)), {
                     -- delay = 1.0,
                     -- easing = "backout",
                     onComplete = function()
@@ -62,7 +62,7 @@ function UICollectCtrl:Unfold()
                 else
                    dis = st + (i-1)*v_:getSize().height
                 end
-                transition.execute(v_, CCMoveTo:create(0.1 / #v * i, CCPoint(0, dis)), {
+                transition.execute(v_, CCMoveTo:create(0.1 / #v * i, cc.p(0, dis)), {
                     -- delay = 1.0,
                     -- easing = "backout",
                     onComplete = function()

@@ -36,7 +36,7 @@ function TrapLogic:_Activate(special_obj)
     if data.affectRangeType == 1 then -- 十字型
         local coords = {{0,0},{0,-1},{0,1},{-1,0},{1,0}} --  mid,up,down,left,right
         for i,v in ipairs(coords) do
-            table.insert(options.cell_positions,ccp(special_obj:getView():getCellPos().x+v[1],special_obj:getView():getCellPos().y+v[2]))
+            table.insert(options.cell_positions,cc.p(special_obj:getView():getCellPos().x+v[1],special_obj:getView():getCellPos().y+v[2]))
         end
     end
     special_obj._map:scan(options) -- options={out_targets,cell_positions,target_type}

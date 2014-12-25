@@ -57,7 +57,7 @@ function UIServerlist:createLastSelected(params)
 	self:createUINode("ImageView",{
         name    = "lastImgPres",
         texture = "UI/serverlist/serverselect_selected_highlight_brown.png",
-        pos     = ccp(0,2),
+        pos     = cc.p(0,2),
     }):addTo(Image_last):setEnabled(false)
 
 	local title = self:getWidgetByName("Label_12")
@@ -77,7 +77,7 @@ function UIServerlist:createLastSelected(params)
 		Font = FONT_GAME,
 		FontSize  = 21,
 		color = color,
-		pos = ccp(title:getPositionX()+180,title:getPositionY())
+		pos = cc.p(title:getPositionX()+180,title:getPositionY())
 	}):addTo(Image_last)
 
 	self:createUINode("Label",{
@@ -86,7 +86,7 @@ function UIServerlist:createLastSelected(params)
 		Font = FONT_GAME,
 		FontSize  = 21,
 		color = color,
-		pos = ccp(last:getPositionX()+200,last:getPositionY())
+		pos = cc.p(last:getPositionX()+200,last:getPositionY())
 	}):addTo(Image_last)
 
 	local areainfo = self:getUIManager():getserverinfo(aid)
@@ -148,8 +148,8 @@ function UIServerlist:createAreaList()
 			Font = FONT_GAME,
 			FontSize  = 20,
 			color = display.COLOR_WHITE,
-			achorpoint = ccp(0,1),
-			pos = ccp(-60,10)
+			achorpoint = cc.p(0,1),
+			pos = cc.p(-60,10)
 		}):addTo(custom_widget)
 
 		lv:pushBackCustomItem(custom_widget)
@@ -198,7 +198,7 @@ function UIServerlist:createServers(areaid)
   		local custom_item = self:createUINode("Panel",{
 		    name = "serverPanel"..i,
 		    size = CCSize(212,67),
-		    achorpoint = ccp(0,1),
+		    achorpoint = cc.p(0,1),
 		})
 
   		-- 一排2个
@@ -220,7 +220,7 @@ function UIServerlist:createServers(areaid)
 				                	"UI/serverlist/serverselect_selected_highlight_green.png",
 				                	"UI/serverlist/serverselect_serverlist_frame.png",
 				                	"" },
-				    pos 		= ccp(252*j + 140,35),
+				    pos 		= cc.p(252*j + 140,35),
 				}):addTo(custom_item)
 
 				custom_widget.serverinfo = {

@@ -21,12 +21,11 @@ function M:onExit()
 end
 function M:onEnter()
     self:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
-        -- print(event.name)
         -- 触摸事件处理
         if event.name == "began" then  self.BeganPos = {x=event.x,y=event.y}
         elseif event.name == "ended" then
 
-            self:getUIManager():closeTopUI(ccp(self.BeganPos.x,self.BeganPos.y))
+            self:getUIManager():closeTopUI(cc.p(self.BeganPos.x,self.BeganPos.y))
         end
         return true
     end)
@@ -43,6 +42,7 @@ function M:init( params )
     end
     self.is_no_modle = params.is_no_modle
     self:setTouchGroup( display.newLayer():addTo(self) )
+
     -- 读取ui配置资源
 
     if params.ccsFileName then
@@ -57,14 +57,16 @@ function M:init( params )
     -- 响应ui根节点的触摸
     self:setTouchEnabled(true)
     -- 响应ui子节点(touchGroup)的触摸
-    self:setTouchLayerEnabled(true,false)
+    self:setTouchLayerEnabled(false,false)
     if self.is_no_modle then
         -- 非模态ui根节点不吞噬触摸
         self:setTouchSwallowEnabled(false)
         -- self:GetTouchGroup():setTouchSwallowEnabled(true)
     else
+        -- self:setTouchLayerEnabled(true,false)
         -- 模态吞噬触摸
         self:setTouchSwallowEnabled(true)
+        self._root_widget:setTouchEnabled(false)
     end
 end
 ------------------------------------------------------------------------------
@@ -79,7 +81,7 @@ function M:loadCCSJsonFile(parent, jsonFile)
     local node, width, height = cc.uiloader:load(jsonFile)
     if node then
         -- node:setPosition((display.width - width)/2, (display.height - height)/2)
-        -- node:setPosition(ccp(0, 0))
+        -- node:setPosition(cc.p(0, 0))
         parent:addChild(node)
 
         -- dumpUITree(node)

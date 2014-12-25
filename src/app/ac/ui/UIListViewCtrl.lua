@@ -94,7 +94,7 @@ function UIListView:updataScrollArea(callback_)
         local layout = arrTemp[i+1]
         local col= i%self.amountCol_
         local row = math.floor(i/self.amountCol_)
-        layout:setPosition(ccp( col*sizeItem.width,self.scrollAreaSize_.height-((row+1)*sizeItem.height)))
+        layout:setPosition(cc.p( col*sizeItem.width,self.scrollAreaSize_.height-((row+1)*sizeItem.height)))
     end
     -- local layout=tolua.cast(self.sv_:getChildren():objectAtIndex(0), "Layout")
     -- self:setScrollAreaSize(CCRect(col*layout:getSize().width,layout:getSize().height*row))

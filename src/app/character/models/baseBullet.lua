@@ -30,17 +30,21 @@ function baseBullet:Fire(startpos,endpos,scale)
 
     -- local bezier0 ={
     --     startpos,
-    --     ccp(startpos.x+(endpos.x-startpos.x)*0.5, startpos.y+(endpos.y-startpos.y)*0.5+80),
+    --     cc.p(startpos.x+(endpos.x-startpos.x)*0.5, startpos.y+(endpos.y-startpos.y)*0.5+80),
     --     endpos
     -- }
-
-    local bezier2 = ccBezierConfig()
-    bezier2.controlPoint_1 = startpos
-    bezier2.controlPoint_2 = ccp(startpos.x+(endpos.x-startpos.x)*0.5, startpos.y+(endpos.y-startpos.y)*0.5+80)
-    bezier2.endPosition = endpos
+    local bezier2 = {
+        startpos,
+        cc.p(startpos.x+(endpos.x-startpos.x)*0.5, startpos.y+(endpos.y-startpos.y)*0.5+80),
+        endpos,
+    }
+    -- local bezier2 = ccBezierConfig()
+    -- bezier2.controlPoint_1 = startpos
+    -- bezier2.controlPoint_2 = cc.p(startpos.x+(endpos.x-startpos.x)*0.5, startpos.y+(endpos.y-startpos.y)*0.5+80)
+    -- bezier2.endPosition = endpos
     --local b = cc.BezierTo:create(1, bezier0)
     self.sprite_:setScale(scale)
-    transition.execute(self.sprite_, CCBezierTo:create(1, bezier2), {
+    transition.execute(self.sprite_, cc.BezierTo:create(1, bezier2), {
         onComplete = function()
         	self.sprite_:removeFromParent()
         	self:removeSelf()

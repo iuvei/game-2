@@ -3,7 +3,7 @@
 警告：退出场景时，如果timer还在，必须删除，否则会一直执行
 ]]
 local Timer = {
-    _scheduler = CCDirector:sharedDirector():getScheduler(),
+    _scheduler = cc.Director:getInstance():getScheduler(),
     _timers = {}
 }
 

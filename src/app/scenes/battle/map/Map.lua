@@ -31,7 +31,6 @@ function Map:ctor(id)
     self.ObjectManager_ = import("app.character.ObjectManager").new()
 
     self:setNodeEventEnabled(true)
-
 end
 ------------------------------------------------------------------------------
 function Map:init()
@@ -45,29 +44,29 @@ function Map:init()
             for x=1,self:getDMap():getMapSize().width do
                local cell = self:getDMap():getMapCell(x-1, y-1)
                 --local pos_ =
-                    local rect = display.newRect(cell.rect.size.width,cell.rect.size.height)
-                    rect:setLineColor(ccc4f(1.0, 1.0, 1.0, 1.0))
-                    local pos_ = ccp(cell.rect:getMidX(),cell.rect:getMidY())
-                    rect:setPosition(ccp(pos_.x,pos_.y))
-                    rect:addTo(self)
+                    -- local rect = display.newRect(cell.rect.size.width,cell.rect.size.height)
+                    -- rect:setLineColor(ccc4f(1.0, 1.0, 1.0, 1.0))
+                    -- local pos_ = cc.p(cc.rectGetMidX(cell.rect),cc.rectGetMidY(cell.rect))
+                    -- rect:setPosition(cc.p(pos_.x,pos_.y))
+                    -- rect:addTo(self)
 
-                    --if DEBUG_BATTLE.showPos then
-                        -- 显示tilemap坐标
-                        self.idLabel_ = ui.newTTFLabel({
-                            text = cell.posX.." , "..cell.posY,
-                            size = 15,
-                            color = display.COLOR_GREEN,
-                        })
-                        :pos(rect:getPosition())
-                        :addTo(self)
-                        -- 显示tilemap坐标的真实坐标
-                        self.idLabel_ = ui.newTTFLabel({
-                            text = rect:getPositionX().." , "..rect:getPositionY(),
-                            size = 15,
-                            color = display.COLOR_GREEN,
-                        })
-                        :pos(rect:getPositionX(),rect:getPositionY()+20)
-                        :addTo(self.bgLayer_)
+                    -- --if DEBUG_BATTLE.showPos then
+                    --     -- 显示tilemap坐标
+                    --     self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                    --         text = cell.posX.." , "..cell.posY,
+                    --         size = 15,
+                    --         color = display.COLOR_GREEN,
+                    --     })
+                    --     :pos(rect:getPosition())
+                    --     :addTo(self)
+                    --     -- 显示tilemap坐标的真实坐标
+                    --     self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                    --         text = rect:getPositionX().." , "..rect:getPositionY(),
+                    --         size = 15,
+                    --         color = display.COLOR_GREEN,
+                    --     })
+                    --     :pos(rect:getPositionX(),rect:getPositionY()+20)
+                    --     :addTo(self.bgLayer_)
                    -- end
             end
         end
@@ -93,31 +92,31 @@ end
 -- 创建视图
 function Map:createView(parent)
 
-    display.addSpriteFramesWithFile(Res.plhuoyan , Res.imghuoyan )
-    display.addSpriteFramesWithFile(Res.pllanhuo ,  Res.imglanhuo)
-    display.addSpriteFramesWithFile(Res.pltaifeng ,  Res.imgtaifeng)
-    display.addSpriteFramesWithFile(Res.pldahuoyan , Res.imgdahuoyan )
-    display.addSpriteFramesWithFile(Res.plshandian , Res.imgshandian )
-    display.addSpriteFramesWithFile(Res.plzhoushao , Res.imgzhoushao )
-    display.addSpriteFramesWithFile(Res.plhit , Res.imghit )
-    display.addSpriteFramesWithFile(Res.plpoison , Res.imgpoison )
-    display.addSpriteFramesWithFile(Res.plstun , Res.imgstun)
-    display.addSpriteFramesWithFile(Res.pltrap , Res.imgtrap)
-    display.addSpriteFramesWithFile("effect/shield.plist" , "effect/shield.png")
-    display.addSpriteFramesWithFile("common/num_red.plist" , "common/num_red.png")
-    display.addSpriteFramesWithFile("common/num_green.plist" , "common/num_green.png")
-    display.addSpriteFramesWithFile("common/num_orange.plist" , "common/num_orange.png")
+    display.addSpriteFrames(Res.plhuoyan , Res.imghuoyan )
+    display.addSpriteFrames(Res.pllanhuo ,  Res.imglanhuo)
+    display.addSpriteFrames(Res.pltaifeng ,  Res.imgtaifeng)
+    display.addSpriteFrames(Res.pldahuoyan , Res.imgdahuoyan )
+    display.addSpriteFrames(Res.plshandian , Res.imgshandian )
+    display.addSpriteFrames(Res.plzhoushao , Res.imgzhoushao )
+    display.addSpriteFrames(Res.plhit , Res.imghit )
+    display.addSpriteFrames(Res.plpoison , Res.imgpoison )
+    display.addSpriteFrames(Res.plstun , Res.imgstun)
+    display.addSpriteFrames(Res.pltrap , Res.imgtrap)
+    display.addSpriteFrames("effect/shield.plist" , "effect/shield.png")
+    display.addSpriteFrames("common/num_red.plist" , "common/num_red.png")
+    display.addSpriteFrames("common/num_green.plist" , "common/num_green.png")
+    display.addSpriteFrames("common/num_orange.plist" , "common/num_orange.png")
 
     -- 背景
     self.bgLayer_ = require("app.scenes.battle.bgLayer").new(self:getId()):addTo(parent)
 
     -- 批量渲染
     if self.batch_ == nil then
-        display.addSpriteFramesWithFile(PLIST_CESHI, IMG_CESHI)
+        display.addSpriteFrames(PLIST_CESHI, IMG_CESHI)
         self.batch_ = display.newBatchNode(IMG_CESHI):addTo(parent,MapConstants.MAP_Z_1_0)
     end
     if self.batchBuild_ == nil then
-        display.addSpriteFramesWithFile(Res.plbuild , Res.imgbuild )
+        display.addSpriteFrames(Res.plbuild , Res.imgbuild )
         self.batchBuild_ = display.newBatchNode(Res.imgbuild):addTo(parent,MapConstants.MAP_Z_1_0)
     end
     self.dMap_=DynamicMap.new(self,self:getBgMapSize().width,self:getBgMapSize().height)
@@ -200,29 +199,6 @@ function Map:getDMap()
     return self.dMap_
 end
 ------------------------------------------------------------------------------
--- <<<<<<< HEAD
--- =======
---
--- function Map:getHeroByCellPos(cellPos,target_type)
---     local objects = self:getAllObjects()
---     target_type = target_type or "all"
---     if target_type == "player" then -- 目标为自己阵营
---         objects = self:getAllCampObjects(MapConstants.PLAYER_CAMP)
---     elseif target_type == "enemy" then -- 目标为敌方阵营
---         objects = self:getAllCampObjects(MapConstants.ENEMY_CAMP)
---     end
---     for id, object in pairs(objects) do
---         if object and object:GetModel():getClassId() == "hero" and not object:GetModel():isDead() then
---                 local pos = object:getCellPos()
---                 if pos.x==cellPos.x and pos.y==cellPos.y then
---                     return object
---                 end
---         end
---     end
---     return nil
--- end
-------------------------------------------------------------------------------
--- >>>>>>> game_fight_ai
 -- 根据阵型生成
 function Map:spawnWithFormation(parent)
     self:spawnSelf(parent)
@@ -234,7 +210,7 @@ function Map:getAktBuildByCamp(camp)
     for id, object in pairs(self:getAllCampObjects(camp)) do
         if object and object:GetModel():getClassId()=="build" then
             local x,y = object:getPosition()
-            return self:getDMap():worldPosToCellPos(ccp(x,y))
+            return self:getDMap():worldPosToCellPos(cc.p(x,y))
         end
     end
     return nil
@@ -298,7 +274,7 @@ function Map:spawnSelf(parent)
         end
     end
     --建筑
-    local pt = self:getDMap():cellPosToWorldPos(ccp(0,5))
+    local pt = self:getDMap():cellPosToWorldPos(cc.p(0,5))
     local viewParams = {
             x = pt.x,
             y = pt.y,
@@ -347,7 +323,7 @@ function Map:spawnEnemy(parent)
         self.buildData=data
     end)
     --建筑
-    local pt = self:getDMap():cellPosToWorldPos(ccp(self:getDMap():getMapSize().width-1,5))
+    local pt = self:getDMap():cellPosToWorldPos(cc.p(self:getDMap():getMapSize().width-1,5))
     local viewParams = {
             x = pt.x,
             y = pt.y,
@@ -481,7 +457,7 @@ function Map:getHeroByCellPos(cellPos,target_type)
         if object and object:GetModel():getClassId() == "hero" and not object:GetModel():isDead() then
             --if object:GetModel():getId() ~= selfObj:GetModel():getId() then
                 local x,y= object:getPosition()
-                local pos = self:getDMap():worldPosToCellPos(ccp(x, y))
+                local pos = self:getDMap():worldPosToCellPos(cc.p(x, y))
                 if pos.x==cellPos.x and pos.y==cellPos.y then
                     return object
                 end

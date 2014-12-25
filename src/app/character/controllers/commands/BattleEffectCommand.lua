@@ -35,7 +35,7 @@ function BattleEffectCommand:execute()
     --操作执行进行中
     elseif self:getOpState() == HeroOpState.Doing then
 
-        self.elapseTime_=math.floor(self.elapseTime_+CCDirector:sharedDirector():getDeltaTime()*1000)
+        self.elapseTime_=math.floor(self.elapseTime_+cc.Director:getInstance():getDeltaTime()*1000)
         if self.skillExeTimesCounter <= #self.arrHitTime then
             if self.elapseTime_ >= tonumber(self.arrHitTime[self.skillExeTimesCounter])   then
                 --执行攻击效果
@@ -50,8 +50,8 @@ function BattleEffectCommand:execute()
              end
             self:setOpState(HeroOpState.End)
         end
-        --print("···",CCDirector:sharedDirector():getDeltaTime())
-        --self.rMeView_:GetModel():updataHits(CCDirector:sharedDirector():getDeltaTime())
+        --print("···",cc.Director:getInstance():getDeltaTime())
+        --self.rMeView_:GetModel():updataHits(cc.Director:getInstance():getDeltaTime())
         -- if self.rMeView_:GetModel():getIsStop()==true then
         --    self:setOpState(HeroOpState.End)
         -- end

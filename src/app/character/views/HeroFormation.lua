@@ -67,7 +67,7 @@ function M:handleFormation(parent, action, Params)
         for i = 1, maxFN do
             local sprite___ = display.newSprite(Params.img)
                 :scale(parent.sprite_:getScale())
-                :flipX(parent.sprite_:isFlipX())
+                :flipX(parent.sprite_:isFlippedX())
                 :addTo(parent:GetBatch())
             parent.spriteLand:push_front( sprite___ )
         end

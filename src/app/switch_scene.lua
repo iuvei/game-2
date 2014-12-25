@@ -23,7 +23,7 @@ function switchscene( name , params)
 	end
 
 	-- 去掉所有未完成的动作
-	CCDirector:sharedDirector():getActionManager():removeAllActions()
+	cc.Director:getInstance():getActionManager():removeAllActions()
 
 	local scene_file = "app.scenes."..name.."."..name.."_scene"
 
@@ -31,10 +31,11 @@ function switchscene( name , params)
 	display.replaceScene( require(scene_file).new(params.tempdata),params.transitionType, params.time)
 
 	if type(params.callback) == "function" then
+		print("···333333333")
 		-- 必须延迟，不然会在替换场景之前执行
 		local handle
-		handle = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(function()
-			CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(handle)
+		handle = cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
+			cc.Director:getInstance():getScheduler():unscheduleScriptEntry(handle)
 			handle = nil
 
 			params.callback()
@@ -46,10 +47,10 @@ end
 function pushscene(name,params)
 	local scene = require("app.scenes."..name..".scene")
 
-	CCDirector:sharedDirector():pushScene(scene:new(params))
+	cc.Director:getInstance():pushScene(scene:new(params))
 end
 
 function popscene()
-	CCDirector:sharedDirector():popScene()
+	cc.Director:getInstance():popScene()
 end
 

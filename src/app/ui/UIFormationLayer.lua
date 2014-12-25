@@ -198,7 +198,7 @@ function M:FlashFormationCell( )
                     -- 修改位置
                     widget:retain()
                     widget:removeFromParentAndCleanup(false)
-                    widget:setPosition(ccp(0,0))
+                    widget:setPosition(cc.p(0,0))
                     usedSlot_wigt:addChild(widget)
 
                     self:ChangeHeroIndex(widget,i)
@@ -290,8 +290,8 @@ function M:CreateFormationCell( heroDt, confHeroData, index )
     local custom_widget = self:createUINode("ImageView",{
         name    = "heroImg"..heroDt.GUID,
         texture = headImg,
-        -- achorpoint = ccp(1,1),
-        pos = ccp(0,0),
+        -- achorpoint = cc.p(1,1),
+        pos = cc.p(0,0),
     }):addTo(ccsCell)
     -- 存储的数据
     custom_widget.data = { GUID = heroDt.GUID, Index = heroDt.index }
@@ -305,8 +305,8 @@ function M:CreateFormationCell( heroDt, confHeroData, index )
         -----------------------------------------
         if eventType == ccs.TouchEventType.began then
 
-            self.widgetLastWorldSpace = widget:convertToWorldSpace(ccp(0,0))
-            self.widgetLastNodeSpace = ccp(widget:getPosition())
+            self.widgetLastWorldSpace = widget:convertToWorldSpace(cc.p(0,0))
+            self.widgetLastNodeSpace = cc.p(widget:getPosition())
             self.lastWidgetParent = widget:getParent()
 
             -- 需执行retain，再removeFromParentAndCleanup，不然会崩溃
@@ -334,7 +334,7 @@ function M:CreateFormationCell( heroDt, confHeroData, index )
             for i = 1,shangzhenPanel:getChildren():count() do
 
                 local usedSlot_wigt = self:getWidgetByName("CheckBox_"..i)
-                if usedSlot_wigt:isBright() and usedSlot_wigt:hitTest(ccp(widget:getPosition())) then
+                if usedSlot_wigt:isBright() and usedSlot_wigt:hitTest(cc.p(widget:getPosition())) then
 
                     local tempIndex = i
                     -----------------------------------------
@@ -357,7 +357,7 @@ function M:CreateFormationCell( heroDt, confHeroData, index )
                     -----------------------------------------
                     -- 处理自己
                     widget:removeFromParentAndCleanup(false)
-                    widget:setPosition(ccp(0,0))
+                    widget:setPosition(cc.p(0,0))
                     usedSlot_wigt:addChild(widget)
                     -- 设置位置
                     self:ChangeHeroIndex(widget, tempIndex)
@@ -375,7 +375,7 @@ function M:CreateFormationCell( heroDt, confHeroData, index )
             -- 脱出了界面外,删除
             if not isInUsedSlot then
                 self:getWidgetByName("Panel_bg",function( PanelRoot )
-                    if not PanelRoot:hitTest(ccp(widget:getPosition())) then
+                    if not PanelRoot:hitTest(cc.p(widget:getPosition())) then
                         DATA_Formation:addData( widget.data.Index )
                         widget:removeFromParentAndCleanup(true)
                         isInUsedSlot = true
@@ -508,7 +508,7 @@ function M:ListenerHeroList( )
                     self.newCell = self:createUINode("ImageView",{
                         name    = "heroImg"..heroDt.GUID,
                         texture = headImg,
-                        pos     = ccp(0,0),
+                        pos     = cc.p(0,0),
                     }):addTo(self)
 
                     self.newCell.data = { GUID = heroDt.GUID, Index = heroDt.index }
@@ -537,7 +537,7 @@ function M:ListenerHeroList( )
 
                             if self.newCell then
                                 local usedSlot_wigt = self:getWidgetByName("CheckBox_"..i)
-                                if usedSlot_wigt:isBright() and usedSlot_wigt:hitTest(ccp(self.newCell:getPosition())) then
+                                if usedSlot_wigt:isBright() and usedSlot_wigt:hitTest(cc.p(self.newCell:getPosition())) then
                                     -- 删除
                                     self.newCell:removeFromParentAndCleanup(true)
                                     self.newCell = nil
@@ -554,7 +554,7 @@ function M:ListenerHeroList( )
                     if not isInUsedSlot then
                         -- 脱出了界面外,删除
                         self:getWidgetByName("Panel_bg",function ( PanelRoot )
-                            if not PanelRoot:hitTest(ccp(widget:getPosition())) then
+                            if not PanelRoot:hitTest(cc.p(widget:getPosition())) then
                                 self.newCell:removeFromParentAndCleanup(true)
                                 self.newCell = nil
                                 isInUsedSlot = true
@@ -569,7 +569,7 @@ function M:ListenerHeroList( )
             self:createUINode("ImageView",{
                 name    = "herolistImg"..heroDt.GUID,
                 texture = headImg,
-                pos     = ccp(-60,0),
+                pos     = cc.p(-60,0),
                 scale   = 0.7,
                 touchEnable = true,
                 TouchEvent = touch,

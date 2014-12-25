@@ -25,14 +25,13 @@ function MapRuntime:ctor(map)
     -- 启用节点事件，确保 onExit 时停止
     self:setNodeEventEnabled(true)
 
-    -- for id, object in pairs(self.map_:getAllObjects()) do
-    --     object.updated__ = true
-
-    -- end
 end
 ------------------------------------------------------------------------------
 function MapRuntime:onExit()
 
+end
+function MapRuntime:onEnter()
+    -- body
 end
 ------------------------------------------------------------------------------
 function MapRuntime:init()

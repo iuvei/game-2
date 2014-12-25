@@ -60,7 +60,7 @@ function UIHeroInfo:ListenHero()
         self.rootHeroSoldierInfo:setEnabled(false)
         self.rootHeroEquip:setEnabled(false)
         --
-        local origin = ccp(self.rootHero:getPositionX(),self.rootHero:getPositionY())
+        local origin = cc.p(self.rootHero:getPositionX(),self.rootHero:getPositionY())
         self.rootHeroSkill:setPosition(origin)
         self.rootHeroArr:setPosition(origin)
         self.rootHeroSoldierInfo:setPosition(origin)
@@ -113,7 +113,7 @@ function UIHeroInfo:ShowDlg(type,isFade)
     -- self.rootHeroSkill:setEnabled(false)
     -- self.rootHeroArr:setEnabled(false)
     --位置
-    local origin = ccp(cc.rectGetMinX(self.rootHero:getBoundingBox()),cc.rectGetMinY(self.rootHero:getBoundingBox()))
+    local origin = cc.p(cc.rectGetMinX(self.rootHero:getBoundingBox()),cc.rectGetMinY(self.rootHero:getBoundingBox()))
     -- self.rootHeroSkill:setPosition(origin)
     -- self.rootHeroArr:setPosition(origin)
     local curDlg = self._cur_show_dlg
@@ -156,7 +156,7 @@ function UIHeroInfo:ShowDlg(type,isFade)
     if not self._cur_show_dlg then
         return
     end
-    local tar = ccp(self.rootHero:getPositionX()+self.rootHero:getSize().width/2+self._cur_show_dlg:getSize().width/2,
+    local tar = cc.p(self.rootHero:getPositionX()+self.rootHero:getSize().width/2+self._cur_show_dlg:getSize().width/2,
         self._cur_show_dlg:getPositionY())
 
     if isFade then

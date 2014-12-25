@@ -212,7 +212,6 @@ function DestroyedBehavior:bindMethods(object)
         object.hpOutlineSprite_ = display.newSprite(string.format("#right-angry.png"))
         --缩放
         object.hpOutlineSprite_:setScaleX(MapConstants.RADIUS_SCALE_X)
-        -- object.hpOutlineSprite_:setScaleY(MapConstants.RADIUS_SCALE_Y)
         -- 加入批量渲染
         batch:addChild(object.hpOutlineSprite_, MapConstants.HP_BAR_ZORDER)
 
@@ -220,30 +219,46 @@ function DestroyedBehavior:bindMethods(object)
         object.hpSprite_:align(display.LEFT_CENTER, 0, 0)
         --缩放
         object.hpSprite_:setScaleX(MapConstants.RADIUS_SCALE_X)
-        -- object.hpSprite_:setScaleY(MapConstants.RADIUS_SCALE_Y)
         -- 加入批量渲染
         batch:addChild(object.hpSprite_, MapConstants.HP_BAR_ZORDER + 1)
 
-        object.Rage_=ui.newTTFLabel({
+        object.RageLabel_=cc.ui.UILabel.newTTFLabel_({
                             text = string.format("rage:%d/%d",object:getRage(),object:getMaxRage()),
                             size = 15,
                             color = display.COLOR_GREEN,
                         })
-                        :pos(ccp(0,0))
-                        :addTo(object:getMap(),MapConstants.MAP_Z_1_0)
+                        :addTo(object:getMap(),MapConstants.MAP_Z_1_0,86)
+        -- object.Rage_ = cc.ui.UILabel.new({
+        --     UILabelType = cc.ui.UILabel.LABEL_TYPE_TTF,
+        --     text = string.format("rage:%d/%d",object:getRage(),object:getMaxRage()),
+        --     size = 15,
+        --     color = display.COLOR_GREEN,
+        -- })
+        -- :pos(0,0)
+        -- :addTo(object:getMap(),MapConstants.MAP_Z_1_0)
 
     end
     self:bindMethod(object,"createView", createView)
     ----------------------------------------
     --
-    local function removeView(object)
-        object.hpOutlineSprite_:removeSelf()
-        object.hpOutlineSprite_ = nil
-        object.hpSprite_:removeSelf()
-        object.hpSprite_ = nil
-        object.Rage_:removeSelf()
-    end
-    self:bindMethod(object,"removeView", removeView, true)
+    -- local function removeView(object)
+    --     if object.hpOutlineSprite_ then
+    --         object.hpOutlineSprite_:removeSelf()
+    --         object.hpOutlineSprite_ = nil
+    --     end
+    --     if object.hpSprite_ then
+    --         object.hpSprite_:removeSelf()
+    --         object.hpSprite_ = nil
+    --     end
+
+    --     if object.Rage_ then
+    --         print("···9999999")
+    --         object.Rage_:removeSelf()
+    --         object.Rage_ = nil
+    --     end
+
+    -- end
+    -- self:bindMethod(object,"removeView", removeView, true)
     ----------------------------------------
     --
     local function updateView(object)
@@ -259,16 +274,14 @@ function DestroyedBehavior:bindMethods(object)
             object.hpOutlineSprite_:setPosition(x + object.hpRadiusOffsetX, y2)
             object.hpOutlineSprite_:setVisible(true)
 
-            -- self.batch_:reorderChild(object.hpSprite_, MapConstants.HP_BAR_ZORDER+1)
-            -- self.batch_:reorderChild(object.hpOutlineSprite_, MapConstants.HP_BAR_ZORDER)
             local y2 = y2+15
-            object.Rage_:setString(string.format("  rage:%d/%d\n  hp:%d/%d",object:getRage(),object:getMaxRage()
+            object.RageLabel_:setString(string.format("  rage:%d/%d\n  hp:%d/%d",object:getRage(),object:getMaxRage()
                 ,object:getHp(),object:getMaxHp()))
-            object.Rage_:setPosition(ccp(x2,y2))
+            object.RageLabel_:setPosition(cc.p(x2,y2))
         else
             object.hpSprite_:setVisible(false)
             object.hpOutlineSprite_:setVisible(false)
-            object.Rage_:setVisible(false)
+            object.RageLabel_:setVisible(false)
         end
     end
     self:bindMethod(object,"updateView", updateView)
@@ -298,7 +311,7 @@ function DestroyedBehavior:unbindMethods(object)
     self:unbindMethod(object,"decreaseRage")
     self:unbindMethod(object,"increaseRage")
     self:unbindMethod(object,"createView")
-    self:unbindMethod(object,"removeView")
+    -- self:unbindMethod(object,"removeView")
     self:unbindMethod(object,"updateView")
     self:unbindMethod(object,"fastUpdateView")
     self:unbindMethod(object,"isUnbreakable")

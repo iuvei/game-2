@@ -208,7 +208,7 @@ function SkillLogic:getTarsByTarLogic(rMe,tarLogicType,attackDis,targetViews)
     for i=1, #dirs do
         local offset =dirs[i]
         for j=1,attackDis do
-            local p=ccp(cell_pos.x+offset[1]*j, cell_pos.y+offset[2]*j)
+            local p=cc.p(cell_pos.x+offset[1]*j, cell_pos.y+offset[2]*j)
             table.insert(options.cell_positions,p)
         end
     end
@@ -242,7 +242,7 @@ function SkillLogic:getAktRangeHorTars(rMe,skillId,target_views,select_type)
     end
     if amount<0 then return end
     for i=1,amount do
-        local p = ccp(startCellPos.x+dir[1][1]*i,startCellPos.y+dir[1][2])
+        local p = cc.p(startCellPos.x+dir[1][1]*i,startCellPos.y+dir[1][2])
         table.insert(options.cell_positions,p)
         -- self:_getRangeTars(rMe,p,targets,true)
     end
@@ -275,7 +275,7 @@ function SkillLogic:getAktRangeAroundTars(rMe,skillId,target_views,select_type)
         options.target_type = "all"
     end
     for i=1,amount do
-        local p = ccp(startCellPos.x+dirs[i][1],startCellPos.y+dirs[i][2])
+        local p = cc.p(startCellPos.x+dirs[i][1],startCellPos.y+dirs[i][2])
         -- self:_getRangeTars(rMe,p,targets,true)
         table.insert(options.cell_positions,p)
     end

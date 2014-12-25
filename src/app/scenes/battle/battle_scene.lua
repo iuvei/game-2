@@ -30,12 +30,23 @@ function battle_scene:ctor(id_)
 
     -- 注册帧事件
     self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.tick))
-    self:scheduleUpdate_()
+    self:scheduleUpdate()
 
-    -- UI管理层
+    -- -- UI管理层
     self.UIlayer = ui_manager.new(self)
 
     self:test()
+    -- self.labeltest={}
+    -- for i=1,10 do
+    --     self.labeltest[#self.labeltest+1]=cc.ui.UILabel.newTTFLabel_({
+    --                         text = string.format("tttttttttttt"),
+    --                         size = 15,
+    --                         color = display.COLOR_GREEN,
+    --                     })
+    --                     :pos(display.cx,display.cy)
+    --                     :addTo(self.mapLayer_,MapConstants.MAP_Z_1_0)
+    -- end
+
 end
 ------------------------------------------------------------------------------
 function battle_scene:onExit()
@@ -50,8 +61,7 @@ function battle_scene:onExit()
         self.mapLayer_ = nil
     end
 
-
-    CCTextureCache:sharedTextureCache():removeAllTextures()
+    cc.TextureCache:getInstance():removeAllTextures()
 end
 ------------------------------------------------------------------------------
 function battle_scene:onEnter()
@@ -97,9 +107,22 @@ function battle_scene:test()
             event.target:setScale(1.0)
         end)
         :onButtonClicked(function()
-            local  cmds =CommandManager:getCmds()
-            local skill_id = 91001--97001--95001--92001--93001--92001--31001
-            table.insert(cmds,2,HeroBoutUseSkillCommand.new(CommandManager:getFrontCommand().opObj_,self.mapLayer_,skill_id))
+
+            for i, object in pairs(self.mapLayer_:getAllObjects()) do
+                print("···",object:GetModel():getId())
+                self.mapLayer_:removeObject(object)
+                break
+            end
+            -- local  cmds =CommandManager:getCmds()
+            -- local skill_id = 91001--97001--95001--92001--93001--92001--31001
+            -- table.insert(cmds,2,HeroBoutUseSkillCommand.new(CommandManager:getFrontCommand().opObj_,self.mapLayer_,skill_id))
+            -- self.labeltest:removeSelf()
+
+            -- for i,v in ipairs(self.labeltest) do
+            --     print(i,v)
+            --     v:removeSelf()
+            -- end
+
         end)
         :pos(display.right - 300, display.top - 15)
         :addTo(self)

@@ -23,6 +23,7 @@ function HeroOperateCommand:execute()
         self:doDone()
     else
         self._object = self._object_view:GetModel()
+        self.map_._cur_object_view = self._object_view
         -- 攻击前处理
         if not self._isDoingBefore then
             self:doingBefore(self._object)

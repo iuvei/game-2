@@ -41,7 +41,7 @@ function bgLayer:ctor(id)
 
     -- tilemap
     self.TileMap_ = CCTMXTiledMap:create("scene/battle/Level0.tmx"):addTo(self)
-    self.TileMap_:setAnchorPoint(ccp(0, 0))
+    self.TileMap_:setAnchorPoint(cc.p(0, 0))
     self.TileMap_:setVisible(false) --不显示
 
     -- 屏幕自适应
@@ -59,7 +59,7 @@ function bgLayer:ctor(id)
     HeroOperateManager:init()
 
     -- 显示地图名字
-    self.idLabel_ = ui.newTTFLabel({
+    self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
             text = string.format("%s", stage.Name),
             size = 25,
             color = display.COLOR_WHITE,
@@ -94,30 +94,30 @@ function bgLayer:ShowTileMapCell()
 
         for x=0,self.TileMap_:getMapSize().width-1 do
             for y=0,self.TileMap_:getMapSize().height-1 do
-                local pos = self.TileMap_:layerNamed("ground"):positionAt(ccp(x,y))
+                local pos = self.TileMap_:layerNamed("ground"):positionAt(cc.p(x,y))
                 local rect = display.newRect(self.tileSize_.width,self.tileSize_.height)
                 rect:setLineColor(ccc4f(1.0, 1.0, 1.0, 1.0))
                 local pos_ = self:getCellCenterPos(pos.x,pos.y)
-                rect:setPosition(ccp(pos_.x,pos_.y))
+                rect:setPosition(cc.p(pos_.x,pos_.y))
                 rect:addTo(self)
 
                 if DEBUG_BATTLE.showPos then
                     -- 显示tilemap坐标
-                    self.idLabel_ = ui.newTTFLabel({
-                        text = x.." , "..y,
-                        size = 15,
-                        color = display.COLOR_GREEN,
-                    })
-                    :pos(rect:getPosition())
-                    :addTo(self)
-                    -- 显示tilemap坐标的真实坐标
-                    self.idLabel_ = ui.newTTFLabel({
-                        text = rect:getPositionX().." , "..rect:getPositionY(),
-                        size = 15,
-                        color = display.COLOR_GREEN,
-                    })
-                    :pos(rect:getPositionX(),rect:getPositionY()+20)
-                    :addTo(self)
+                    -- self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                    --     text = x.." , "..y,
+                    --     size = 15,
+                    --     color = display.COLOR_GREEN,
+                    -- })
+                    -- :pos(rect:getPositionX(),rect:getPositionY())
+                    -- :addTo(self)
+                    -- -- 显示tilemap坐标的真实坐标
+                    -- self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
+                    --     text = rect:getPositionX().." , "..rect:getPositionY(),
+                    --     size = 15,
+                    --     color = display.COLOR_GREEN,
+                    -- })
+                    -- :pos(rect:getPositionX(),rect:getPositionY()+20)
+                    -- :addTo(self)
                 end
             end
         end

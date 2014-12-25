@@ -155,7 +155,7 @@ function AStar:getAroundCell(curCellPos)
     local tmp={}
     for i = 1, #self.deleget_.directions do
         local offset = self.deleget_.directions[i]
-        local  p=ccp(curCellPos.x+offset[1], curCellPos.y+offset[2])
+        local  p=cc.p(curCellPos.x+offset[1], curCellPos.y+offset[2])
         if not self:isRangeOut(p) then
             table.insert(tmp,p)
         end

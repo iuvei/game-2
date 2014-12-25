@@ -33,14 +33,14 @@ function home_ui_manager:init()
     local ui_script=nil
     -- 玩家信息
     local ui_script_player=self:openUI({uiScript=UIPlayerInfo, ccsFileName="UI/player_info.json",open_close_effect=false,is_no_modle=true})
-    ui_script_player:setPosition(ccp(0,display.top - ui_script_player._root_widget:getSize().height))
+    ui_script_player:setPosition(cc.p(0,display.top - ui_script_player._root_widget:getSize().height))
     -- 主菜单
     local ui_script_menu=self:openUI({uiScript=UIMainMenu, ccsFileName="UI/main_menu.json",open_close_effect=false,is_no_modle=true,zorder = 20000})
-    ui_script_menu:setPosition(ccp(display.right - ui_script_menu._root_widget:getSize().width,display.bottom))
+    ui_script_menu:setPosition(cc.p(display.right - ui_script_menu._root_widget:getSize().width,display.bottom))
 
     --
     ui_script=self:openUI({uiScript=UIChat, ccsFileName="UI/chat.json",open_close_effect=false,is_no_modle=true})
-    -- ui_script:setPosition(ccp(- ui_script._root_widget:getSize().width + 68,0))
+    -- ui_script:setPosition(cc.p(- ui_script._root_widget:getSize().width + 68,0))
 
 end
 ----------------------------------------------------------------
@@ -50,7 +50,7 @@ function home_ui_manager:createRoleInfoDlg()
         open_close_effect=false,
         is_no_modle=true,
         zorder = 0})
-    ui_script:setPosition(ccp(display.right/2-ui_script._root_widget:getSize().width/2,display.top - ui_script._root_widget:getSize().height))
+    ui_script:setPosition(cc.p(display.right/2-ui_script._root_widget:getSize().width/2,display.top - ui_script._root_widget:getSize().height))
 
 end
 -- 进入战场按钮
@@ -62,7 +62,7 @@ function home_ui_manager:createStagesBtn()
                 KNMsg:getInstance():flashShow("请选择上阵英雄")
                 return
             end
-            self:openUI({uiScript=UIStages, ccsFileName="UI/UIstages_1/UIstages_1.json",open_close_effect=false})
+            self:openUI({uiScript=UIStages, ccsFileName="UI/UIstages_1/UIstages_1.json",open_close_effect=true})
         end)
         :pos(display.right-200, display.bottom+60)
         :addTo(self)

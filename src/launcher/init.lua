@@ -20,7 +20,7 @@ Launcher = {}
 -- Launcher.UpdateRetType = { SUCCESSED = 0, NETWORK_ERROR = 1, MD5_ERROR = 2, OTHER_ERROR = 3 }
 
 local sharedApplication = CCApplication:sharedApplication()
-local sharedDirector = CCDirector:sharedDirector()
+local sharedDirector = cc.Director:getInstance()
 local target = sharedApplication:getTargetPlatform()
 Launcher.platform    = "unknown"
 Launcher.model       = "unknown"
@@ -364,7 +364,7 @@ function Launcher.getAppVersionCode()
 end
 
 function Launcher.performWithDelayGlobal(listener, time)
-	local scheduler = CCDirector:sharedDirector():getScheduler()
+	local scheduler = cc.Director:getInstance():getScheduler()
     local handle = nil
     handle = scheduler:scheduleScriptFunc(function()
         scheduler:unscheduleScriptEntry(handle)

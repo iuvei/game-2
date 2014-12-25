@@ -27,7 +27,7 @@ function AStarUtil:findPath(startCellPos, targetCellPos, map,object)
                                 end
                             end
                             --自己阵营设为障碍
-                             if map:isSelfCampByCellPos(ccp(x,y),object:GetModel():getCampId()) then
+                             if map:isSelfCampByCellPos(cc.p(x,y),object:GetModel():getCampId()) then
                                  return 1
                              end
                              return 0

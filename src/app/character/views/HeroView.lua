@@ -67,7 +67,7 @@ function HeroView:init(model,params)
     --     color = display.COLOR_WHITE
     -- end
 
-    -- self.idLabel_ = ui.newTTFLabel({
+    -- self.idLabel_ = cc.ui.UILabel.newTTFLabel_({
     --         text = string.format("%s", hero:getNickname()),
     --         size = 15,
     --         color = color,
@@ -118,7 +118,7 @@ end
 -- function HeroView:updataImpacts()
 --     for k,v in pairs(self.impactSprite_) do
 --         local x,y = self:getPosition()
---         v:setPosition(ccp(x, y))
+--         v:setPosition(cc.p(x, y))
 --     end
 -- end
 
@@ -259,7 +259,7 @@ function HeroView:createIdleAction()
     Formation:handleFormation(self,"callback",{
         callback = function ( sprite )
             sprite:stopAllActions()
-            sprite:setDisplayFrame(frame)
+            sprite:setSpriteFrame(frame)
     end})
 end
 ------------------------------------------------------------------------------
@@ -288,14 +288,14 @@ end
 ------------------------------------------------------------------------------
 function HeroView:createMiss()
     local x,y = self:getPosition()
-    local label = ui.newTTFLabel({
+    local label = cc.ui.UILabel.newTTFLabel_({
                             text = "Miss",
                             size = 20,
                             color = display.COLOR_RED,
                         })
-                        :pos(ccp(x,y))
+                        :pos(x,y)
                         :addTo(self:GetModel():getMap(),MapConstants.MAP_Z_1_0)
-    transition.execute(label, CCMoveTo:create(1, CCPoint(x,y+50)), {
+    transition.execute(label, CCMoveTo:create(1,cc.p(x,y+50)), {
     easing = "backout",
     onComplete = function()
         label:removeSelf()
@@ -304,14 +304,14 @@ function HeroView:createMiss()
 end
 function HeroView:createSkillNameEff(name)
     local x,y = self:getPosition()
-    local label = ui.newTTFLabel({
+    local label = cc.ui.UILabel.newTTFLabel_({
                             text = name,
                             size = 30,
                             color = display.COLOR_BLACK,
                         })
-                        :pos(ccp(x,y))
+                        :pos(x,y)
                         :addTo(self:GetModel():getMap(),MapConstants.MAP_Z_1_0)
-    transition.execute(label, CCMoveTo:create(1, CCPoint(x,y+50)), {
+    transition.execute(label, CCMoveTo:create(1, cc.p(x,y+50)), {
     easing = "backout",
     onComplete = function()
         label:removeSelf()
@@ -331,7 +331,7 @@ function HeroView:createAttackEff()
     local sprite =nil
     -- if skillEffData.effMoveType == SkillDefine.EffType_Origin then
     --     x,y = self:getPosition()
-    --     sprite:setPosition(ccp(x,y))
+    --     sprite:setPosition(cc.p(x,y))
     --     local onComplete = function()
     --         --print("move completed")
     --     end
@@ -351,7 +351,7 @@ function HeroView:createAttackEff()
             local sprite = display.newSprite():addTo(self:GetModel():getMap(),MapConstants.MAP_Z_2_0)
             tx,ty = rTarView:getPosition()
 
-            sprite:setPosition(ccp(tx+arrOffset[1],ty+arrOffset[2]))
+            sprite:setPosition(cc.p(tx+arrOffset[1],ty+arrOffset[2]))
             local onComplete = function()
                 --print("move completed")
             end
@@ -361,7 +361,7 @@ function HeroView:createAttackEff()
             tx,ty = rTarView:getPosition()
             x,y= self:getPosition()
             local map = self:GetModel():getMap()
-            baseBullet.new(self:GetModel(), ccp(x,y),ccp(tx+arrOffset[1],ty+arrOffset[2]),frameName,scale_):addTo(map,MapConstants.MAP_Z_2_0)
+            baseBullet.new(self:GetModel(), cc.p(x,y),cc.p(tx+arrOffset[1],ty+arrOffset[2]),frameName,scale_):addTo(map,MapConstants.MAP_Z_2_0)
         end
     end
 
@@ -384,9 +384,9 @@ function HeroView:createBeAttackAction()
     -- local sequence = transition.sequence({
     --     transition.spawn({
     --         CCDelayTime:create(0.4),
-    --         CCMoveBy:create(0.2, ccp(moveby_,0)),
+    --         CCMoveBy:create(0.2, cc.p(moveby_,0)),
     --     }),
-    --     CCMoveBy:create(0.2, ccp(-moveby_,0))
+    --     CCMoveBy:create(0.2, cc.p(-moveby_,0))
     -- })
     -- transition.execute(self,sequence)
 
@@ -394,15 +394,15 @@ function HeroView:createBeAttackAction()
     Formation:handleFormation(self,"callback",{
         callback = function ( sprite )
             sprite:stopAllActions()
-            sprite:setDisplayFrame(frame)
+            sprite:setSpriteFrame(frame)
 
             -- 变红 移动
             -- local sequence = transition.sequence({
             --     transition.spawn({
             --         CCTintBy:create(0.4, 0, 255, 255),
-            --         CCMoveBy:create(0.2, ccp(moveby_,0)),
+            --         CCMoveBy:create(0.2, cc.p(moveby_,0)),
             --     }),
-            --     CCMoveBy:create(0.2, ccp(-moveby_,0))
+            --     CCMoveBy:create(0.2, cc.p(-moveby_,0))
             -- })
             -- transition.execute(sprite,sequence)
             -- transition.execute(sprite)
@@ -437,7 +437,7 @@ function HeroView:createDeadAction()
     Formation:handleFormation(self,"callback",{
         callback = function ( sprite )
             sprite:stopAllActions()
-            sprite:setDisplayFrame(self:createDeadFrame())
+            sprite:setSpriteFrame(self:createDeadFrame())
             local params={
                 time1 = 0.4,
             }
@@ -448,7 +448,7 @@ end
 function HeroView:createDeadActionOne(sprtie,_callback)
     if sprtie then
         sprtie:stopAllActions()
-        sprtie:setDisplayFrame(self:createDeadFrame())
+        sprtie:setSpriteFrame(self:createDeadFrame())
         EffectFadeInOut:run(sprtie,{onComplete = _callback})
     end
 

@@ -1,6 +1,6 @@
 INIT_FUNCTION = {}
 ----------------------------------------------------------------
-local winSize = CCDirector:sharedDirector():getWinSize()
+local winSize = cc.Director:getInstance():getWinSize()
 INIT_FUNCTION.width              = winSize.width
 INIT_FUNCTION.height             = winSize.height
 INIT_FUNCTION.cx                 = winSize.width / 2
@@ -67,7 +67,7 @@ function INIT_FUNCTION.AppExistsListener(bindApp)
     --     self.touchLayer = display.newLayer()
     --     self.touchLayer:addNodeEventListener(cc.KEYPAD_EVENT, function(event)
     --         if event.key == "back" then
-    --             --CCDirector:sharedDirector():endToLua()
+    --             --cc.Director:getInstance():endToLua()
     --             local javaClassName = "com/cocos2dx/testgame/Testgame"
     --             local javaMethodName = "exit"
     --             luaj.callStaticMethod(javaClassName, javaMethodName)
@@ -156,7 +156,7 @@ end
 -- ]]
 -- function INIT_FUNCTION.switchScene( name , temp_data )
 --      -- 去掉所有未完成的动作
---      CCDirector:sharedDirector():getActionManager():removeAllActions()
+--      cc.Director:getInstance():getActionManager():removeAllActions()
 
 --      local scene_file = "app/scenes/" .. name .. "/scene"
 
@@ -314,8 +314,8 @@ end
 ----------------------------------------------------------------
 -- function refreshCopy(percent)
 --  local action
---  action = CCDirector:sharedDirector():getScheduler():scheduleScriptFunc(function()
---      local curScene = CCDirector:sharedDirector():getRunningScene()
+--  action = cc.Director:getInstance():getScheduler():scheduleScriptFunc(function()
+--      local curScene = cc.Director:getInstance():getRunningScene()
 
 --      if INIT_FUNCTION.layer then
 -- --           front = layer:getChildByTag(255)
@@ -353,7 +353,7 @@ end
 --          INIT_FUNCTION.layer:addChild(INIT_FUNCTION.front)
 --          curScene:addChild(INIT_FUNCTION.layer)
 --      end
---      CCDirector:sharedDirector():getScheduler():unscheduleScriptEntry(action)
+--      cc.Director:getInstance():getScheduler():unscheduleScriptEntry(action)
 --  end, 0, false)
 -- end
 ----------------------------------------------------------------

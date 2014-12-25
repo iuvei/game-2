@@ -53,7 +53,7 @@ function HeroAtkCommand:execute()
         -- self._times_atk = skillLogic:getTimesAtk()
     --操作执行进行中
     elseif self:getOpState() == HeroOpState.Doing then
-        local time_interval = CCDirector:sharedDirector():getDeltaTime()*1000
+        local time_interval = cc.Director:getInstance():getDeltaTime()*1000
         self.elapseTime_=math.floor(self.elapseTime_+time_interval)
         if  self.elapseTime_ >= self.endTimeInterval_ then
             self._rMe:doStopEvent()

@@ -14,12 +14,12 @@ function CBattle:ctor(mapEvent)
     self.map_=mapEvent:getMap()
     self.isStart=false
     self.bout=0
-    self.label = ui.newTTFLabel({
+    self.label = cc.ui.UILabel.newTTFLabel_({
                             text = "Bout:"..self.bout,
                             size = 30,
                             color = display.COLOR_GREEN,
                         })
-                        :pos(ccp(100,50))
+                        :pos(100,50)
                         :addTo(self.map_,MapConstants.MAP_Z_3_0)
 end
 ---------------------------------------

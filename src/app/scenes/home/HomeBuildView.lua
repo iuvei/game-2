@@ -25,7 +25,7 @@ function HomeBuildView:init(model,params)
     for k,data in pairs(datas) do
         local rect=configMgr:getConfig("home"):toRect(data.rect)
         if data.resType == 1 then
-            self:setPosition(ccp(rect.x,rect.y))
+            self:setPosition(cc.p(rect.x,rect.y))
             break
         end
     end
@@ -40,7 +40,7 @@ function HomeBuildView:init(model,params)
                 self.elements_[HomeBuildView.ResType_LightBg]:setVisible(false)
             end
         elseif data.resType==HomeBuildView.ResType_Title then
-            self.elements_[data.resType]=ui.newTTFLabel({
+            self.elements_[data.resType]=cc.ui.UILabel.newTTFLabel_({
                             text = self:GetModel():getName(),
                             size = 20,
                             color = display.COLOR_GREEN,
@@ -63,7 +63,7 @@ function HomeBuildView:init(model,params)
     --self:GetBatch():addChild(self.sprite_,MapConstants.MAX_OBJECT_ZORDER)
     -- 设置坐标
     --local pt = self:GetModel():getVaildTouchRect().origin
-    --self:setPosition(ccp(pt.x,pt.y))
+    --self:setPosition(cc.p(pt.x,pt.y))
     --self:updateView()
     return true
 end
@@ -98,11 +98,12 @@ function HomeBuildView:contains(worldPos)
     -- print("HomeBuildView",s:getBoundingBox():getMidX(),s:getBoundingBox():getMidY(),s:getBoundingBox():getMaxX()
     --     ,s:getBoundingBox():getMaxY(),
     --     self:GetModel():getName())
-    if self.elements_[HomeBuildView.ResType_TitleBg]:getBoundingBox():containsPoint(worldPos) then
+    local rc = self.elements_[HomeBuildView.ResType_TitleBg]:getBoundingBox()
+    if cc.rectContainsPoint(rc,worldPos) then
         return true
     end
-    if self.elements_[HomeBuildView.ResType_MainImg]:getBoundingBox():containsPoint(worldPos) == true then
-
+    rc = self.elements_[HomeBuildView.ResType_MainImg]:getBoundingBox()
+    if cc.rectContainsPoint(rc,worldPos) then
         return true
     end
     -- elseif self:GetModel():contains(worldPos) then
@@ -128,7 +129,7 @@ end
 -- 更新
 function HomeBuildView:updateView()
     local sprite = self.sprite_
-    sprite:setPosition(ccp(self:getPosition()))
+    sprite:setPosition(cc.p(self:getPosition()))
 end
 ------------------------------------------------------------------------------
 return HomeBuildView

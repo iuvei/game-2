@@ -125,7 +125,7 @@ function AICharacterBehavior:bindMethods(object)
     --     end
 
     --     local tx, ty = object:getPosition()
-    --     local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(tx,ty))
+    --     local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(cc.p(tx,ty))
     --     local cellPosEnemy=nil
     --     -- if object:GetModel():getType()=="gongbing" then
     --     if math.floor(object:GetModel():getArmId() / 1000) == 3 then
@@ -217,7 +217,7 @@ function AICharacterBehavior:bindMethods(object)
         end
 
         -- local mx,my = object:getPosition()
-        local cellPosSelf = object_view:getCellPos() -- local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(mx,my))
+        local cellPosSelf = object_view:getCellPos() -- local cellPosSelf = mapEvent:getMap():getDMap():worldPosToCellPos(cc.p(mx,my))
 
         local disInfo={}
         for id, object_view_ in pairs(mapEvent.map_:getAllCampObjects(camp)) do
@@ -237,7 +237,7 @@ function AICharacterBehavior:bindMethods(object)
             if isPriSelectRow then
                 for i,target in ipairs(disInfo) do
                     -- local tx,ty = target.enemyObj:getPosition()
-                    -- local cellPosEnemy = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(tx,ty))
+                    -- local cellPosEnemy = mapEvent:getMap():getDMap():worldPosToCellPos(cc.p(tx,ty))
                     local cellPosEnemy = target.enemy_obj_view:getCellPos()
                     --TODO 找到同一线上的，需改成按规则查找
                     if cellPosEnemy.y == cellPosSelf.y then
@@ -257,7 +257,7 @@ function AICharacterBehavior:bindMethods(object)
         for i=1, #aktDirs do
             local offset =aktDirs[i]
             for j=1,dis do
-                local p=ccp(sCellPos.x+offset[1]*j, sCellPos.y+offset[2]*j)
+                local p=cc.p(sCellPos.x+offset[1]*j, sCellPos.y+offset[2]*j)
                 local t=object:getMap():getHeroByCellPos(p)
                 if t and not t:GetModel():isDead() then
                     table.insert(targets,t)
@@ -272,7 +272,7 @@ function AICharacterBehavior:bindMethods(object)
     local function getMovePosWayForRow(object,mapEvent)
         local object = object:getView()
         local mx,my = object:getPosition()
-        local startCellPos = mapEvent:getMap():getDMap():worldPosToCellPos(ccp(mx,my))
+        local startCellPos = mapEvent:getMap():getDMap():worldPosToCellPos(cc.p(mx,my))
         local target = startCellPos
         local camp = object:GetModel():getCampId()
         if camp == MapConstants.PLAYER_CAMP then
@@ -292,7 +292,7 @@ function AICharacterBehavior:bindMethods(object)
     local function getMovePosWayFindNearEnemy(object,mapEvent,isPriSelectRow)
         local enemy =object:findNearestEnemy(mapEvent,isPriSelectRow)
         local mx,my=enemy:getPosition()
-        return mapEvent:getMap():getDMap():worldPosToCellPos(ccp(mx,my))
+        return mapEvent:getMap():getDMap():worldPosToCellPos(cc.p(mx,my))
     end
     self:bindMethod(object,"getMovePosWayFindNearEnemy", getMovePosWayFindNearEnemy)
     ----------------------------------------

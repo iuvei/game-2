@@ -96,7 +96,7 @@ function UIChat:Listen()
         size = CCSize(499, 40)
     })
     self:GetTouchGroup():addChild(editbox,1)
-    -- editbox:setPosition(ccp(147,307))
+    -- editbox:setPosition(cc.p(147,307))
     editbox:setFontName("Paint Boy" )
     editbox:setFontSize(28)
     editbox:setFontColor(display.COLOR_RED)
@@ -110,11 +110,11 @@ end
 function UIChat:Activate()
     if self._is_open then
         self:setPosition(-self._root_widget:getSize().width+68, 0)
-        self._editbox:setPosition(ccp(291-self._root_widget:getSize().width+68,520))
+        self._editbox:setPosition(cc.p(291-self._root_widget:getSize().width+68,520))
         self._is_open=false
     else
         self:setPosition(0, 0)
-        self._editbox:setPosition(ccp(291,520))
+        self._editbox:setPosition(cc.p(291,520))
         self._is_open=true
     end
 end

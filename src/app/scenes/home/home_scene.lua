@@ -9,9 +9,9 @@ collectgarbage("setstepmul"  ,  5000)
 local CommonDefine = require("app.ac.CommonDefine")
 local configMgr = require("config.configMgr")
 local ui_manager = import(".home_ui_manager")
-local base_cene = require("app.scenes.base_cene")
+local base_scene = require("app.scenes.base_scene")
 ----------------------------------------------------------------
-local home_scene = class("home_scene", base_cene)
+local home_scene = class("home_scene", base_scene)
 home_scene.SCROLL_DEACCEL_RATE = 0.95
 home_scene.SCROLL_DEACCEL_DIST = 1.0
 ----------------------------------------------------------------
@@ -25,6 +25,16 @@ function home_scene:ctor()
     self.buildsLayer_=display.newNode()
     self.builds_={}
     self.selBuildId_=CommonDefine.INVALID_ID
+    -- 场景拖动数据
+    self.drag = {
+            startX  = 0,
+            startY  = 0,
+            lastX   = 0,
+            lastY   = 0,
+            offsetX = 0,
+            offsetY = 0,
+            isDeaccelerate=false,
+        }
    -- self.bgLayer_:align(display.LEFT_BOTTOM, 0, 0)
     self:addChild(self.bgLayer_)
     local sceneSize = CCSize(display.width,display.height)
@@ -69,6 +79,31 @@ function home_scene:ctor()
     -- self:test()
     -- test
     ------------------------------------------
+end
+----------------------------------------------------------------
+function home_scene:onEnter()
+    printInfo("enter home scene ok")
+    INIT_FUNCTION.AppExistsListener(self)
+
+    self.touchLayer_:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
+        return self:onTouch(event.name, event.x, event.y)
+    end)
+    self.touchLayer_:setTouchEnabled(true)
+    self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.tick))
+    self:scheduleUpdate()
+
+    if self.UIlayer then self.UIlayer:init() end
+    --
+    self:moveToSceneCenter()
+end
+----------------------------------------------------------------
+function home_scene:onExit()
+    if self.UIlayer then
+        self.UIlayer:removeFromParent(true)
+        self.UIlayer = nil
+    end
+    CCTextureCache:sharedTextureCache():removeAllTextures()
+    -- CCTextureCache:sharedTextureCache():removeUnusedTextures()
 end
 function home_scene:test()
     ------------------------------------------
@@ -207,7 +242,7 @@ function home_scene:onTouch(event, x, y)
             offsetY = 0,
             isDeaccelerate=false,
         }
-        local worldPos = self:viewPos2worldPos(ccp(x, y))
+        local worldPos = self:viewPos2worldPos(cc.p(x, y))
         local b=self:onTouchBuilding(worldPos)
         if b then
             self.selBuildId_=b:getBuildId()
@@ -223,11 +258,10 @@ function home_scene:onTouch(event, x, y)
         self.drag.lastX = x
         self.drag.lastY = y
         self:moveOffset(self.drag.offsetX, self.drag.offsetY)
-        --self.map_:getCamera():moveOffset(self.drag.offsetX, self.drag.offsetY)
     elseif event == "ended" then
         --self.drag = nil
         self.drag.isDeaccelerate=true
-        local worldPos = self:viewPos2worldPos(ccp(x, y))
+        local worldPos = self:viewPos2worldPos(cc.p(x, y))
         if self:isContainsBySelBuildId(worldPos) then
             self.builds_[self.selBuildId_]:selected()
         end
@@ -255,11 +289,17 @@ function home_scene:tick(dt)
     end
 end
 ----------------------------------------------------------------
+-- 场景移动相关
+function home_scene:moveToSceneCenter()
+    self.drag.offsetX=0
+    self.drag.offsetY=0
+    self:moveOffset(math.floor(display.width/2 - self:getSceneSize().width/2) ,0)
+end
 function home_scene:moveOffset(offsetX, offsetY)
-    self:setOffset(self.offsetX_ + offsetX, self.offsetY_ + offsetY)
+    self:_setOffset(self.offsetX_ + offsetX, self.offsetY_ + offsetY)
 end
 ----------------------------------------------------------------
-function home_scene:setOffset(x, y, movingSpeed, onComplete)
+function home_scene:_setOffset(x, y, movingSpeed, onComplete)
     --if self.zooming_ then return end
 
     if x < self.offsetLimit_.minX then
@@ -300,7 +340,7 @@ function home_scene:setOffset(x, y, movingSpeed, onComplete)
         -- transition.moveTo(self.batch_, {x = x, y = y, time = movingTime})
         -- transition.moveTo(self.marksLayer_, {x = x, y = y, time = movingTime})
     else
-        self:setPos(ccp(x, y))
+        self:setPos(cc.p(x, y))
          self.bgLayer_:setPosition(x, y)
          self.buildsLayer_:setPosition(x, y)
         --self:setPosition(x, y)
@@ -318,30 +358,7 @@ function home_scene:resetOffsetLimit()
         maxY = 0,
     }
 end
-----------------------------------------------------------------
-function home_scene:onEnter()
-    printInfo("enter home scene ok")
-    INIT_FUNCTION.AppExistsListener(self)
 
-    self.touchLayer_:addNodeEventListener(cc.NODE_TOUCH_EVENT, function(event)
-        return self:onTouch(event.name, event.x, event.y)
-    end)
-    self.touchLayer_:setTouchEnabled(true)
-    self:addNodeEventListener(cc.NODE_ENTER_FRAME_EVENT, handler(self, self.tick))
-    self:scheduleUpdate()
-
-    if self.UIlayer then self.UIlayer:init() end
------------
-end
-----------------------------------------------------------------
-function home_scene:onExit()
-    if self.UIlayer then
-        self.UIlayer:removeFromParentAndCleanup(true)
-        self.UIlayer = nil
-    end
-    CCTextureCache:sharedTextureCache():removeAllTextures()
-    -- CCTextureCache:sharedTextureCache():removeUnusedTextures()
-end
 ----------------------------------------------------------------
 --场景建筑相关
 function home_scene:onTouchBuilding(worldPos)

@@ -61,9 +61,9 @@ function BuildView:createBeAttackAction()
     local sequence = transition.sequence({
         transition.spawn({
             CCTintBy:create(0.4, 0, 255, 255),
-            CCMoveBy:create(0.2, ccp(moveby_,0)),
+            CCMoveBy:create(0.2, cc.p(moveby_,0)),
         }),
-        CCMoveBy:create(0.2, ccp(-moveby_,0))
+        CCMoveBy:create(0.2, cc.p(-moveby_,0))
     })
     transition.execute( self:GetSprite(),sequence)
 end

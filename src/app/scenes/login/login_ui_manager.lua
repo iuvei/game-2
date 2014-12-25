@@ -58,7 +58,7 @@ function login_ui_manager:init()
     bg:setScaleY(INIT_FUNCTION.height/mapcontent.height);
 
     -- 版本
-    local version_label = ui.newTTFLabel({
+    local version_label = cc.ui.UILabel.newTTFLabel_({
         text = "version: "..VERSION,
         font = FONT,--FONT_GAME,
         size = 20,
@@ -200,7 +200,7 @@ function login_ui_manager:createServerListBtn()
 	})
     :pos(display.cx-190, 195)
     :addTo(self)
-    self.selectedServer:setAnchorPoint(ccp(0,1))
+    self.selectedServer:setAnchorPoint(cc.p(0,1))
     self.selectedServer.serverinfo = {aid=aid, sid=sid}
 
     --
@@ -212,7 +212,7 @@ function login_ui_manager:createServerListBtn()
 	})
     :pos(display.cx+90, 195)
     :addTo(self)
-    self.selcetText:setAnchorPoint(ccp(0,1))
+    self.selcetText:setAnchorPoint(cc.p(0,1))
 
 end
 ------------------------------------------------------------------------------

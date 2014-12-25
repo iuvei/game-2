@@ -32,19 +32,40 @@ function ObjectView:init(model,params)
     -- 设置是否翻转
     if params.flipx ~= nil then self:flipX(params.flipx) end
     -- 设置坐标
-    self:setPosition(ccp(params.x,params.y))
+    self:setPosition(cc.p(params.x,params.y))
     self:updataCellPos()
 end
 ------------------------------------------------------------------------------
 -- 退出
 function ObjectView:onExit()
-    self.model_:removeView()
+    self:removeView()
+    -- self.model_:removeView()
     self.model_ = nil
 end
 ------------------------------------------------------------------------------
 --
 function ObjectView:onEnter()
 
+end
+------------------------------------------------------------------------------
+--
+function ObjectView:removeView()
+    if self.model_.hpOutlineSprite_ then
+        self.model_.hpOutlineSprite_:removeSelf()
+        self.model_.hpOutlineSprite_ = nil
+    end
+    if self.model_.hpSprite_ then
+        self.model_.hpSprite_:removeSelf()
+        self.model_.hpSprite_ = nil
+    end
+
+    if self.model_.RageLabel_ then
+        -- print("···data",s)
+        -- issue :删除报错
+        -- self.model_.RageLabel_:removeSelf()
+        self.model_.RageLabel_ = nil
+    end
+    -- print("···en")
 end
 ------------------------------------------------------------------------------
 --所在地图
@@ -78,14 +99,15 @@ function ObjectView:flipX(flip)
 end
 ------------------------------------------------------------------------------
 function ObjectView:isFlipX()
-    return self.sprite_:isFlipX()
+    return self.sprite_:isFlippedX()
 end
 ------------------------------------------------------------------------------
 -- 更新
 function ObjectView:updateView()
     local sprite = self.sprite_
     if sprite then
-        sprite:setPosition(ccp(self:getPosition()))
+        -- sprite:setPosition(cc.p(self:getPosition()))
+        sprite:setPosition(cc.p(self:getPosition()))
     end
     self:updataImpacts()
 end
@@ -99,7 +121,7 @@ end
 function ObjectView:updataImpacts()
     for k,v in pairs(self.impactSprite_) do
         local x,y = self:getPosition()
-        v:setPosition(ccp(x, y))
+        v:setPosition(cc.p(x, y))
     end
 end
 function ObjectView:removeImpactsEffect()
@@ -129,7 +151,7 @@ function ObjectView:createImpactEffect(resEffectId,isRepeatPlay,effectPoint)
     local scale_ = resEffectData.scale/100
     local x,y = self:getPosition()
     local sprite = display.newSprite()
-    sprite:setPosition(ccp(x+arrOffset[1],y+arrOffset[2]))
+    sprite:setPosition(cc.p(x+arrOffset[1],y+arrOffset[2]))
     sprite:setScale(scale_)
     if effectPoint==nil or effectPoint == 1 then -- 人物身上
         self:GetModel():getMap():addChild(sprite,MapConstants.MAP_Z_2_0)
@@ -167,7 +189,7 @@ end
 --取得自己的格子坐标
 function ObjectView:_getCellPos()
     local x,y = self:getPosition()
-    return self:getMap():getDMap():worldPosToCellPos(ccp(x,y))
+    return self:getMap():getDMap():worldPosToCellPos(cc.p(x,y))
 end
 ------------------------------------------------------------------------------
 function ObjectView:createIdleAction()

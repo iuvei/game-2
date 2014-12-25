@@ -35,7 +35,7 @@ function M:run( sprite_ , num , param )
     setAnchPos( group , 0 , 0 , 0.5 )
     sprite_:getParent():addChild(group,param.zorder)
     local x_,y_=sprite_:getPosition()
-    group:setPosition(ccp(x_,y_))
+    group:setPosition(cc.p(x_,y_))
 
     --[[特效开始]]
     group:setScale(0.3)

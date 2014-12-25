@@ -206,7 +206,7 @@ function KNBtn:new(path, file, x, y, params, group)
 		end
 		if this.params["parent"] and not CCRectMake(this.params["parent"]:getX(),    --若有父组件时，点击到组件外部时不响应
 			this.params["parent"]:getY(), this.params["parent"]:getWidth(),
-				params["parent"]:getHeight()):containsPoint(ccp(x,y)) then
+				params["parent"]:getHeight()):containsPoint(cc.p(x,y)) then
 				press = false
 				moveOn = false
 				lastX = 0
@@ -220,7 +220,7 @@ function KNBtn:new(path, file, x, y, params, group)
 			if type == "began" then
 --				audio.playSound("sound/click.mp3")
 
-				if cc.rectContainsPoint(this:getRange(),ccp(x,y)) then
+				if cc.rectContainsPoint(this:getRange(),cc.p(x,y)) then
 					press = true
 					moveOn = true
 --					lastX = x
@@ -246,7 +246,7 @@ function KNBtn:new(path, file, x, y, params, group)
 				if this.params["upSelect"] then
 						if math.abs(cc.rectGetMinX(this:getRange()) - lastX) > CANCELDIS or
 							math.abs(cc.rectGetMinY(this:getRange()) - lastY) > CANCELDIS or
-							not this:getRange():containsPoint(ccp(x,y)) then
+							not this:getRange():containsPoint(cc.p(x,y)) then
 								press = false
 								moveOn = false
 								return false
@@ -254,14 +254,14 @@ function KNBtn:new(path, file, x, y, params, group)
 				else
 					if math.abs(cc.rectGetMinX(this:getRange()) - lastX) > CANCELDIS or
 						math.abs(cc.rectGetMinY(this:getRange()) - lastY) > CANCELDIS or
-						not cc.rectContainsPoint(this:getRange(),ccp(x,y)) then
+						not cc.rectContainsPoint(this:getRange(),cc.p(x,y)) then
 							press = false
 							moveOn = false
 							this:setState(NORMAL)
 							return false
 					end
 
-					if cc.rectContainsPoint(this:getRange(),ccp(x,y)) then
+					if cc.rectContainsPoint(this:getRange(),cc.p(x,y)) then
 						if press then
 							moveOn = true
 							this:setState(SELECTED)
@@ -286,7 +286,7 @@ function KNBtn:new(path, file, x, y, params, group)
 					end
 				end
 			elseif type == "ended" then
-				if cc.rectContainsPoint(this:getRange(),ccp(x,y)) then
+				if cc.rectContainsPoint(this:getRange(),cc.p(x,y)) then
 					if press and moveOn then
 						--放开后执行回调
 						local result --callback执行的结果，默认返回nil 如果是反回false则不触发单选组的选中效果
@@ -547,7 +547,7 @@ function KNBtn:getHeight()
 end
 
 function KNBtn:setPosition(x,y)
-	self.layer:setPosition(ccp(x,y))
+	self.layer:setPosition(cc.p(x,y))
 end
 
 function KNBtn:getX()
@@ -564,7 +564,7 @@ function KNBtn:setFlip(horizontal)
 		end
 	else
 		for i = 1, #self.item do
-			self.item[i]:setFlipY(true)
+			self.item[i]:setFlippedY(true)
 		end
 	end
 end

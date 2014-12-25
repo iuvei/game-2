@@ -24,7 +24,7 @@ function stage_mgr:set_data( data )
     table.walk(data, function(v, k)
         self:update(v)
     end)
-    dump(self.__data)
+    -- dump(self.__data)
 end
 ----------------------------------------
 function stage_mgr:get_count()

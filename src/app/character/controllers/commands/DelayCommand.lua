@@ -20,7 +20,7 @@ function DelayCommand:execute()
 
     --操作执行进行中
     elseif self:getOpState() == HeroOpState.Doing then
-        self._elapseTime=math.floor(self._elapseTime+CCDirector:sharedDirector():getDeltaTime()*1000)
+        self._elapseTime=math.floor(self._elapseTime+cc.Director:getInstance():getDeltaTime()*1000)
 
         if  self._elapseTime >= self._endTimeInterval then
             if self._rMe:isState("beattacking") then

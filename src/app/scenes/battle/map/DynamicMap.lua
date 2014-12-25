@@ -60,14 +60,14 @@ function DynamicMap:worldPosToCellPos(worldPos)
     local x = math.floor( worldPos.x / self:getCellSize().width )
     local y = math.floor( worldPos.y / self:getCellSize().height )
     y = (self:getMapSize().height-1) - y
-    return ccp(x,y)
+    return cc.p(x,y)
 end
 ------------------------------------------------------------------------------
 --
 function DynamicMap:cellPosToWorldPos(cellPos)
-    --local pos = ccp(cellPos.x*self:getCellSize().width,cellPos.y*self:getCellSize().height)
+    --local pos = cc.p(cellPos.x*self:getCellSize().width,cellPos.y*self:getCellSize().height)
     local rc = self:getMapCell(cellPos.x,cellPos.y).rect
-    local pos = ccp(rc:getMidX(),rc:getMidY())
+    local pos = cc.p(cc.rectGetMidX(rc),cc.rectGetMidY(rc))
     --pos.x =  math.floor(pos.x + self:getCellSize().width /2)
     --pos.y = math.floor(pos.y + self:getCellSize().height /2)
 

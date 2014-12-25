@@ -30,7 +30,6 @@ function M:init( params )
     self:initTouchSelFormation()
 
      local lstItem = self:getWidgetByName("ScrollView")
-     print("···",lstItem)
      self._lstItem =UIListView.new(lstItem)
      self._tplItem = tolua.cast(GUIReader:shareReader():widgetFromJsonFile("UI/hero_main_item.json"),"Layout")
 
@@ -144,7 +143,7 @@ function M:addItem(heroDt)
                     self.newCell = self:createUINode("ImageView",{
                         name    = "heroImg"..heroDt.GUID,
                         texture = heroinfo.headIcon,
-                        pos     = ccp(0,0),
+                        pos     = cc.p(0,0),
                     }):addTo(self,2)
                     self.newCell.data = { GUID = heroDt.GUID, Index = heroDt.index }
                     self.newCell:setPosition(sender:getTouchBeganPosition())
@@ -160,7 +159,7 @@ function M:addItem(heroDt)
                             for i = 1,#PanelPos:getChildren() do
                                 if self.newCell then
                                     local wg_slot = PanelPos:getChildByName("PanelPos_"..i)
-                                    if wg_slot:hitTest(ccp(self.newCell:getPosition())) then
+                                    if wg_slot:hitTest(cc.p(self.newCell:getPosition())) then
                                         local data = {
                                             fId=self.wg_sel_formation.formationType,
                                             slotIndex=i,
@@ -185,8 +184,8 @@ function M:addItem(heroDt)
                 end
                 --点击弹起处理
                 if self.drag.isClickDown and not self.drag.isMove then
-                    -- self:getUIManager():openUI({uiScript=require("app.ui.UIHeroInfo"),ccsFileName="UI/hero_info.json",
-                    --                             params={GUID=heroDt.GUID}})
+                    self:getUIManager():openUI({uiScript=require("app.ui.UIHeroInfo"),ccsFileName="UI/hero_info.json",
+                                                params={GUID=heroDt.GUID}})
                 end
             end
         end)
@@ -385,7 +384,7 @@ end
 function M:setSelectedFormationCell(fId,index,isLight)
     local pos =self:indexToPos(fId,index)
     local wgfmt = self.wg_sel_formation
-    wgfmt.arrCell[index]:setPosition(ccp(3+10+((pos-1)%3)*20, 66-3-10-(math.floor((pos-1)/3))*20))
+    wgfmt.arrCell[index]:setPosition(cc.p(3+10+((pos-1)%3)*20, 66-3-10-(math.floor((pos-1)/3))*20))
     if isLight then
         wgfmt.arrCell[index]:setText(tostring(index))
     else
@@ -464,7 +463,7 @@ function M:initFmtSlots()
                     --UIHelper:seekWidgetByName(widgetItem, "name")
                     --拖动后弹起处理
                     if self.drag.isClickDown and self.drag.isMove then
-                        if not wg_slot:hitTest(ccp(newCell:getPosition())) then
+                        if not wg_slot:hitTest(cc.p(newCell:getPosition())) then
                             local data = {
                                             fId=self.wg_sel_formation.formationType,
                                             slotIndex=i,

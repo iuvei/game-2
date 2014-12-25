@@ -53,16 +53,16 @@ function KNMsg:new()
 
 			if type == 0 then
 				content = display.newSprite("common/prompt_bg.png")
-				content:setAnchorPoint( ccp(0 , 0) )
+				content:setAnchorPoint( cc.p(0 , 0) )
 				textField:setColor(ccc3( 0xff , 0xff , 0xff ))
-				textField:setAnchorPoint( ccp( 0 , 1 ) )
+				textField:setAnchorPoint( cc.p( 0 , 1 ) )
 
 				if textField:getContentSize().width > 360 then
 					textField:setDimensions(CCSize:new( 360 , 70 ))
 
-					textField:setPosition( ccp( ( content:getContentSize().width - textField:getContentSize().width ) / 2 , content:getContentSize().height / 1.5 + 3 ) )
+					textField:setPosition( cc.p( ( content:getContentSize().width - textField:getContentSize().width ) / 2 , content:getContentSize().height / 1.5 + 3 ) )
 				else
-					textField:setPosition( ccp( ( content:getContentSize().width - textField:getContentSize().width ) / 2 , content:getContentSize().height / 1.5 - 8 ) )
+					textField:setPosition( cc.p( ( content:getContentSize().width - textField:getContentSize().width ) / 2 , content:getContentSize().height / 1.5 - 8 ) )
 				end
 
 				content:addChild(textField)
@@ -78,7 +78,7 @@ function KNMsg:new()
 				setAnchPos(textField , display.cx/2 - 30 , 110 , 0.5)
 
 
-				content:setAnchorPoint( ccp(0 , 0) )
+				content:setAnchorPoint( cc.p(0 , 0) )
 
 				local cSize = content:getContentSize()
 
@@ -147,7 +147,7 @@ function KNMsg:new()
 
 			local tempX = ( display.width - content:getContentSize().width ) / 2
 			local tempY = ( display.height + content:getContentSize().height / 2 ) / 2 - content:getContentSize().height + 100
-			content:setPosition( ccp( tempX , tempY ) )
+			content:setPosition( cc.p( tempX , tempY ) )
 
 
 			return content , textField
@@ -236,10 +236,10 @@ function KNMsg:new()
 			if time == 0 then return end
 
 			local textField = CCLabelTTF:create(store.text , FONT , 15)
-			textField:setAnchorPoint( ccp(0 , 1) )
+			textField:setAnchorPoint( cc.p(0 , 1) )
 			local tempX = (display.width - textField:getContentSize().width ) / 2
 			local tempY = (display.height + textField:getContentSize().height / 2 ) / 2
-			textField:setPosition( ccp(tempX , tempY) )
+			textField:setPosition( cc.p(tempX , tempY) )
 			createAction(textField , time , 0)
 		end
 

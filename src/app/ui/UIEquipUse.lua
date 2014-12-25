@@ -268,7 +268,7 @@ function UIEquipUse:InitialUp()
                 -- 创建子物品
                 local item_sub =self._item_main:clone()
                 local x,y=UIHelper:seekWidgetByName(self._content_up,"ImagePos"..i):getPosition()
-                item_sub:setPosition(ccp(x,y))
+                item_sub:setPosition(cc.p(x,y))
                 --创建文本
                 local color_ = ccc3(0, 255, 0)
                 if sub_num < need_num then
@@ -278,7 +278,7 @@ function UIEquipUse:InitialUp()
                     name = "val",
                     text = string.format(StringData[890000003],sub_num,need_num),--%d/%d
                     -- Font = font_UIScrollViewTest,
-                    pos  = ccp(x,y-20-item_sub:getSize().height/2),
+                    pos  = cc.p(x,y-20-item_sub:getSize().height/2),
                     FontSize  = 30,
                     color = color_,
                 }):addTo(self._item_main:getParent())
