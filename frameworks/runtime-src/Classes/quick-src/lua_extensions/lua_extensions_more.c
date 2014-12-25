@@ -22,6 +22,11 @@ extern "C" {
 
 // lsqlite3
 #include "lsqlite3/lsqlite3.h"
+// wsp amend
+//lua-crypt
+#include "cryptEx/lua-crypt.h"
+//
+#include "pbc/pbc-lua.h"
 
 static luaL_Reg luax_exts[] = {
     {"cjson", luaopen_cjson_safe},
@@ -33,6 +38,9 @@ static luaL_Reg luax_exts[] = {
 #if CC_USE_SQLITE
     {"lsqlite3", luaopen_lsqlite3},
 #endif
+    // wsp amend
+    {"crypt", luaopen_crypt},
+	{"protobuf.c", luaopen_protobuf_c},
     {NULL, NULL}
 };
 

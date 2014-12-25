@@ -192,6 +192,38 @@
 		C06C3797191A1D1E00617BED /* ConfigParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C06C3794191A1D1E00617BED /* ConfigParser.cpp */; };
 		C07828F818B4D72E00BD2287 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C07828F418B4D72E00BD2287 /* main.m */; };
 		C07828FA18B4D72E00BD2287 /* SimulatorApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = C07828F718B4D72E00BD2287 /* SimulatorApp.mm */; };
+		D11AC9081A4C0139006FD64B /* alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8E71A4C0139006FD64B /* alloc.c */; };
+		D11AC9091A4C0139006FD64B /* alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8E71A4C0139006FD64B /* alloc.c */; };
+		D11AC90A1A4C0139006FD64B /* array.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8E91A4C0139006FD64B /* array.c */; };
+		D11AC90B1A4C0139006FD64B /* array.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8E91A4C0139006FD64B /* array.c */; };
+		D11AC90C1A4C0139006FD64B /* bootstrap.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8EB1A4C0139006FD64B /* bootstrap.c */; };
+		D11AC90D1A4C0139006FD64B /* bootstrap.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8EB1A4C0139006FD64B /* bootstrap.c */; };
+		D11AC90E1A4C0139006FD64B /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8ED1A4C0139006FD64B /* context.c */; };
+		D11AC90F1A4C0139006FD64B /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8ED1A4C0139006FD64B /* context.c */; };
+		D11AC9101A4C0139006FD64B /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8EF1A4C0139006FD64B /* decode.c */; };
+		D11AC9111A4C0139006FD64B /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8EF1A4C0139006FD64B /* decode.c */; };
+		D11AC9121A4C0139006FD64B /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F11A4C0139006FD64B /* map.c */; };
+		D11AC9131A4C0139006FD64B /* map.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F11A4C0139006FD64B /* map.c */; };
+		D11AC9141A4C0139006FD64B /* pattern.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F31A4C0139006FD64B /* pattern.c */; };
+		D11AC9151A4C0139006FD64B /* pattern.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F31A4C0139006FD64B /* pattern.c */; };
+		D11AC9161A4C0139006FD64B /* pbc-lua.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F51A4C0139006FD64B /* pbc-lua.c */; };
+		D11AC9171A4C0139006FD64B /* pbc-lua.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F51A4C0139006FD64B /* pbc-lua.c */; };
+		D11AC9181A4C0139006FD64B /* proto.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F81A4C0139006FD64B /* proto.c */; };
+		D11AC9191A4C0139006FD64B /* proto.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8F81A4C0139006FD64B /* proto.c */; };
+		D11AC91A1A4C0139006FD64B /* protobuf.lua in Resources */ = {isa = PBXBuildFile; fileRef = D11AC8FA1A4C0139006FD64B /* protobuf.lua */; };
+		D11AC91B1A4C0139006FD64B /* protobuf.lua in Resources */ = {isa = PBXBuildFile; fileRef = D11AC8FA1A4C0139006FD64B /* protobuf.lua */; };
+		D11AC91C1A4C0139006FD64B /* register.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FB1A4C0139006FD64B /* register.c */; };
+		D11AC91D1A4C0139006FD64B /* register.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FB1A4C0139006FD64B /* register.c */; };
+		D11AC91E1A4C0139006FD64B /* rmessage.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FC1A4C0139006FD64B /* rmessage.c */; };
+		D11AC91F1A4C0139006FD64B /* rmessage.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FC1A4C0139006FD64B /* rmessage.c */; };
+		D11AC9201A4C0139006FD64B /* stringpool.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FD1A4C0139006FD64B /* stringpool.c */; };
+		D11AC9211A4C0139006FD64B /* stringpool.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FD1A4C0139006FD64B /* stringpool.c */; };
+		D11AC9221A4C0139006FD64B /* varint.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FF1A4C0139006FD64B /* varint.c */; };
+		D11AC9231A4C0139006FD64B /* varint.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC8FF1A4C0139006FD64B /* varint.c */; };
+		D11AC9241A4C0139006FD64B /* wmessage.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC9011A4C0139006FD64B /* wmessage.c */; };
+		D11AC9251A4C0139006FD64B /* wmessage.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC9011A4C0139006FD64B /* wmessage.c */; };
+		D11AC9291A4C017D006FD64B /* lua-crypt.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC9271A4C017D006FD64B /* lua-crypt.c */; };
+		D11AC92A1A4C017D006FD64B /* lua-crypt.c in Sources */ = {isa = PBXBuildFile; fileRef = D11AC9271A4C017D006FD64B /* lua-crypt.c */; };
 		D6B061351803AC000077942B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B061341803AC000077942B /* CoreMotion.framework */; };
 		F293B3CD15EB7BE500256477 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3CC15EB7BE500256477 /* QuartzCore.framework */; };
 		F293B3D115EB7BE500256477 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3D015EB7BE500256477 /* OpenAL.framework */; };
@@ -517,6 +549,35 @@
 		C07828F418B4D72E00BD2287 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C07828F618B4D72E00BD2287 /* SimulatorApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulatorApp.h; sourceTree = "<group>"; };
 		C07828F718B4D72E00BD2287 /* SimulatorApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SimulatorApp.mm; sourceTree = "<group>"; };
+		D11AC8E71A4C0139006FD64B /* alloc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = alloc.c; sourceTree = "<group>"; };
+		D11AC8E81A4C0139006FD64B /* alloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alloc.h; sourceTree = "<group>"; };
+		D11AC8E91A4C0139006FD64B /* array.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = array.c; sourceTree = "<group>"; };
+		D11AC8EA1A4C0139006FD64B /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = array.h; sourceTree = "<group>"; };
+		D11AC8EB1A4C0139006FD64B /* bootstrap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bootstrap.c; sourceTree = "<group>"; };
+		D11AC8EC1A4C0139006FD64B /* bootstrap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bootstrap.h; sourceTree = "<group>"; };
+		D11AC8ED1A4C0139006FD64B /* context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = context.c; sourceTree = "<group>"; };
+		D11AC8EE1A4C0139006FD64B /* context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = context.h; sourceTree = "<group>"; };
+		D11AC8EF1A4C0139006FD64B /* decode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = decode.c; sourceTree = "<group>"; };
+		D11AC8F01A4C0139006FD64B /* descriptor.pbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = descriptor.pbc.h; sourceTree = "<group>"; };
+		D11AC8F11A4C0139006FD64B /* map.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = map.c; sourceTree = "<group>"; };
+		D11AC8F21A4C0139006FD64B /* map.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = map.h; sourceTree = "<group>"; };
+		D11AC8F31A4C0139006FD64B /* pattern.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pattern.c; sourceTree = "<group>"; };
+		D11AC8F41A4C0139006FD64B /* pattern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pattern.h; sourceTree = "<group>"; };
+		D11AC8F51A4C0139006FD64B /* pbc-lua.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "pbc-lua.c"; sourceTree = "<group>"; };
+		D11AC8F61A4C0139006FD64B /* pbc-lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "pbc-lua.h"; sourceTree = "<group>"; };
+		D11AC8F71A4C0139006FD64B /* pbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pbc.h; sourceTree = "<group>"; };
+		D11AC8F81A4C0139006FD64B /* proto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = proto.c; sourceTree = "<group>"; };
+		D11AC8F91A4C0139006FD64B /* proto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proto.h; sourceTree = "<group>"; };
+		D11AC8FA1A4C0139006FD64B /* protobuf.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = protobuf.lua; sourceTree = "<group>"; };
+		D11AC8FB1A4C0139006FD64B /* register.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = register.c; sourceTree = "<group>"; };
+		D11AC8FC1A4C0139006FD64B /* rmessage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rmessage.c; sourceTree = "<group>"; };
+		D11AC8FD1A4C0139006FD64B /* stringpool.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stringpool.c; sourceTree = "<group>"; };
+		D11AC8FE1A4C0139006FD64B /* stringpool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringpool.h; sourceTree = "<group>"; };
+		D11AC8FF1A4C0139006FD64B /* varint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = varint.c; sourceTree = "<group>"; };
+		D11AC9001A4C0139006FD64B /* varint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = varint.h; sourceTree = "<group>"; };
+		D11AC9011A4C0139006FD64B /* wmessage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wmessage.c; sourceTree = "<group>"; };
+		D11AC9271A4C017D006FD64B /* lua-crypt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "lua-crypt.c"; sourceTree = "<group>"; };
+		D11AC9281A4C017D006FD64B /* lua-crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lua-crypt.h"; sourceTree = "<group>"; };
 		D6B061341803AC000077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 		F293B3C815EB7BE500256477 /* mygame iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "mygame iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F293B3CC15EB7BE500256477 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -974,6 +1035,8 @@
 		9F91066A19F5614800AD5CAB /* lua_extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D11AC9261A4C017D006FD64B /* cryptEx */,
+				D11AC8E61A4C0139006FD64B /* pbc */,
 				9F91066B19F5614800AD5CAB /* Android.mk */,
 				9F91066C19F5614800AD5CAB /* cjson */,
 				9F91067319F5614800AD5CAB /* debugger */,
@@ -1086,6 +1149,49 @@
 				15427CD2198F220600DC375D /* libluacocos2d iOS.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D11AC8E61A4C0139006FD64B /* pbc */ = {
+			isa = PBXGroup;
+			children = (
+				D11AC8E71A4C0139006FD64B /* alloc.c */,
+				D11AC8E81A4C0139006FD64B /* alloc.h */,
+				D11AC8E91A4C0139006FD64B /* array.c */,
+				D11AC8EA1A4C0139006FD64B /* array.h */,
+				D11AC8EB1A4C0139006FD64B /* bootstrap.c */,
+				D11AC8EC1A4C0139006FD64B /* bootstrap.h */,
+				D11AC8ED1A4C0139006FD64B /* context.c */,
+				D11AC8EE1A4C0139006FD64B /* context.h */,
+				D11AC8EF1A4C0139006FD64B /* decode.c */,
+				D11AC8F01A4C0139006FD64B /* descriptor.pbc.h */,
+				D11AC8F11A4C0139006FD64B /* map.c */,
+				D11AC8F21A4C0139006FD64B /* map.h */,
+				D11AC8F31A4C0139006FD64B /* pattern.c */,
+				D11AC8F41A4C0139006FD64B /* pattern.h */,
+				D11AC8F51A4C0139006FD64B /* pbc-lua.c */,
+				D11AC8F61A4C0139006FD64B /* pbc-lua.h */,
+				D11AC8F71A4C0139006FD64B /* pbc.h */,
+				D11AC8F81A4C0139006FD64B /* proto.c */,
+				D11AC8F91A4C0139006FD64B /* proto.h */,
+				D11AC8FA1A4C0139006FD64B /* protobuf.lua */,
+				D11AC8FB1A4C0139006FD64B /* register.c */,
+				D11AC8FC1A4C0139006FD64B /* rmessage.c */,
+				D11AC8FD1A4C0139006FD64B /* stringpool.c */,
+				D11AC8FE1A4C0139006FD64B /* stringpool.h */,
+				D11AC8FF1A4C0139006FD64B /* varint.c */,
+				D11AC9001A4C0139006FD64B /* varint.h */,
+				D11AC9011A4C0139006FD64B /* wmessage.c */,
+			);
+			path = pbc;
+			sourceTree = "<group>";
+		};
+		D11AC9261A4C017D006FD64B /* cryptEx */ = {
+			isa = PBXGroup;
+			children = (
+				D11AC9271A4C017D006FD64B /* lua-crypt.c */,
+				D11AC9281A4C017D006FD64B /* lua-crypt.h */,
+			);
+			path = cryptEx;
 			sourceTree = "<group>";
 		};
 		F293B3BD15EB7BE500256477 = {
@@ -1293,6 +1399,7 @@
 				F405C6C919ED14AA005AD31C /* MainMenu.xib in Resources */,
 				5023817617EBBE3400990C9B /* Icon.icns in Resources */,
 				C05D1C131923449100B808A4 /* config.json in Resources */,
+				D11AC91B1A4C0139006FD64B /* protobuf.lua in Resources */,
 				9F91079E19F5704400AD5CAB /* ConsoleWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1310,6 +1417,7 @@
 				5091733917ECE17A00D62437 /* Icon-58.png in Resources */,
 				5023811F17EBBCAC00990C9B /* Icon-152.png in Resources */,
 				5023812017EBBCAC00990C9B /* Icon-57.png in Resources */,
+				D11AC91A1A4C0139006FD64B /* protobuf.lua in Resources */,
 				521A8E7019F0C3D200D177D7 /* Default-667h@2x.png in Resources */,
 				C03781B918BF655400FE4F13 /* res in Resources */,
 				5023812217EBBCAC00990C9B /* Icon-76.png in Resources */,
@@ -1365,20 +1473,28 @@
 				5023813317EBBCE400990C9B /* AppDelegate.cpp in Sources */,
 				C00FD4971938512100C6382D /* PlayEnable_png.cpp in Sources */,
 				9F91079F19F5704400AD5CAB /* ConsoleWindowController.m in Sources */,
+				D11AC9191A4C0139006FD64B /* proto.c in Sources */,
 				9F91076F19F5614900AD5CAB /* lua_cjson.c in Sources */,
 				9F91070F19F5614900AD5CAB /* FilterShaders.cpp in Sources */,
 				C00FD4951938512100C6382D /* PlayDisable_png.cpp in Sources */,
 				9F91079719F56A6600AD5CAB /* SimulatorConfig.cpp in Sources */,
+				D11AC90F1A4C0139006FD64B /* context.c in Sources */,
 				C033B51D191B337200D06937 /* VisibleRect.cpp in Sources */,
+				D11AC92A1A4C017D006FD64B /* lua-crypt.c in Sources */,
 				C00FD49D1938512100C6382D /* Shine_png.cpp in Sources */,
 				9F91074519F5614900AD5CAB /* SBJsonParser.m in Sources */,
+				D11AC9111A4C0139006FD64B /* decode.c in Sources */,
 				9F91074D19F5614900AD5CAB /* ReachabilityIOSMac.m in Sources */,
 				15AA9649199B6D4600725633 /* lua_debugger.c in Sources */,
 				9F9106D119F5614900AD5CAB /* CCHueFilter.cpp in Sources */,
 				9F91076D19F5614900AD5CAB /* fpconv.c in Sources */,
+				D11AC9231A4C0139006FD64B /* varint.c in Sources */,
+				D11AC9151A4C0139006FD64B /* pattern.c in Sources */,
+				D11AC91F1A4C0139006FD64B /* rmessage.c in Sources */,
 				9F9106B719F5614900AD5CAB /* CCCrypto.cpp in Sources */,
 				9F91078619F561CD00AD5CAB /* HelperFunc.cpp in Sources */,
 				9F9106D719F5614900AD5CAB /* CCSaturationFilter.cpp in Sources */,
+				D11AC9211A4C0139006FD64B /* stringpool.c in Sources */,
 				9F91079519F56A6600AD5CAB /* ProjectConfig.cpp in Sources */,
 				9F91077719F5614900AD5CAB /* lfs.c in Sources */,
 				9F91077B19F5614900AD5CAB /* lsqlite3.c in Sources */,
@@ -1386,6 +1502,7 @@
 				9F9106D919F5614900AD5CAB /* CCSepiaFilter.cpp in Sources */,
 				9F91074119F5614900AD5CAB /* SBJSON.m in Sources */,
 				9F91077319F5614900AD5CAB /* debugger.c in Sources */,
+				D11AC90D1A4C0139006FD64B /* bootstrap.c in Sources */,
 				9F91071F19F5614900AD5CAB /* cocos2dx_extra_luabinding.cpp in Sources */,
 				9F9106B919F5614900AD5CAB /* md5.c in Sources */,
 				9F91074319F5614900AD5CAB /* SBJsonBase.m in Sources */,
@@ -1395,6 +1512,7 @@
 				9F9106DF19F5614900AD5CAB /* CCFilteredSprite.cpp in Sources */,
 				C00FD4991938512100C6382D /* Portrait_png.cpp in Sources */,
 				9F9106C119F5614900AD5CAB /* CCContrastFilter.cpp in Sources */,
+				D11AC9131A4C0139006FD64B /* map.c in Sources */,
 				9F9106C719F5614900AD5CAB /* CCExposureFilter.cpp in Sources */,
 				C06C3797191A1D1E00617BED /* ConfigParser.cpp in Sources */,
 				9F91077919F5614900AD5CAB /* lpack.c in Sources */,
@@ -1406,20 +1524,25 @@
 				9F91075119F5614900AD5CAB /* CCNative.mm in Sources */,
 				9F9106B519F5614900AD5CAB /* libbase64.c in Sources */,
 				9F91075319F5614900AD5CAB /* CCNativeMac.mm in Sources */,
+				D11AC9091A4C0139006FD64B /* alloc.c in Sources */,
 				9F91075519F5614900AD5CAB /* OpenUDIDMac.m in Sources */,
 				9F91072719F5614900AD5CAB /* CCHTTPRequest.cpp in Sources */,
+				D11AC9171A4C0139006FD64B /* pbc-lua.c in Sources */,
 				9F9106D519F5614900AD5CAB /* CCRGBFilter.cpp in Sources */,
 				9F9106C519F5614900AD5CAB /* CCDropShadowFilter.cpp in Sources */,
 				9F9106C319F5614900AD5CAB /* CCCustomFilter.cpp in Sources */,
 				9F91078119F5614900AD5CAB /* lua_zlib.c in Sources */,
 				9F9106CD19F5614900AD5CAB /* CCGrayFilter.cpp in Sources */,
 				C0619CD81896894800872C26 /* Runtime_ios-mac.mm in Sources */,
+				D11AC91D1A4C0139006FD64B /* register.c in Sources */,
 				9F9106D319F5614900AD5CAB /* CCMaskFilter.cpp in Sources */,
 				9F91077119F5614900AD5CAB /* strbuf.c in Sources */,
 				3EB5152D19528284006966AA /* Protos.pb.cc in Sources */,
+				D11AC9251A4C0139006FD64B /* wmessage.c in Sources */,
 				9F9106BF19F5614900AD5CAB /* CCBrightnessFilter.cpp in Sources */,
 				9F91077F19F5614900AD5CAB /* lua_extensions_more.c in Sources */,
 				9F91074F19F5614900AD5CAB /* CCCryptoMac.mm in Sources */,
+				D11AC90B1A4C0139006FD64B /* array.c in Sources */,
 				9F9106C919F5614900AD5CAB /* CCFilter.cpp in Sources */,
 				C00FD4931938512100C6382D /* Landscape_png.cpp in Sources */,
 				9F91074719F5614900AD5CAB /* SBJsonWriter.m in Sources */,
@@ -1439,32 +1562,40 @@
 				15AA9648199B6D4600725633 /* lua_debugger.c in Sources */,
 				9F91074819F5614900AD5CAB /* OpenUDIDIOS.m in Sources */,
 				9F9106D619F5614900AD5CAB /* CCSaturationFilter.cpp in Sources */,
+				D11AC91C1A4C0139006FD64B /* register.c in Sources */,
 				9F91073819F5614900AD5CAB /* CCStore.mm in Sources */,
 				9F91073619F5614900AD5CAB /* CCNativeIOS.mm in Sources */,
 				9F91074219F5614900AD5CAB /* SBJsonBase.m in Sources */,
 				9F9106E019F5614900AD5CAB /* ccFilterShaders.cpp in Sources */,
 				9F91078D19F5658D00AD5CAB /* lua_cocos2dx_extension_filter_auto.cpp in Sources */,
 				9F9106D819F5614900AD5CAB /* CCSepiaFilter.cpp in Sources */,
+				D11AC9161A4C0139006FD64B /* pbc-lua.c in Sources */,
 				9F9106DC19F5614900AD5CAB /* CCTestFilter.cpp in Sources */,
 				C00FD4981938512100C6382D /* Portrait_png.cpp in Sources */,
 				9F91074A19F5614900AD5CAB /* CCNetworkIOSMac.mm in Sources */,
+				D11AC9101A4C0139006FD64B /* decode.c in Sources */,
 				9F91071E19F5614900AD5CAB /* cocos2dx_extra_luabinding.cpp in Sources */,
 				9F9106D219F5614900AD5CAB /* CCMaskFilter.cpp in Sources */,
 				9F9106DE19F5614900AD5CAB /* CCFilteredSprite.cpp in Sources */,
 				9F9106CC19F5614900AD5CAB /* CCGrayFilter.cpp in Sources */,
 				9F91079619F56A6600AD5CAB /* SimulatorConfig.cpp in Sources */,
 				5023812517EBBCAC00990C9B /* RootViewController.mm in Sources */,
+				D11AC90A1A4C0139006FD64B /* array.c in Sources */,
 				C00FD4921938512100C6382D /* Landscape_png.cpp in Sources */,
 				9F91074019F5614900AD5CAB /* SBJSON.m in Sources */,
+				D11AC90C1A4C0139006FD64B /* bootstrap.c in Sources */,
+				D11AC9241A4C0139006FD64B /* wmessage.c in Sources */,
 				9F91073E19F5614900AD5CAB /* CCStoreReceiptVerifyRequestIOS.mm in Sources */,
 				9F91072219F5614900AD5CAB /* HelperFunc_luabinding.cpp in Sources */,
 				F293BB9C15EB831F00256477 /* AppDelegate.cpp in Sources */,
 				9F91076819F5614900AD5CAB /* CCStoreProduct.cpp in Sources */,
+				D11AC9081A4C0139006FD64B /* alloc.c in Sources */,
 				C00FD49A1938512100C6382D /* Runtime.cpp in Sources */,
 				9F91072619F5614900AD5CAB /* CCHTTPRequest.cpp in Sources */,
 				9F9106C219F5614900AD5CAB /* CCCustomFilter.cpp in Sources */,
 				9F9106BE19F5614900AD5CAB /* CCBrightnessFilter.cpp in Sources */,
 				9F9106CE19F5614900AD5CAB /* CCHazeFilter.cpp in Sources */,
+				D11AC9201A4C0139006FD64B /* stringpool.c in Sources */,
 				9F91074419F5614900AD5CAB /* SBJsonParser.m in Sources */,
 				9F91074C19F5614900AD5CAB /* ReachabilityIOSMac.m in Sources */,
 				9F91077A19F5614900AD5CAB /* lsqlite3.c in Sources */,
@@ -1479,6 +1610,7 @@
 				9F9106D419F5614900AD5CAB /* CCRGBFilter.cpp in Sources */,
 				9F91077019F5614900AD5CAB /* strbuf.c in Sources */,
 				C00FD4941938512100C6382D /* PlayDisable_png.cpp in Sources */,
+				D11AC9291A4C017D006FD64B /* lua-crypt.c in Sources */,
 				9F91077619F5614900AD5CAB /* lfs.c in Sources */,
 				9F91077C19F5614900AD5CAB /* sqlite3.c in Sources */,
 				9F91076E19F5614900AD5CAB /* lua_cjson.c in Sources */,
@@ -1489,18 +1621,24 @@
 				9F9106BC19F5614900AD5CAB /* CCBlurFilter.cpp in Sources */,
 				9F91078019F5614900AD5CAB /* lua_zlib.c in Sources */,
 				9F91073219F5614900AD5CAB /* CCCryptoIOS.mm in Sources */,
+				D11AC91E1A4C0139006FD64B /* rmessage.c in Sources */,
 				9F91076619F5614900AD5CAB /* CCStorePaymentTransaction.cpp in Sources */,
 				5023812417EBBCAC00990C9B /* main.m in Sources */,
 				9F91072819F5614900AD5CAB /* CCNetwork.cpp in Sources */,
 				9F91078719F561CD00AD5CAB /* HelperFunc.cpp in Sources */,
 				9F91073C19F5614900AD5CAB /* CCStorePaymentTransactionWrapper.mm in Sources */,
+				D11AC9221A4C0139006FD64B /* varint.c in Sources */,
 				9F91070E19F5614900AD5CAB /* FilterShaders.cpp in Sources */,
 				9F9106C419F5614900AD5CAB /* CCDropShadowFilter.cpp in Sources */,
+				D11AC90E1A4C0139006FD64B /* context.c in Sources */,
 				9F9106B419F5614900AD5CAB /* libbase64.c in Sources */,
 				C033B51C191B337200D06937 /* VisibleRect.cpp in Sources */,
 				9F91076C19F5614900AD5CAB /* fpconv.c in Sources */,
+				D11AC9181A4C0139006FD64B /* proto.c in Sources */,
 				9F9106C619F5614900AD5CAB /* CCExposureFilter.cpp in Sources */,
+				D11AC9121A4C0139006FD64B /* map.c in Sources */,
 				C0619CD71896894800872C26 /* Runtime_ios-mac.mm in Sources */,
+				D11AC9141A4C0139006FD64B /* pattern.c in Sources */,
 				9F9106DA19F5614900AD5CAB /* CCSharpenFilter.cpp in Sources */,
 				9F9106CA19F5614900AD5CAB /* CCGammaFilter.cpp in Sources */,
 				9F91071A19F5614900AD5CAB /* cocos2dx_extra_ios_iap_luabinding.cpp in Sources */,
