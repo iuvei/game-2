@@ -40,11 +40,11 @@ function UIEquipUse:init( params )
     self._parmas = params.params
     -- init ctrl
     self._root_get_way = self:getWidgetByName("GetWay")
-    self._root_get_way:setEnabled(false)
+    self._root_get_way:setVisible(false)
     self._content_get_way = self:getWidgetByName("PanelGetWay")
-    self._content_get_way:setEnabled(false)
+    self._content_get_way:setVisible(false)
     self._content_up = self:getWidgetByName("PanelUp")
-    self._content_up:setEnabled(false)
+    self._content_up:setVisible(false)
     self._root_info = self:getWidgetByName("ItemInfo")
     self._lst_ctrl = UIListView.new(UIHelper:seekWidgetByName(self._root_get_way, "ScrollView"))
     self._lst_ctrl:InitialItem()
@@ -83,12 +83,12 @@ function UIEquipUse:show_info(state,equip_info)
     w:setText(info_.name)
 
     w=UIHelper:seekWidgetByName(self._root_info,"ItemNum")
-    w:setEnabled(false)
+    w:setVisible(false)
     local need_condition=UIHelper:seekWidgetByName(self._root_info,"LabelCondition")
-    need_condition:setEnabled(false)
+    need_condition:setVisible(false)
     -- 穿上的不显示数量
     if state ~= 2 and info_.num and info_.num > 0 then
-        w:setEnabled(true)
+        w:setVisible(true)
         w:setText(string.format(StringData[100000037],info_.num))
     end
     w=UIHelper:seekWidgetByName(self._root_info,"AttInfo")
@@ -127,7 +127,7 @@ function UIEquipUse:show_info(state,equip_info)
             if conf_compound.elevel > self._info.elevel then
                  need_condition:setColor(display.COLOR_RED)
             end
-            need_condition:setEnabled(true)
+            need_condition:setVisible(true)
             need_condition:setText(string.format(StringData[100000045],conf_compound.elevel))
         else
             self._btn:setTitleText(StringData[890000001])
@@ -178,7 +178,7 @@ function UIEquipUse:ClickBtn(state)
                 GUID        = self._parmas.equip_slot.equip_info.GUID,
                 HeroGUID    = self._parmas.hero_guid,
             })
-        self._btn:setEnabled(false)
+        self._btn:setVisible(false)
     else
         if self._op_state == 1 then
             self:ShowDlg("get_way",true)
@@ -193,17 +193,17 @@ function UIEquipUse:ShowDlg(type,is_open,isFade)
     if self.isFading then
         return
     end
-    self._root_get_way:setEnabled(false)
+    self._root_get_way:setVisible(false)
     if is_open then
         -- 设置小icon
         UIUtil:SetIconFrame(self._compond_link[1],self._info.icon,self._info.quality)
         if type == "get_way" then
             self._root_get_way:setVisible(true)
-            self._root_get_way:setEnabled(true)
+            self._root_get_way:setVisible(true)
             self:ChangSubDlg(type,self._info.dataId)
         elseif type == "compound" then
             self._root_get_way:setVisible(true)
-            self._root_get_way:setEnabled(true)
+            self._root_get_way:setVisible(true)
             self:ChangSubDlg(type,self._info.dataId)
         end
     else
@@ -212,22 +212,22 @@ function UIEquipUse:ShowDlg(type,is_open,isFade)
 
 end
 function UIEquipUse:ChangSubDlg(type,dataId)
-    self._content_get_way:setEnabled(false)
-    self._content_up:setEnabled(false)
+    self._content_get_way:setVisible(false)
+    self._content_up:setVisible(false)
     if type == "get_way" then
         self._content_get_way:setVisible(true)
-        self._content_get_way:setEnabled(true)
+        self._content_get_way:setVisible(true)
         self:UpdataGetWay({dataId=dataId})
     elseif type == "compound" then
         self._content_up:setVisible(true)
-        self._content_up:setEnabled(true)
+        self._content_up:setVisible(true)
         self:InitialUp()
         self:UpdataCompound({dataId=dataId})
     end
  end
 function UIEquipUse:HideDlg(dlg)
     if dlg then
-        dlg:setEnabled(false)
+        dlg:setVisible(false)
     end
 end
 function UIEquipUse:UpdataGetWay(options)
@@ -278,7 +278,7 @@ function UIEquipUse:InitialUp()
                     name = "val",
                     text = string.format(StringData[890000003],sub_num,need_num),--%d/%d
                     -- Font = font_UIScrollViewTest,
-                    pos  = cc.p(x,y-20-item_sub:getSize().height/2),
+                    pos  = cc.p(x,y-20-item_sub:getContentSize().height/2),
                     FontSize  = 30,
                     color = color_,
                 }):addTo(self._item_main:getParent())

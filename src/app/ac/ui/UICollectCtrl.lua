@@ -14,7 +14,7 @@ end
 -- typename up dowm left right
 function UICollectCtrl:AddItem(item,typename)
     self._items[#self._items]=item
-    self._size.width,self._size.height=item:getSize().width,item:getSize().height
+    self._size.width,self._size.height=item:getContentSize().width,item:getContentSize().height
     if not self._items_by_class[typename] then
         self._items_by_class[typename] = {}
      end
@@ -57,10 +57,10 @@ function UICollectCtrl:Unfold()
         if k == "up" then
             for i,v_ in ipairs(v) do
                 if i == 1 then
-                   st = self._fold:getSize().height/2 + v_:getSize().height/2
+                   st = self._fold:getContentSize().height/2 + v_:getContentSize().height/2
                    dis=st
                 else
-                   dis = st + (i-1)*v_:getSize().height
+                   dis = st + (i-1)*v_:getContentSize().height
                 end
                 transition.execute(v_, CCMoveTo:create(0.1 / #v * i, cc.p(0, dis)), {
                     -- delay = 1.0,

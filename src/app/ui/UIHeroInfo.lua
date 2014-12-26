@@ -156,7 +156,7 @@ function UIHeroInfo:ShowDlg(type,isFade)
     if not self._cur_show_dlg then
         return
     end
-    local tar = cc.p(self.rootHero:getPositionX()+self.rootHero:getSize().width/2+self._cur_show_dlg:getSize().width/2,
+    local tar = cc.p(self.rootHero:getPositionX()+self.rootHero:getContentSize().width/2+self._cur_show_dlg:getContentSize().width/2,
         self._cur_show_dlg:getPositionY())
 
     if isFade then
@@ -192,7 +192,7 @@ function UIHeroInfo:UpdataHero(options)
     w=UIHelper:seekWidgetByName(root, "country")
     w:setText(self.heroinfo.countryInfo.name)
     --头像
-    w = tolua.cast(UIHelper:seekWidgetByName(root, "Image_head"),"ImageView")
+    w = UIHelper:seekWidgetByName(root, "Image_head")
     w:loadTexture(self.heroinfo.headIcon)
     --星级数量
     UIUtil:SetStars(UIHelper:seekWidgetByName(root, "Panel_31"),self.heroinfo.stars)
@@ -276,7 +276,7 @@ function UIHeroInfo:ListenEquip()
     --for i=0,self.rootHeroEquip:getChildrenCount()-1 do
     for i=1,6 do
         local slot = self.rootHeroEquip:getChildByName("EquipBg_"..i)
-        slot:getChildByName("sign"):setEnabled(false)
+        slot:getChildByName("sign"):setVisible(false)
         slot.state = 0 -- 0 ＝ 无可穿装备，1 ＝ 可穿装备，2 ＝ 已装备
         slot.equip_pos = i
         self._equip_solts[i]=slot
@@ -318,7 +318,7 @@ function UIHeroInfo:UpdataHeroEquip()
     end
 
     for k,v in ipairs(self._equip_solts ) do
-        v:getChildByName("sign"):setEnabled(false)
+        v:getChildByName("sign"):setVisible(false)
         -- 0 ＝ 无可穿装备，1 ＝ 可穿装备，2 ＝ 已装备
         local equip_info = get_equip( self.heroinfo.equips, k )
         if v.state == 0 or v.state == 1 then
@@ -326,10 +326,12 @@ function UIHeroInfo:UpdataHeroEquip()
                 equip_info = item_operator:get_equip_info( equip_info )
                 v.equip_info = equip_info--equip_info
                 v.state = 2
-                self:createUINode("ImageView",{
+                local s=self:createUINode("ImageView",{
                         name    = "EquipImg"..k,
                         texture = equip_info.icon,
+                        pos     = cc.p(0,0),
                     }):addTo(v)
+
             else
                 -- 默认显示图片
                 local equip_id = hero_helper:getconf_require_equip( self.heroinfo.dataId )[k]
@@ -340,6 +342,7 @@ function UIHeroInfo:UpdataHeroEquip()
                self:createUINode("ImageView",{
                         name    = "EquipImg"..k,
                         texture = equip_info.icon,
+                        pos     = cc.p(0,0),
                 }):addTo(v):setColor(ccc3(299, 587, 114))
 
                 -- 检测是否有可以穿戴的装备
@@ -347,7 +350,7 @@ function UIHeroInfo:UpdataHeroEquip()
                 if equip_info then -- can use
                     v.equip_info = equip_info
                     v.state = 1
-                    v:getChildByName("sign"):setEnabled(true)
+                    v:getChildByName("sign"):setVisible(true)
                 end
 
                 -- 检测是否可合成则可穿戴

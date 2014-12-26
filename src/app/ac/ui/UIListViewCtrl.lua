@@ -11,7 +11,7 @@ function UIListView:ctor(ScrollView,col,row)
     self.lstCtrlItem = nil
     local item=self:getItemByIndex(1)
     if item then
-        self.sizeItem_=item:getSize()
+        self.sizeItem_=item:getContentSize()
     else
         self.sizeItem_=CCSize(0,0)
     end
@@ -28,13 +28,13 @@ function UIListView:insert(item)
     --     self.items_[col+1]={}
     -- end
     -- self.items_[col+1][row+1]=item
-    self.sizeItem_=item:getSize()
+    self.sizeItem_=item:getContentSize()
     self:updataScrollArea()
 end
 function UIListView:setScrollAreaSize(size)
     local size_ = size
-    if self:getScrollView():getSize().width > size.width or self:getScrollView():getSize().height > size.height then
-        size_=self:getScrollView():getSize()
+    if self:getScrollView():getContentSize().width > size.width or self:getScrollView():getContentSize().height > size.height then
+        size_=self:getScrollView():getContentSize()
     end
     self:getScrollView():setInnerContainerSize(size_)
 end
@@ -69,7 +69,7 @@ function UIListView:updataScrollArea(callback_)
     end
     -- set position
     local sizeItem = self.sizeItem_
-    self.amountCol_= math.floor(self:getScrollView():getSize().width/sizeItem.width)
+    self.amountCol_= math.floor(self:getScrollView():getContentSize().width/sizeItem.width)
 
     -- 除法
     local row_div = math.floor(amount/self.amountCol_)
@@ -97,7 +97,7 @@ function UIListView:updataScrollArea(callback_)
         layout:setPosition(cc.p( col*sizeItem.width,self.scrollAreaSize_.height-((row+1)*sizeItem.height)))
     end
     -- local layout=tolua.cast(self.sv_:getChildren():objectAtIndex(0), "Layout")
-    -- self:setScrollAreaSize(CCRect(col*layout:getSize().width,layout:getSize().height*row))
+    -- self:setScrollAreaSize(CCRect(col*layout:getContentSize().width,layout:getContentSize().height*row))
 end
 ----------------------------------------------------------------------------------------------------------
 -- item 相关

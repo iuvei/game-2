@@ -109,8 +109,8 @@ function UIChat:Listen()
 end
 function UIChat:Activate()
     if self._is_open then
-        self:setPosition(-self._root_widget:getSize().width+68, 0)
-        self._editbox:setPosition(cc.p(291-self._root_widget:getSize().width+68,520))
+        self:setPosition(-self._root_widget:getContentSize().width+68, 0)
+        self._editbox:setPosition(cc.p(291-self._root_widget:getContentSize().width+68,520))
         self._is_open=false
     else
         self:setPosition(0, 0)

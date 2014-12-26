@@ -28,8 +28,8 @@ function RichLabelCtrl:ctor(label,options)
     ]]--
     self.ctrl_=label
     label:setText("")
-    local curWidth = label:getSize().width
-    local curHeight = label:getSize().height
+    local curWidth = label:getContentSize().width
+    local curHeight = label:getContentSize().height
 
     options.dimensions = CCSize(curWidth, curHeight)
     options.fontSize=label:getFontSize()

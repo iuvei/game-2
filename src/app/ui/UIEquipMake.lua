@@ -152,9 +152,9 @@ function UIEquipMake:ShowDlg(index)
         dlg:setVisible(true)
         dlg:setEnabled(true)
         dlg:setPositionY(self._root_hero_info:getPositionY())
-        local offset_x=self._root:getSize().width/2 - (dlg:getSize().width + self._root_hero_info:getSize().width)/2
+        local offset_x=self._root:getContentSize().width/2 - (dlg:getContentSize().width + self._root_hero_info:getContentSize().width)/2
         self._root_hero_info:setPositionX(offset_x)
-        dlg:setPositionX(self._root_hero_info:getPositionX()+self._root_hero_info:getSize().width)
+        dlg:setPositionX(self._root_hero_info:getPositionX()+self._root_hero_info:getContentSize().width)
     end
     -- stre
     if index == 1 then
