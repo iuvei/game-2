@@ -10,7 +10,7 @@ fi
 ARG="-relaunch-off -quick $QUICK_COCOS2DX_ROOT -workdir $DIR"
 SIZE="-portrait"
 CMD="$BIN $ARG $SIZE"
-
+111111
 until $CMD; do
     echo ""
     echo "------------------------------------------------------"
